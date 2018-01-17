@@ -1,0 +1,161 @@
+LP background
+=====
+max z_LP = c^T * x
+s.t. Ax <= b
+     x >= 0
+
+c, x in R^n
+A in R^(m x n)
+b in R^(m x 1)
+
+Integer program:
+max z_IP = c^T * x
+s.t. Ax <= b
+     x in Z^n_+   (x >= 0 and integer)
+
+c in R^n
+A in R^(m x n)
+b in R^(m x 1)
+
+Is there a relationship between z_LP and z_IP?
+z_LP >= z_IP
+
+In general, no poly-time algo to solve an IP.
+
+Treat the LP as a linear relaxation of the IP
+(remove the integrality restrictions).
+
+e.g.
+max 5x_1 + 2x_2
+s.t. 3x_1 + x_2  <= 10
+     2x_1 + 3x_2 <=  8
+     x_1, x_2 >= 0 and integer
+
+Linear relaxation:
+max 5x_1 + 2x_2
+s.t. 3x_1 + x_2  <= 10
+     2x_1 + 3x_2 <=  8
+     x_1, x_2 >= 0
+
+Convex problems easy to solve; non-convex
+problems not so much.
+
+-- Convexity of function
+    f(x) is convex
+    <->
+    forall x_1, x_2 in dom(f), forall lambda in [0, 1]:
+        f(lambda * x_1 + (1 - lambda) * x_2)
+        <=
+        lambda * f(x_1) + (1 - lambda) * f(x_2)
+
+-- Convexity of set
+    S subset-of R^n is convex
+    <->
+    forall x_1, x_2 in S, forall lambda in [0, 1]:
+        lambda * x_1 + (1 - lambda) * x_2 in S
+
+-- feasible region of an LP is a convex set;
+    IP not so much, unless:
+    -- feasible region is a singular point
+    -- feasible region is empty set
+
+Can the linear relaxation of an IP be feasible,
+but the IP infeasible?
+--> max x_1 + x_2
+    s.t. x_1 <= 1/2
+         x_1 >= 1/4
+    (linear relaxation unbounded here.)
+--> narrow triangle that never contains integer points
+
+Extreme points of feasible region of LP:
+-- If there is an optimum, it's at a corner point
+   -- As long as LP not infeasible or unbounded
+-- Also called basic feasible solutions (BFS)
+
+Degeneracy:
+-- > 1 basis corresponding to a single BFS
+-- One of the basic vars takes zero
+
+Simplex method: move from corner to corner,
+till optimum found.
+
+e.g. max 5x_1 + 3x_2
+     s.t. x_1 <= 4
+          -x_1 + x_2 <= 6
+          3x_1 + 2x_2 <= 18
+          x_1, x_2 >= 0
+
+z   x_1   x_2   s_1   s_2   s_3    RHS
+--------------------------------------
+1    -5    -3     0     0     0      0
+0     1     0     1     0     0      4  s_1
+0    -1     1     0     1     0      6  s_2
+0     3     2     0     0     1     18  s_3
+
+x_1 leaves
+s_1 enters: 4/1 min
+
+z   x_1   x_2   s_1   s_2   s_3    RHS
+--------------------------------------
+1     0    -3     5     0     0     20
+0     1     0     1     0     0      4  x_1
+0     0     1     1     1     0     10  s_2
+0     0     2    -3     0     1      6  s_3
+
+x_2 leaves
+s_3 enters: 6/2 min
+
+z   x_1   x_2   s_1   s_2   s_3    RHS
+--------------------------------------
+1     0     0    1/2    0   3/2     29
+0     1     0     1     0     0      4  x_1
+0     0     0    5/2    1   -1/2     7  s_2
+0     0     1   -3/2    0    1/2     3  x_2
+
+z* = 29, x_1 = 4, x_2 = 3, s_2 = 3/2, s_1 = 0, s_3 = 0
+
+If this were an IP, and we ended up with a non-integer
+soln, we'd need to cut the space down.
+
+Add a constraint: x_1 + x_2 <= 5
+Re-solve as LP
+Add constraint to tableau
+Re-establish basis...
+Check optimal; if not, pivot, maybe dual simplex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
