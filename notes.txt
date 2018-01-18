@@ -124,6 +124,167 @@ Re-establish basis...
 Check optimal; if not, pivot, maybe dual simplex
 
 
+Duality in LP
+=====
+
+primal:
+e.g.
+max c^T * x
+s.t. Ax <= b
+     x >= 0
+
+dual:
+min b^T * y
+s.t. A^T * y >= c
+    y >= 0
+
+c^T * x <= b^T * y   # weak duality
+
+If there is an optimum to the primal,
+there is an optimum to the dual, and
+    c^T * x^* = b^T * y^*
+
+Complementary slackness:
+For a corner-point soln:
+If x_i is basic, e_i is non-basic
+    (e = surplus var)
+If s_i is basic, y_i is non-basic
+    (s = slack var)
+
+    x * e = 0
+    s * y = 0
+
+Reduced costs/shadow prices/dual prices: values in
+objective row of simplex tableau above the slacks
+
+Sensitivity analysis
+
+Better off with simplex method on linear relaxations
+of IP, as opposed to interior-point methods
+(why?)
+
+Simplex may require exponential time in pathological
+cases.
+There are polynomial-time algos for LP now
+(interior-point methods)
+
+if A then B:
+T     T   -->  T
+T     F   -->  F
+F     T   -->  T
+F     F   -->  T
+
+A iff B:
+T     T   -->  T
+T     F   -->  F
+F     T   -->  F
+F     F   -->  T
+
+Proof by contradiction of "if A then B":
+-- Assume A is true; assume B is false.
+-- What follows from this? Need to show that
+    this leads to a contradiction, and so B
+    must be true
+
+Contrapositive: if not B, then not A
+Converse: if B, then A
+Inverse: if not A, then not B
+
+
+Graph: set G = (V, E)
+V = vertices, E = edges
+
+Directed edges or undirected edges
+
+Graph as substructure for building an IP
+
+Node-node adjacency matrix representation
+(A[x, y] = 1 if nodes x and y are connected via
+an edge, else ___? (sometimes 0, sometimes -(degree)))
+
+   A   B   C   D
+A  0   1
+B  1   0
+C          0
+D              0
+
+(symmetric for undirected graph)
+
+Node-arc incidence matrix:
+    (A,B) (A,C) ...
+A
+B
+C
+C
+
+Exactly two ones in every column
+Usually more edges than nodes -> more storage req'd
+
+Directed node-arc rep:
+ 1 for flow-out
+-1 for flow-in
+All columns sum to zero --> unimodular matrix
+-- not linearly independent
+    --> cross off bottom row
+        --> basis: tree (graph w/no cycles)
+            fast pivots (network simplex method)
+-- If this is only set of constraints, and RHS
+    of constraints are integers, then you'll get
+    an integer soln always
+
+Paths
+
+Discovered tree
+
+Clique of a graph: subgraph that has all possible
+edges (every node has an edge to every other node)
+-- k_n, where n is # of nodes in clique
+(complete graph)
+# edges: C(n, 2)
+
+Complement of a graph:
+graph with same set of vertices, but with edges
+where there weren't edges in original graph, and
+the original edges removed.
+
+Bipartite graph:
+where vertices are partitioned into two sets, and
+there are no edges between two nodes in the same
+partition.
+These come up in transportation models a lot--
+-- sources vs. destinations
+-- assignment problems: tasks to workers...
+-- no odd cycles
+
+Matching problem:
+-- sum[i]( x_ij ) <= 1 forall j
+-- sum[j]( x_ij ) <= 1 forall i
+
+Node packing problem:
+find a set of nodes of maximum cardinality such that
+no node is incident with the same edge (or arc)
+
+Set packing problem:
+Given a universe U and a family S of subsets of U,
+find a collection C of sets in S, whose cardinality is
+maximized, such that all sets in C are pairwise
+disjoint.
+
+O(f(n)), Omega(f(n)), Theta(f(n))
+Polynomial-in-n time
+
+Implicit enumeration of binary IP solutions:
+exponential in # vars
+
+NP: set of all problems whose solutions can be verified
+in polynomial time
+NP-complete: set of NP problems that can be transformed
+into each other in polynomial time.
+NP-hard: at least as hard as the hardest problems in NP
+(don't have to be elements of NP)
+
+IP are NP-complete problems
+
 
 
 
