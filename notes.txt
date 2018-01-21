@@ -59,6 +59,9 @@ problems not so much.
     -- feasible region is a singular point
     -- feasible region is empty set
 
+The convex hull of S is the intersection of all
+convex sets that contain S.
+
 Can the linear relaxation of an IP be feasible,
 but the IP infeasible?
 --> max x_1 + x_2
@@ -75,6 +78,12 @@ Extreme points of feasible region of LP:
 Degeneracy:
 -- > 1 basis corresponding to a single BFS
 -- One of the basic vars takes zero
+    (or takes on lower/upper bound of var)
+
+Degeneracy created by:
+-- Redundant constraints
+-- > n hyperplanes meeting at a point in n
+    dimensions
 
 Simplex method: move from corner to corner,
 till optimum found.
@@ -140,6 +149,7 @@ s.t. A^T * y >= c
 
 c^T * x <= b^T * y   # weak duality
 
+Strong duality theorem:
 If there is an optimum to the primal,
 there is an optimum to the dual, and
     c^T * x^* = b^T * y^*
@@ -169,16 +179,16 @@ There are polynomial-time algos for LP now
 (interior-point methods)
 
 if A then B:
-T     T   -->  T
+T     T   -->  T  # Assume A true; show B must be true
 T     F   -->  F
 F     T   -->  T
 F     F   -->  T
 
 A iff B:
-T     T   -->  T
+T     T   -->  T  # Assume A true; show B must be true
 T     F   -->  F
 F     T   -->  F
-F     F   -->  T
+F     F   -->  T  # Assume B true; show A must be true
 
 Proof by contradiction of "if A then B":
 -- Assume A is true; assume B is false.
@@ -186,9 +196,11 @@ Proof by contradiction of "if A then B":
     this leads to a contradiction, and so B
     must be true
 
-Contrapositive: if not B, then not A
+Contrapositive: if ~B, then ~A
+(A -> B is equivalent to ~B -> ~A)
+
 Converse: if B, then A
-Inverse: if not A, then not B
+Inverse: if ~A, then ~B
 
 
 Graph: set G = (V, E)
@@ -284,6 +296,50 @@ NP-hard: at least as hard as the hardest problems in NP
 (don't have to be elements of NP)
 
 IP are NP-complete problems
+
+Two important sets in an IP:
+-- Convex hull of feasible integer points
+-- Region induced by the (linear relaxation of)
+    the constraints
+
+IP:
+max c^T * x
+s.t. Ax <= b
+    x >= 0
+
+Let P = { x in Z^n_+ : Ax <= b }
+(countable set of points)
+Let P_LR = { x in R^n_+ = Ax <= b }
+    (linear relaxation set)
+Let P_CH = convex hull of P
+
+Every LP has an optimum, if it does, at an
+extreme point/BFS/corner point
+
+If we change the IP to:
+max c^T * x
+s.t. x in P_CH,
+then an optimum will be at a corner point of
+P_CH
+
+Main idea: To LR, add a bunch of other constraints
+such that we whittle the feasible region down in
+this way such that we obtain corner points that
+are integer --> cutting planes
+
+P_CH and P_LR are polyhedra
+{ x in R^n : Ax <= b }
+* All polyhedra are convex.
+
+Convex set that is not a polyhedron: circle
+
+Adding cutting planes iteratively, it introduces
+the risk of introducing degeneracy.
+
+backwards-e == "such that"
+
+
+
 
 
 
