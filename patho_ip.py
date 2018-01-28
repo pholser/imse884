@@ -1,9 +1,23 @@
 from __future__ import division
 from pyomo.environ import *
+from pyomo.opt import SolverFactory
+
+def z(model):
+    return model.x[1]
+
+def cx(model):
+    return 2*summation(model.x) == 5
+
+opt = SolverFactory('cplex')
 
 model = ConcreteModel()
-model.indexes = RangeSet(1, 5)
+model.n = 5
+model.indexes = RangeSet(1, model.n)
 model.x = Var(model.indexes, within=NonNegativeReals, bounds=(0, 1))
-model.z = Objective(expr = model.x[1])
-model.constraint = Constraint(expr = 2*model.x[1] + 2*model.x[2] + 2*model.x[3] + 2*model.x[4] + 2*model.x[5] == 5)
+model.z = Objective(rule=z)
+model.constraints = ConstraintList()
+model.constraints.add(2*summation(model.x) == 5)
+
+results = opt.solve(model)
+model.display()
 
