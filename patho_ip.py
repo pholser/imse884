@@ -1,4 +1,6 @@
 from __future__ import division
+import heapq as q
+from ostruct import OpenStruct
 from pyomo.environ import *
 from pyomo.opt import SolverFactory
 
@@ -19,6 +21,9 @@ class Node:
     def __repr__(self):
         return self.__str__()
 
+nil_node = OpenStruct()
+nil_node.z = -float('inf')
+
 class BranchAndBound:
     def __init__(self, problem):
         self.problem = problem
@@ -26,9 +31,33 @@ class BranchAndBound:
 
     def solve(self):
         z_star = -float('inf')
+        candidates = []
+        processed_nodes = []
+        best = nil_node 
+
         root_result = self.opt.solve(self.problem)
-        nodes = [Node(self.problem)]
-        return nodes
+        root = Node(self.problem)
+        q.heappush(candidates, (-root.z, root))
+
+        while len(candidates) > 0:
+            candidate = q.heappop(candidates)[1]
+            if candidate.is_integer():
+                print candidate, "is integer"
+                if candidate.z > best.z:
+                    print candidate, "is better than", best
+                    best = candidate
+                else:
+                    print "fathom", candidate
+            else:
+                print candidate, "is not integer"
+                if candidate.z >= best.z:
+                    print candidate, "is better than", best
+                else:
+                    print "fathom", candidate
+
+            processed_nodes.append(candidate)
+ 
+        return processed_nodes
 
 def z(model):
     return model.x[1]
