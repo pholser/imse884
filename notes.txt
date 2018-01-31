@@ -503,6 +503,107 @@ The shape of the problem matters.
 
 Random diving
 
+-- If A and b are rational
+-- If there is a feasible integer point
+-- If LP unbounded
+-- Then IP is unbounded
+
+Pseudo-branching:
+
+We would be branching on a basic var; never
+a non-basic var (NBV would always be zero, an integer)
+
+We know based on the reduced costs of NBV, which vars are
+doing more or less harm in achieving optimality.
+
+What if we branched on a BV based on some estimate of
+reduced cost --> Pseudo-cost.
+
+Gets a broader separation, where one child of the branch
+improves a lot, the other doesn't --> hopefully fathom
+larger chunk of tree.
+
+No silver bullet, that will work well on every problem.
+
+Strong branching:
+-- n vars, assume they're binary; bad reduced costs
+    call that set of vars S
+
+root: branch on sum[x_i in S](x_i) = 0, and on
+    sum[x_i in S](x_i) >= 1
+
+Hopefully fathom one side or another quickly.
+
+Or:
+root: branch on sum[x_i in S](x_i) = n, and on
+    sum[x_i in S](x_i) <= n - 1
+where n is |S|
+
+-- branch on var least close to integer
+(CPLEX default)
+    -- depends on the problem
+        -- feasibility vs. optimality
+
+Rules for branching:
+1) Between all children, no feasible integer points
+eliminated
+2) Must remove linear relaxation of parent
+3) Must eventually terminate with only integer
+    extreme points
+    -- End at a single integer point
+
+Branching on polyhedra:
+-- Each node with four children:
+-- Only works for integer problems, not binary
+
+Easton: Branching: easier and better than many other
+techniques for solving IP
+-- Sometimes helpful to invent hand-rolling branching
+strategy for solving specific problems
+
+
+Column generation:
+When LP/IP has way more variables than constraints
+-- Comes up a lot in crew scheduling problems
+
+Idea: take the problem, cut it down to some reasonable
+size involving fewer vars; introduce new columns as you
+go
+-- Don't add variables that would never pivot in
+
+The overarching idea is that many linear programs are too large
+to consider all the variables explicitly. Since most of the
+variables will be non-basic and assume a value of zero in the
+optimal solution, only a subset of variables need to be considered
+in theory when solving the problem. Column generation leverages
+this idea to generate only the variables which have the potential
+to improve the objective function -- that is, to find variables
+with negative reduced cost (assuming without loss of generality that
+the problem is a minimization problem).
+
+The problem being solved is split into two problems:
+the master problem and the subproblem. The master problem is
+the original problem with only a subset of variables being considered.
+The subproblem is a new problem created to identify a new variable.
+The objective function of the subproblem is the reduced cost of
+the new variable with respect to the current dual variables,
+and the constraints require that the variable obey the naturally
+occurring constraints.
+
+The process works as follows. The master problem is solved --
+from this solution, we are able to obtain dual prices for each of
+the constraints in the master problem. This information is then
+utilized in the objective function of the subproblem.
+The subproblem is solved. If the objective value of the subproblem
+is negative, a variable with negative reduced cost has been
+identified. This variable is then added to the master problem,
+and the master problem is re-solved. Re-solving the master problem
+will generate a new set of dual values, and the process is repeated
+until no negative reduced cost variables are identified.
+The subproblem returns a solution with non-negative reduced cost,
+we can conclude that the solution to the master problem is optimal.
+
+
 
 
 
