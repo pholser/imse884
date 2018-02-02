@@ -603,6 +603,100 @@ until no negative reduced cost variables are identified.
 The subproblem returns a solution with non-negative reduced cost,
 we can conclude that the solution to the master problem is optimal.
 
+e.g. Cutting stock problem.
+Lots of wood planks of a particular length.
+How to cut it into pieces of the desired lengths so as to
+minimize the number of boards I need to cut
+
+n pieces of wood, 52 ft. long.
+Need pieces 6 ft., 8 ft., 10 ft. long
+
+Demand for 6-ft pieces: 120
+        8-ft          : 54
+        10-ft         : 60
+
+Let x_i = # of boards of type i, where I make a certain
+set of cuts on the board
+
+min x_1 + x_2 + x_3
+s.t.
+8x_1 + 0x_2 + 0x_3 = 120
+0x_1 + 6x_2 + 0x_3 = 54
+0x_1 + 0x_2 + 5x_3 = 60
+
+current soln: (15, 9, 12)
+
+Revised simplex tableau:
+
+ c_B^T * B^(-1) * A_j - c_j  | c_B^T * B^(-1) * b
+-------------------------------------------------
+    A_j * B^(-1)             | B^(-1) * b
+
+B^(-1) = [8 0 0; 0 6 0; 0 0 5]^(-1)
+       = [1/8 0 0; 0 1/6 0; 0 0 1/5]
+z = 36
+
+Column gen: treat those as ridiculous cuts.
+a) What about 3 6ft, 3 8ft, 1 10ft from each board?
+b) What about 4 6ft, 0 8ft, 2 10ft from each board?
+
+To decide whether such a new cut would be beneficial,
+calc the reduced costs (c_B^T * B^(-1) * A_j - c_j)...
+if it's making the cost cheaper, add it in.
+
+(1 board added in each; cost of new column therefore == 1)
+a) (1 1 1)[1/8 0 0; 0 1/6 0; 0 0 1/5] * [3 3 1] - 1
+   = 43/40 - 1 = 3/40
+b) -1/10
+
+a) better:
+
+min x_1 + x_2 + x_3 + x_4
+s.t.
+8x_1 + 0x_2 + 0x_3 + 3x_4 = 120
+0x_1 + 6x_2 + 0x_3 + 3x_4 = 54
+0x_1 + 0x_2 + 5x_3 +  x_4 = 60
+
+Keep pricing in other columns, eliminate others
+
+Branch-and-price: essentially column gen for IP
+Start B-and-B tree at root node with LR of reduced problem
+At node further down, you either have:
+-- integer
+   -- update z_IP; you now have a B^(-1)
+   -- add columns
+-- fractional
+   -- < z_IP
+       -- add columns
+   -- >= z_IP
+       -- branch
+-- infeasible
+   -- add columns
+
+check out the slack for a given solution -- target reducing
+these on column gen decisions
+
+Matching in a graph:
+set of edges such that there is at most one edge
+adjacent to every node
+
+Bipartite graphs cannot have odd cycles
+
+Clique k_m in a graph is a complete subgraph of a graph,
+whose number of vertices = m
+-- # edges: C(m, 2)
+
+Independent set of vertices:
+-- Select vertices such that no two vertices are
+    adjacent.
+
+Packing, covering
+
+
+
+
+
+
 
 
 
