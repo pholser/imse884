@@ -1,0 +1,49 @@
+set of int: EMPLOYEE;
+set of int: JOB;
+array[EMPLOYEE, JOB] of int: expected_benefit;
+array[JOB] of int: number_of_required_people;
+
+array[EMPLOYEE, JOB] of var 0..1: assigned;
+
+% Every employee must perform at least one job.
+% No one employee can perform four or more jobs.
+constraint
+    forall (e in EMPLOYEE) (
+        let {
+            var int: number_of_assigned_jobs = 
+                sum (j in JOB) (assigned[e, j])
+        }
+        in number_of_assigned_jobs >= 1
+            /\ number_of_assigned_jobs < 4
+    );
+
+% Each job requires a certain number of people to complete.
+% Every job must be done.
+constraint
+    forall (j in JOB) (
+        sum (e in EMPLOYEE) (assigned[e, j])
+        ==
+        number_of_required_people[j]
+    );
+
+% Anyone doing job 5 cannot do job 2, 7, or 9.
+constraint
+    forall (e in EMPLOYEE) (
+        8 * assigned[e, 5]
+            + 4 * assigned[e, 2]
+            + 2 * assigned[e, 7]
+            + assigned[e, 9]
+        <= 8
+    );
+
+var int: obj =
+    sum (e in EMPLOYEE, j in JOB) (
+        assigned[e, j] * expected_benefit[e, j]
+    );
+
+solve maximize obj;
+
+output([
+    "assigned =\n" ++ show2d(assigned) ++ "\n",
+    "obj = \(obj)\n"
+]);

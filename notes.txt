@@ -693,6 +693,13 @@ Independent set of vertices:
 Packing, covering
 
 
+IP modeling:
+HW2:
+-- problem 1, do it in Excel
+-- problem 2, do it in whatever
+-- problem 3, do it in whatever
+-- problem 4, do it in whatever
+-- problem 5, do in in OPL
 
 
 
