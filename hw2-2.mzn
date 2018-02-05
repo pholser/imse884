@@ -29,15 +29,20 @@ int: salary_cap;
 
 array[PLAYER, TEAM_ROLE] of var 0..1: team;
 
-solve satisfy;
+var float: obj =
+    sum (p in PLAYER, r in TEAM_ROLE) (
+        team[p, r] * player_avg_points[p]
+    );
+solve maximize obj;
+% solve satisfy;
 
-% Each team role satisfied by a player.
+% Each team role filled by a player.
 constraint
     forall (r in TEAM_ROLE) (
         sum (p in PLAYER) (team[p, r]) == 1
     );
 
-% No player satisfies more than one team role.
+% No player fills more than one team role.
 constraint
     forall (p in PLAYER) (
         sum (r in TEAM_ROLE) (team[p, r]) <= 1
@@ -60,3 +65,27 @@ constraint
     sum (p in PLAYER, r in TEAM_ROLE) (
         team[p, r] * player_salaries[p]
     ) <= salary_cap;
+
+output(
+    [
+        player_names[p]
+            ++ " "
+            ++ show([s | s in POSITION where position_eligible[p, s] == 1])
+            ++ " plays "
+            ++ show(r)
+            ++ ", avg points = "
+            ++ show(player_avg_points[p])
+            ++ ", salary = "
+            ++ show(player_salaries[p])
+            ++ "\n"
+        | p in PLAYER, r in TEAM_ROLE where fix(team[p, r]) == 1
+    ]
+    ++
+    ["salary spent = "
+        ++ show(sum (p in PLAYER, r in TEAM_ROLE) (
+            fix(team[p, r]) * player_salaries[p]
+        ))
+        ++ "\n"]
+    ++
+    ["obj = \(obj)\n"]
+);
