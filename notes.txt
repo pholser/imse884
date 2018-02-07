@@ -698,8 +698,84 @@ HW2:
 -- problem 1, do it in Excel
 -- problem 2, do it in whatever
 -- problem 3, do it in whatever
+    -- a) minimize sum of all completion times
+        -- shortest processing time first
+    -- b) minimize max finish time
 -- problem 4, do it in whatever
 -- problem 5, do in in OPL
+
+Modeling TSP:
+-- n cities
+-- distances between each city pair (i, j)
+-- Visit all the cities once so as to minimize
+    the total distance traveled.
+
+One possible formulation:
+Decision vars:
+1) x_ij = 1 if tour includes arc from i to j
+        = 0 else
+2) x_ik = 1 if city i is the k'th city on the tour
+        = 0 else
+3) x_ijk = 1 if city i is the (k-1)'th city and
+    city j is the k'th city.
+         = 0 else
+
+Example tour with five cities: 1-2-3-5-4-1
+
+3) constraints:
+     Above, we have x_121 = 1,
+     x_232 = 1,
+     x_353 = 1,
+     x_544 = 1
+     x_415 = 1
+
+# There is only one k'th arc in the tour
+* sum[i, j]( x_ijk ) = 1, forall k
+
+# No self-visits
+* x_iik = 0, forall i, k     # n^2 constraints
+    With one constraint: sum[i, k]( x_iik ) = 0
+
+# One exit out of each city
+* sum[j, k]( x_ijk ) = 1, forall i
+
+# One entry into each city
+* sum[i, k]( x_ijk ) = 1, forall j
+
+# Start and end at node 1
+* sum[j]( x_ij1 ) = 1,
+    sum[]( x_i1n ) = 1
+
+# Flow-in == flow-out at each node
+...?
+
+
+2) constraints
+    Above, we have x_11 = 1
+        x_22 = 1
+        x_33 = 1
+        x_54 = 1
+        x_45 = 1
+        x_16 = 1
+
+# Exactly one city is the k'th city
+sum[i]( x_ik ) = 1, forall k
+
+# Every city visited exactly once
+sum[k]( x_ik ) = 1, forall i
+
+Let d_ij = distance between cities i and j
+Let var y_ij = 1 if cities i and j are adjacent in tour
+     (i -> j)
+
+# e.g.
+x_11 = 1 /\ x_32 = 1 --> y_13 = 1
+    # truth-table this for all vals to generalize
+# in general:
+
+
+min sum[i, j]( d_ij * y_ij )
+
 
 
 
