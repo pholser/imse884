@@ -34,7 +34,7 @@ var float: obj =
         team[p, r] * player_avg_points[p]
     );
 solve maximize obj;
-% solve satisfy;
+
 
 % Each team role filled by a player.
 constraint
