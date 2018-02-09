@@ -1,0 +1,7 @@
+LOAN = {STUDENT, CAR, CREDIT_CARD};
+initial_balance = [30000, 8000, 12000];
+interest_rate_per_month = [0.0075, 0.005, 0.01];
+minimum_monthly_payment = [300, 50, 125];
+monthly_debt_retirement_budget = 800;
+max_month = 180;
+over_minimum = 50;
