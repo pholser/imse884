@@ -43,7 +43,7 @@ constraint
 constraint
     forall (m in MONTH) (
         sum (loan in LOAN) (monthly_payment[loan, m])
-        ==
+        <=
         monthly_debt_retirement_budget
     );
     
@@ -69,7 +69,7 @@ constraint
 
 var float: obj =
     sum (loan in LOAN, m in MONTH_0) (
-        monthly_balance[loan, m]
+        monthly_interest_charge[loan, m]
     );
     
 solve minimize obj;

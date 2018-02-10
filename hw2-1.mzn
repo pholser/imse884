@@ -9,12 +9,9 @@ array[EMPLOYEE, JOB] of var 0..1: assigned;
 % No one employee can perform four or more jobs.
 constraint
     forall (e in EMPLOYEE) (
-        let {
-            var int: number_of_assigned_jobs = 
-                sum (j in JOB) (assigned[e, j])
-        }
-        in number_of_assigned_jobs >= 1
-            /\ number_of_assigned_jobs < 4
+        sum (j in JOB) (assigned[e, j]) >= 1
+        /\
+        sum (j in JOB) (assigned[e, j]) <= 4
     );
 
 % Each job requires a certain number of people to complete.
