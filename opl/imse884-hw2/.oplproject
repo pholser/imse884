@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ASCII"?><project>
+	<version>1.0</version>
+	<configs>
+		<config default="true" name="HW2 Problem 4" category="opl">
+			<ref name="hw2-4.mod" type="model">
+			</ref>
+		</config>
+	</configs>
+	
+</project>
