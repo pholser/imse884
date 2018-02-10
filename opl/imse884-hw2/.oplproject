@@ -5,6 +5,10 @@
 			<ref name="hw2-4.mod" type="model">
 			</ref>
 		</config>
+		<config default="false" name="HW2 Problem 3" category="opl">
+			<ref name="hw2-3b.mod" type="model">
+			</ref>
+		</config>
 	</configs>
 	
 </project>
