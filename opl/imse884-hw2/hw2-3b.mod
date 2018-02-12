@@ -16,6 +16,7 @@ subject to {
         sum (m in MACHINE) (job_assigned_to_machine[j, m]) == 1
     );
 
+    // Definition of last completion time on a machine.
     forall (m in MACHINE) (
         last_completion_time[m] ==
             sum (j in JOB) (
@@ -32,18 +33,18 @@ subject to {
 main {
     if (!thisOplModel.generate()) {
         if (cplex.solve()) {
-            for (var j in thisOplModel.JOB) {
-                for (var m in thisOplModel.MACHINE) {
+            for (var m in thisOplModel.MACHINE) {
+                writeln("Machine " + m + ":");
+                for (var j in thisOplModel.JOB) {
                     if (thisOplModel.job_assigned_to_machine[j][m] > 0.99) {
                         writeln(
-                            "Job " + j + " assigned to machine " + m
-                                + ", duration = "
+                            "Job " + j + ", duration = "
                                 + thisOplModel.processing_time[j]);
                     }
                 }
+                writeln("Last completion time: " + thisOplModel.last_completion_time[m]);
             }
-            writeln("Max completion time = "
-                + thisOplModel.max_last_completion_time);
+            writeln("Max completion time = " + cplex.getObjValue());
         } else {
             writeln("Either Unbounded or Infeasible");
         }
