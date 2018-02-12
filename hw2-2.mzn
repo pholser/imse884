@@ -14,7 +14,12 @@ enum TEAM_ROLE = {
     CENTER,
     UTILITY
 };
+
+% Tells whether a player may play a given position.
 array[PLAYER, POSITION] of 0..1: position_eligible;
+
+% Tells whether a role on the fantasy team may be filled by
+% a player playing a given position.
 array[POSITION, TEAM_ROLE] of 0..1: team_role_fulfillable =
     array2d(
         POSITION,
@@ -27,13 +32,9 @@ array[POSITION, TEAM_ROLE] of 0..1: team_role_fulfillable =
          |]);
 int: salary_cap;
 
-array[PLAYER, TEAM_ROLE] of var 0..1: team;
 
-var float: obj =
-    sum (p in PLAYER, r in TEAM_ROLE) (
-        team[p, r] * player_avg_points[p]
-    );
-solve maximize obj;
+% What players fill what roles on the fantasy team?
+array[PLAYER, TEAM_ROLE] of var 0..1: team;
 
 
 % Each team role filled by a player.
@@ -65,6 +66,14 @@ constraint
     sum (p in PLAYER, r in TEAM_ROLE) (
         team[p, r] * player_salaries[p]
     ) <= salary_cap;
+
+
+var float: obj =
+    sum (p in PLAYER, r in TEAM_ROLE) (
+        team[p, r] * player_avg_points[p]
+    );
+solve maximize obj;
+
 
 output(
     [
