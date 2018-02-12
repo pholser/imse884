@@ -1,12 +1,12 @@
-{string} LOAN = {"Student", "Car", "Credit Card"};
-float initial_balance[LOAN] = [30000, 8000, 12000];
-float interest_rate_per_month[LOAN] = [0.0075, 0.005, 0.01];
-float minimum_monthly_payment[LOAN] = [300, 50, 125];
-float monthly_debt_retirement_budget = 800;
-int max_month = 180;
+{string} LOAN = ...;
+float initial_balance[LOAN] = ...;
+float interest_rate_per_month[LOAN] = ...;
+float minimum_monthly_payment[LOAN] = ...;
+float monthly_debt_retirement_budget = ...;
+int max_month = ...;
 range MONTH_0 = 0..max_month;
 range MONTH = 1..max_month;
-float over_minimum = 50;
+float over_minimum = ...;
 
 dvar float monthly_balance[LOAN, MONTH_0];
 dvar float monthly_interest_charge[LOAN, MONTH_0];

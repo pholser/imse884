@@ -1,7 +1,8 @@
-range MACHINE = 1..4;
-range JOB = 1..15;
-int processing_time[JOB] =
-    [23, 14, 7, 62, 21, 17, 19, 55, 16, 13, 27, 31, 35, 18, 9];
+int number_of_machines = ...;
+range MACHINE = 1..number_of_machines;
+int number_of_jobs = ...;
+range JOB = 1..number_of_jobs;
+int processing_time[JOB] = ...;
 
 dvar int+ job_assigned_to_machine[JOB, MACHINE] in (0..1);
 dvar int+ last_completion_time[MACHINE];

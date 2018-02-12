@@ -4,17 +4,25 @@
 		<config default="true" name="HW2 Problem 4" category="opl">
 			<ref name="hw2-4.mod" type="model">
 			</ref>
+			<ref name="hw2-4.dat" type="data">
+			</ref>
 		</config>
 		<config default="false" name="HW2 Problem 3" category="opl">
 			<ref name="hw2-3b.mod" type="model">
+			</ref>
+			<ref name="hw2-3b.dat" type="data">
 			</ref>
 		</config>
 		<config default="false" name="HW2 Problem 5b" category="opl">
 			<ref name="hw2-5b.mod" type="model">
 			</ref>
+			<ref name="hw2-5b.dat" type="data">
+			</ref>
 		</config>
 		<config default="false" name="HW2 Problem 5a" category="opl">
 			<ref name="hw2-5a.mod" type="model">
+			</ref>
+			<ref name="hw2-5a.dat" type="data">
 			</ref>
 		</config>
 	</configs>
