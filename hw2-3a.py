@@ -37,7 +37,7 @@ processing_time = parameters['processing_time']
 assert number_of_jobs == len(processing_time)
 
 machines = [Machine(i) for i in xrange(1, number_of_machines+1)]
-jobs = [Job(number=i, processing_time=v)
+jobs = [Job(number=i+1, processing_time=v)
     for i, v in enumerate(processing_time)
 ]
 for j in sorted(jobs, key=lambda j: j.processing_time):
