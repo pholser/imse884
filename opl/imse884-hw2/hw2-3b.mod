@@ -4,11 +4,20 @@ int number_of_jobs = ...;
 range JOB = 1..number_of_jobs;
 int processing_time[JOB] = ...;
 
+
+// Is a given job assigned to a given machine?
 dvar int+ job_assigned_to_machine[JOB, MACHINE] in (0..1);
+
+// Last completion time of a job at a machine.
+// We're solving for max last completion time; sequence of jobs
+// does not matter.
 dvar int+ last_completion_time[MACHINE];
+
 dvar int+ max_last_completion_time;
 
+
 minimize max_last_completion_time;
+
 
 subject to {
     // Every job assigned to exactly one machine.
@@ -29,6 +38,7 @@ subject to {
         max_last_completion_time >= last_completion_time[m]
     );
 }
+
 
 main {
     if (!thisOplModel.generate()) {

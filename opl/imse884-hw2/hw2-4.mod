@@ -8,16 +8,29 @@ range MONTH_0 = 0..max_month;
 range MONTH = 1..max_month;
 float over_minimum = ...;
 
-dvar float monthly_balance[LOAN, MONTH_0];
-dvar float monthly_interest_charge[LOAN, MONTH_0];
-dvar float monthly_payment[LOAN, MONTH];
-dvar int+ pay_over_minimum[LOAN, MONTH] in (0..1);
-dvar int paid[LOAN, MONTH] in (0..1);
 
+// What balance to carry on a loan in a given month?
+dvar float monthly_balance[LOAN, MONTH_0];
+
+// How much interest to incur on a loan in a given month?
+dvar float monthly_interest_charge[LOAN, MONTH_0];
+
+// How much to pay on a given loan in a given month?
+dvar float monthly_payment[LOAN, MONTH];
+
+// Should we pay more than the minimum payment on a loan in a given month?
+dvar int+ pay_over_minimum[LOAN, MONTH] in (0..1);
+
+
+// To pay the loans off most quickly, we will make payments so as
+// to minimize the total interest charges incurred (assuming we are
+// not incurring more charges, like more credit card purchases or
+// late fees on loans).
 minimize
     sum (loan in LOAN, m in MONTH_0) (
         monthly_interest_charge[loan, m]
     );
+
 
 subject to {
     // Initial balances.
@@ -56,6 +69,11 @@ subject to {
     );
 
     // Month-over-month balances.
+    // We are treating this schedule as if we are making payments
+    // forever. By keeping interest payments at a minimum, we will
+    // pay off soonest. Below, we'll find the months at which
+    // balance becomes zero or negative, and these will be the months
+    // we're interested in.
     forall (loan in LOAN, m in MONTH) (
         monthly_balance[loan, m]
         ==
@@ -67,6 +85,7 @@ subject to {
         )
     );
 }
+
 
 main {
     if (!thisOplModel.generate()) {

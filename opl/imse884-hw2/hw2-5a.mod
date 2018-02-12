@@ -6,16 +6,19 @@ range CUSTOMER =  2..number_of_stops;
 int DEPOT = ...;
 int distance[STOP, STOP] = ...;
 
+
 // Does a vehicle traverse an arc from stop A to stop B?
 dvar int+ traversed[STOP, STOP, VEHICLE] in (0..1);
 
 // Variables used in the Miller-Tucker-Zemlin subtour elimination constraints
 dvar float+ u[CUSTOMER];
 
+
 minimize
     sum (s1 in STOP, s2 in STOP, v in VEHICLE) (
         traversed[s1, s2, v] * distance[s1, s2]
     );
+
 
 subject to {
     // No self-arcs traversed.
@@ -68,6 +71,7 @@ subject to {
         number_of_stops - 1
     );
 }
+
 
 main {
     if (!thisOplModel.generate()) {

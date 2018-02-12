@@ -5,14 +5,19 @@ range JOB = 1..number_of_jobs;
 range POSITION = 1..number_of_jobs;
 int processing_time[JOB] = ...;
 
+
+// Is a given job assigned to a given machine at a given position?
 dvar int+ job_assigned_to_machine[JOB, POSITION, MACHINE] in (0..1);
+// The completion time of the job at a given position
 dvar int+ completion_time[POSITION, MACHINE];
+
 
 minimize
     sum (p in POSITION, m in MACHINE) (completion_time[p, m]);
 
+
 subject to {
-    // Completion times.
+    // Definition of completion time of a job at a given position.
     forall (p in POSITION, m in MACHINE) (
         completion_time[p, m]
         ==
@@ -37,6 +42,7 @@ subject to {
         ) <= 1
     );
 }
+
 
 main {
     if (!thisOplModel.generate()) {
