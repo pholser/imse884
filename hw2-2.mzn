@@ -1,4 +1,5 @@
-set of int: PLAYER;
+int: number_of_players;
+set of int: PLAYER = 1..number_of_players;
 array[PLAYER] of string: player_names;
 array[PLAYER] of int: player_salaries;
 array[PLAYER] of float: player_avg_points;

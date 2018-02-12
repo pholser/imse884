@@ -1,5 +1,7 @@
-set of int: EMPLOYEE;
-set of int: JOB;
+int: number_of_employees;
+set of int: EMPLOYEE = 1..number_of_employees;
+int: number_of_jobs;
+set of int: JOB = 1..number_of_jobs;
 array[EMPLOYEE, JOB] of int: expected_benefit;
 array[JOB] of int: number_of_required_people;
 

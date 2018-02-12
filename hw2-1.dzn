@@ -1,5 +1,5 @@
-EMPLOYEE = 1..5;
-JOB = 1..9;
+number_of_employees = 5;
+number_of_jobs = 9;
 expected_benefit =
     [|12, 8, 5, 8, 9, 5, 4, 6, 11
      |11, 7, 3, 10, 6, 4, 7, 3, 9
