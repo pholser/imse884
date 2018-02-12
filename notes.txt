@@ -831,6 +831,108 @@ sum[i in S]( sum[j in S] ( x_ij ) ) <= |S| - 1
     # 2^(n-1) of these constraints!
     # find a soln without these, then add in subtour constraints
 
+Lazy constraints:
+-- those constraints that don't really contribute
+
+Remove such constraints.
+If you find a soln in the reduced-constraint problem,
+you can test it against the lazy removed constraints;
+if there are violations, need to add violated
+constraints back to problem, and resolve.
+Lots of constraints increase basis; more challenging
+to solve.
+
+With TSP, you have a zillion constraints (expo in #cities),
+subtour constraints, etc...
+
+Use these in problems with:
+-- lots of constraints
+-- fast method for identifying vios on constraints
+
+Modeling: disjunctive constraints:
+e.g. with integer vars:
+    min (x - 2)^2
+Hint: make it piecewise linear
+Use a linear approximation for different slices of
+the function
+
+  x     f(x)
+-------------
+  0      4
+  1      1
+  2      0
+  3      1
+  4      4
+  5      9
+
+For x = 2.5, f(x) on the line between (2, 0) and (3, 1)
+Convex combination: x = lambda * x_1 + (1 - lambda) * x_2
+                  f(x) = lambda * f(x_1) + (1 - lambda) * f(x_2)
+
+Lambdas for each piecewise segment:
+    lambda_0, ..., lambda_5
+
+lambda_i >= 0
+sum[i]( lambda_i ) == 1
+
+to get to f(2.5):
+
+min 4 * lambda_0 + 1 * lambda_1 + 0 * lambda_2
+    + 1 * lambda_3 + 4 * lambda_4 + 9 * lambda_5
+s.t. the above.
+
+But, do extra to ensure that you get only
+two non-negative lambdas.
+
+Add binary vars u_1, ..., u_5, so that
+u_1 sits between lambda_0 and lambda_1....
+
+sum[i]( u_i ) == 1
+
+e.g. lambda_0, lambda_1, u_1
+0     0    0   --> ok
+0     0    1   --> x
+0    >0    0   --> ok
+0    >0    1   --> ok
+>0    0    0   --> ok
+>0    0    1   --> x
+>0   >0    0   --> x
+>0   >0    1   --> ok
+
+how to express a constraint that captures this truth table?
+(1 - lambda_i) + (1 - lambda_(i+1)) + u_i <= 2
+
+Useful for expressing nonlinear constraints, objective
+as if they were linear.
+
+e.g. sports scheduling
+Double robin-round tournament
+n teams, 2n - 2 slots
+
+Kansas State
+West Virginia
+Texas Tech
+
+Decision vars:
+The solution looks like "team t comes to facility f
+to play at time t"
+Let x_ijk = 1 if team i plays at team j in slot k
+
+e.g. x_{tt,ksu,12} = 1
+
+constraints:
+# Every slot has enough games
+sum[i, j]( x_ijk ) = n/2, forall k
+
+# Every team occupies right number of slots
+sum[j]( x_ijk ) + sum[j]( x_jik ) = 1
+    forall k, forall i
+(obviates first constraint)
+
+
+
+
+
 
 
 

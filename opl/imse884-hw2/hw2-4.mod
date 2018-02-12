@@ -68,7 +68,6 @@ subject to {
     );
 }
 
-
 main {
     if (!thisOplModel.generate()) {
         if (cplex.solve()) {
@@ -132,6 +131,6 @@ main {
             writeln("Either Unbounded or Infeasible");
         }
     } else {
-        writeln("OPL could not read problem")      
+        writeln("OPL could not read problem");
     }
 }
