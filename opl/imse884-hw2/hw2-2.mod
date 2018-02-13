@@ -41,6 +41,7 @@ maximize
         team[p, r] * player_avg_points[p]
     );
 
+
 subject to {
     // Each team role filled by a player.
     forall (r in TEAM_ROLE) (
