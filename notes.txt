@@ -921,14 +921,56 @@ Let x_ijk = 1 if team i plays at team j in slot k
 e.g. x_{tt,ksu,12} = 1
 
 constraints:
-# Every slot has enough games
-sum[i, j]( x_ijk ) = n/2, forall k
-
 # Every team occupies right number of slots
 sum[j]( x_ijk ) + sum[j]( x_jik ) = 1
     forall k, forall i
 (obviates first constraint)
 
+# Every team plays every other team twice,
+# once on road, once at home.
+sum[k]( x_ijk ) = 1 forall i, forall j != i
+sum[i, k]( x_iik ) == 0
+
+# Need separation between matchups of two of same teams
+x_{TT,KSU}1 = 1
+-->
+sum[i in 2..6])( x_{KSU,TT} ) == 0
+
+x_{KSU,TT}1 = 1
+-->
+sum[i in 2..6])( x_{TT,KSU} ) == 0
+
+sum[k in m..m+5]( x_ijk + x_jik ) <= 1
+    forall i, forall j != i, forall m in 1..2n-7
+
+# At most two home games in a row for a team
+x_{TT,KSU}_k + x_{WV,KSU}_(k+1) + x_{BAY,KSU}_(k+2)
+    <= 2
+
+sum[i, k in m..m+2]( x_ijk ) <= 2
+    forall j, forall m in 1..2n-4
+
+# Same for away games
+
+# KSU must be away in slot 14 due to concert
+sum[j]( x_{KSU,j,14} ) == 1, forall j != KSU
+
+# Equal number of weekends at home
+(slots 2, 4, 6, ..., 18)
+(every team gets at least four weekend games)
+
+# TV usually sets objective(s)
+there are A and B games
+-- A-game: two top-25 teams
+    (Okla, Tech, WV, KU, BAY)
+-- B-game: WV at TEX, KU at KSU, ...
+
+Goal: have at least 2 B-games or 1 A-game in
+every slot.
+
+Let y_k = 1 if slot has a good matchup, 0 else.
+
+Come up with constraints and objective to match.
 
 
 
