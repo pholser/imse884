@@ -53,9 +53,9 @@ subject to {
         sum (c in CUSTOMER) (traversed[c, DEPOT, v]) == 1
     );
 
-    // Each vehicle visits at least two customers.
+    // Each vehicle visits exactly two customers.
     forall (v in VEHICLE) (
-        sum (c in CUSTOMER, s in STOP) (traversed[s, c, v]) >= 2
+        sum (c in CUSTOMER, s in STOP) (traversed[s, c, v]) == 2
     );
 
     // Disregard subtours. These are Miller-Tucker-Zemlin
@@ -79,23 +79,14 @@ main {
             for (var v in thisOplModel.VEHICLE) {
                 writeln("Vehicle " + v + " traverses:");
                 writeln("===========================");
-                
-                var tour_complete = false;
-                var s = thisOplModel.DEPOT;
-                while (!tour_complete) {
+                for (var s in thisOplModel.STOP) {
                     for (var d in thisOplModel.STOP) {
                         if (thisOplModel.traversed[s][d][v] >= 0.99) {
                             writeln("(" + s + ", " + d + "), distance = "
                                 + thisOplModel.distance[s][d]);
-                            s = d;
-                            if (d == thisOplModel.DEPOT) {
-                                tour_complete = true;
-                                break;
-                            }
                         }
                     }
                 }
-
                 writeln("");
             }
             writeln("Total distance covered = " + cplex.getObjValue());

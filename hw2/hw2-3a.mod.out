@@ -1,0 +1,20 @@
+Machine 1:
+Job 15, duration = 9, completion time = 9
+Job 14, duration = 18, completion time = 27
+Job 1, duration = 23, completion time = 50
+Job 8, duration = 55, completion time = 105
+Machine 2:
+Job 3, duration = 7, completion time = 7
+Job 2, duration = 14, completion time = 21
+Job 11, duration = 27, completion time = 48
+Job 4, duration = 62, completion time = 110
+Machine 3:
+Job 6, duration = 17, completion time = 17
+Job 5, duration = 21, completion time = 38
+Job 13, duration = 35, completion time = 73
+Machine 4:
+Job 10, duration = 13, completion time = 13
+Job 9, duration = 16, completion time = 29
+Job 7, duration = 19, completion time = 48
+Job 12, duration = 31, completion time = 79
+Total completion time = 674

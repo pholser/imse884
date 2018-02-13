@@ -1,0 +1,17 @@
+Machine 1:
+	[(Job 3/duration 7), (Job 9/duration 16), (Job 5/duration 21), (Job 13/duration 35)]
+	completion times: [7, 23, 44, 79]
+	last completion time: 79
+Machine 2:
+	[(Job 15/duration 9), (Job 6/duration 17), (Job 1/duration 23), (Job 8/duration 55)]
+	completion times: [9, 26, 49, 104]
+	last completion time: 104
+Machine 3:
+	[(Job 10/duration 13), (Job 14/duration 18), (Job 11/duration 27), (Job 4/duration 62)]
+	completion times: [13, 31, 58, 120]
+	last completion time: 120
+Machine 4:
+	[(Job 2/duration 14), (Job 7/duration 19), (Job 12/duration 31)]
+	completion times: [14, 33, 64]
+	last completion time: 64
+Sum of all completion times: 674

@@ -79,23 +79,14 @@ main {
             for (var v in thisOplModel.VEHICLE) {
                 writeln("Vehicle " + v + " traverses:");
                 writeln("===========================");
-                
-                var tour_complete = false;
-                var s = thisOplModel.DEPOT;
-                while (!tour_complete) {
+                for (var s in thisOplModel.STOP) {
                     for (var d in thisOplModel.STOP) {
                         if (thisOplModel.traversed[s][d][v] >= 0.99) {
                             writeln("(" + s + ", " + d + "), distance = "
                                 + thisOplModel.distance[s][d]);
-                            s = d;
-                            if (d == thisOplModel.DEPOT) {
-                                tour_complete = true;
-                                break;
-                            }
                         }
                     }
                 }
-
                 writeln("");
             }
             writeln("Total distance covered = " + cplex.getObjValue());

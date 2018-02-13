@@ -1,0 +1,106 @@
+Compiling hw2-3b.mzn, with additional data hw2-3.dzn
+Running hw2-3b.mzn
+Job 1 assigned to machine 2, duration = 23
+Job 2 assigned to machine 3, duration = 14
+Job 3 assigned to machine 4, duration = 7
+Job 4 assigned to machine 2, duration = 62
+Job 5 assigned to machine 1, duration = 21
+Job 6 assigned to machine 4, duration = 17
+Job 7 assigned to machine 2, duration = 19
+Job 8 assigned to machine 3, duration = 55
+Job 9 assigned to machine 2, duration = 16
+Job 10 assigned to machine 4, duration = 13
+Job 11 assigned to machine 3, duration = 27
+Job 12 assigned to machine 1, duration = 31
+Job 13 assigned to machine 4, duration = 35
+Job 14 assigned to machine 3, duration = 18
+Job 15 assigned to machine 1, duration = 9
+Max completion time = 120
+----------
+Job 1 assigned to machine 2, duration = 23
+Job 2 assigned to machine 1, duration = 14
+Job 3 assigned to machine 4, duration = 7
+Job 4 assigned to machine 2, duration = 62
+Job 5 assigned to machine 1, duration = 21
+Job 6 assigned to machine 4, duration = 17
+Job 7 assigned to machine 2, duration = 19
+Job 8 assigned to machine 3, duration = 55
+Job 9 assigned to machine 2, duration = 16
+Job 10 assigned to machine 4, duration = 13
+Job 11 assigned to machine 3, duration = 27
+Job 12 assigned to machine 1, duration = 31
+Job 13 assigned to machine 4, duration = 35
+Job 14 assigned to machine 3, duration = 18
+Job 15 assigned to machine 1, duration = 9
+Max completion time = 120
+----------
+Job 1 assigned to machine 2, duration = 23
+Job 2 assigned to machine 2, duration = 14
+Job 3 assigned to machine 2, duration = 7
+Job 4 assigned to machine 4, duration = 62
+Job 5 assigned to machine 4, duration = 21
+Job 6 assigned to machine 4, duration = 17
+Job 7 assigned to machine 1, duration = 19
+Job 8 assigned to machine 1, duration = 55
+Job 9 assigned to machine 2, duration = 16
+Job 10 assigned to machine 3, duration = 13
+Job 11 assigned to machine 3, duration = 27
+Job 12 assigned to machine 3, duration = 31
+Job 13 assigned to machine 2, duration = 35
+Job 14 assigned to machine 1, duration = 18
+Job 15 assigned to machine 2, duration = 9
+Max completion time = 104
+----------
+Job 1 assigned to machine 2, duration = 23
+Job 2 assigned to machine 3, duration = 14
+Job 3 assigned to machine 4, duration = 7
+Job 4 assigned to machine 1, duration = 62
+Job 5 assigned to machine 1, duration = 21
+Job 6 assigned to machine 4, duration = 17
+Job 7 assigned to machine 2, duration = 19
+Job 8 assigned to machine 4, duration = 55
+Job 9 assigned to machine 2, duration = 16
+Job 10 assigned to machine 4, duration = 13
+Job 11 assigned to machine 3, duration = 27
+Job 12 assigned to machine 3, duration = 31
+Job 13 assigned to machine 2, duration = 35
+Job 14 assigned to machine 3, duration = 18
+Job 15 assigned to machine 1, duration = 9
+Max completion time = 93
+----------
+Job 1 assigned to machine 2, duration = 23
+Job 2 assigned to machine 3, duration = 14
+Job 3 assigned to machine 3, duration = 7
+Job 4 assigned to machine 1, duration = 62
+Job 5 assigned to machine 4, duration = 21
+Job 6 assigned to machine 1, duration = 17
+Job 7 assigned to machine 2, duration = 19
+Job 8 assigned to machine 3, duration = 55
+Job 9 assigned to machine 3, duration = 16
+Job 10 assigned to machine 1, duration = 13
+Job 11 assigned to machine 4, duration = 27
+Job 12 assigned to machine 2, duration = 31
+Job 13 assigned to machine 4, duration = 35
+Job 14 assigned to machine 2, duration = 18
+Job 15 assigned to machine 4, duration = 9
+Max completion time = 92
+----------
+Job 1 assigned to machine 2, duration = 23
+Job 2 assigned to machine 3, duration = 14
+Job 3 assigned to machine 3, duration = 7
+Job 4 assigned to machine 1, duration = 62
+Job 5 assigned to machine 4, duration = 21
+Job 6 assigned to machine 1, duration = 17
+Job 7 assigned to machine 2, duration = 19
+Job 8 assigned to machine 3, duration = 55
+Job 9 assigned to machine 3, duration = 16
+Job 10 assigned to machine 1, duration = 13
+Job 11 assigned to machine 4, duration = 27
+Job 12 assigned to machine 2, duration = 31
+Job 13 assigned to machine 4, duration = 35
+Job 14 assigned to machine 2, duration = 18
+Job 15 assigned to machine 4, duration = 9
+Max completion time = 92
+----------
+==========
+Finished in 313msec
