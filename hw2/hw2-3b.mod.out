@@ -1,0 +1,24 @@
+Machine 1:
+Job 2, duration = 14
+Job 3, duration = 7
+Job 4, duration = 62
+Job 15, duration = 9
+Last completion time: 92
+Machine 2:
+Job 1, duration = 23
+Job 5, duration = 21
+Job 9, duration = 16
+Job 12, duration = 31
+Last completion time: 91
+Machine 3:
+Job 7, duration = 19
+Job 8, duration = 55
+Job 14, duration = 18
+Last completion time: 92
+Machine 4:
+Job 6, duration = 17
+Job 10, duration = 13
+Job 11, duration = 27
+Job 13, duration = 35
+Last completion time: 92
+Max completion time = 92
