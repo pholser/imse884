@@ -26,13 +26,13 @@ standard output.
 
 OPL model, data file, and captured output for solution to problem 2.
 
-## hw2-3a.py
+## hw2-3a.py, hw2-3a.py.out
 
 Python program to solve problem 3 part a (for minimizing customer completion
-time). Sorts the jobs in ascending order of processing time, and iterates over
-the sorted list, adding the job to the machine that will minimize that job's
-completion time (based on what's ahead of it in the machine queues).
-This guarantees an optimal solution.
+time), and its output. Sorts the jobs in ascending order of processing time,
+and iterates over the sorted list, adding the job to the machine that will
+minimize that job's completion time (based on what's ahead of it in the
+machine queues). This guarantees an optimal solution.
 
 ## hw2-3.dat
 
