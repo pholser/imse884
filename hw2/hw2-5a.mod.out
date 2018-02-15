@@ -1,0 +1,37 @@
+Vehicle 1 traverses:
+===========================
+(1, 12), distance = 1167
+(12, 4), distance = 336
+(4, 1), distance = 1433
+
+Vehicle 2 traverses:
+===========================
+(1, 13), distance = 1057
+(13, 10), distance = 587
+(10, 1), distance = 1104
+
+Vehicle 3 traverses:
+===========================
+(1, 5), distance = 66
+(5, 8), distance = 577
+(8, 1), distance = 635
+
+Vehicle 4 traverses:
+===========================
+(1, 6), distance = 2141
+(6, 2), distance = 365
+(2, 1), distance = 2457
+
+Vehicle 5 traverses:
+===========================
+(1, 7), distance = 1616
+(7, 9), distance = 1033
+(9, 1), distance = 2407
+
+Vehicle 6 traverses:
+===========================
+(1, 11), distance = 644
+(11, 3), distance = 167
+(3, 1), distance = 712
+
+Total distance covered = 18504
