@@ -983,6 +983,59 @@ e.g. Cancer treatment
 Where to align gamma knife, how much radiation to
 send thru that alignment, how many shots to take?
 
+Discretize the brain into points (1 mm^3?)
+p_ijk = 1 if coord (i,j,k) has cancer, 0 else
+
+Let x_{theta,phi},{x_1,y_1,z_1} =
+    radiation setting >= 0
+Let y_{theta,phi,x_1,y_1,z_1} = 1 if shot beam, 0 else
+    still discretizing the potential angle space
+
+-- Amt of radiation will be less in interior parts of brain
+-- Radiation beam will have an effect on cells not in the
+    beam's path
+
+Sparsity of IP matrices
+--> phrase constraints in terms of the non-zeros
+
+To kill a cancer cell at p_ijk, you need at least a certain
+amt of radiation to hit it.
+
+Good model formulations:
+This is a tough one: there are a number of equivalent models,
+some solve faster than others. It is difficult to quantify a
+good model and we will cover this throughout the semester.
+
+One way frequently used to tighten models is to remove
+redundant constraints, adding logical inequalities, fixing variables.
+
+For instance:
+
+max 5x_1 + 7x_2 + 3x_3 + x_4 + x_5 + x_6
+s.t.:
+    10x_1 + 7x_2 + 3x_3 <= 15   (logi imp)
+     5x_1 + 2x_2 +  x_3<= 5	    (Red)
+     x_5 + x_6 <= 1             (log imp)
+     x_4 + x_6 <= 1
+     x_4 + x_5 <= 1
+     7x_3 - x_4 - x_5 - x_6 <= 5.3 (fixing).
+    x1,x2,x3,x4,x5,x6 {0,1}
+
+Can reduce to:
+max 5x_1 + 7x_2 + 3x_3 + x_4 + x_5 + x_6
+s.t.:
+    10x_1 + 7x_2 + 3x_3 <= 15
+      x_4 +  x_5 +  x_6 <= 1
+      x_1 <= x_2
+    x1,x2,x3,x4,x5,x6 {0,1}
+
+So the soln is immediate.
+
+CPLEX preprocessing: attempt to remove constraints,
+vars, etc. to get to something that makes sense.
+
+Can tell you size of reduced problem
+
 
 
 
