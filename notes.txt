@@ -973,6 +973,16 @@ Let y_k = 1 if slot has a good matchup, 0 else.
 Come up with constraints and objective to match.
 
 
+e.g. Cancer treatment
+-- Tumor in brain
+-- Would like to kill the tumor with radiation
+-- Aim a beam thru head, person perfectly still
+-- May kill tumor, but other tissue along way
+-- Some parts of brain, you must not go thru.
+
+Where to align gamma knife, how much radiation to
+send thru that alignment, how many shots to take?
+
 
 
 
