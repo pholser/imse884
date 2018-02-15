@@ -50,9 +50,9 @@ interchangeable).
 OPL model and captured output for problem 3 part b (for minimizing go-home
 time).
 
-## hw2-4.mod, hw2-4.mod.out
+## hw2-4.mod, hw2-4.dat, hw2-4.mod.out
 
-OPL model and data file for problem 4.
+OPL model, data file, and captured output for problem 4.
 
 ## hw2-5a.mod, hw2-5a.dat, hw2-5a.mod.out
 
