@@ -6,10 +6,10 @@ Included in this distribution:
 
 Excel workbook, with solution to problem 1.
 
-## hw2-1.mzn, hw1-2.dzn
+## hw2-1.mzn, hw1-2.dzn, hw1-2.mzn.out
 
-MiniZinc model and data file for problem 1. Using COIN-OR as the backing
-solver in MiniZinc IDE, I confirmed the Excel solution.
+MiniZinc model, data file, and captured output for problem 1. Using COIN-OR
+as the backing solver in MiniZinc IDE, I confirmed the Excel solution.
 
 ## DraftKingsData.csv
 
