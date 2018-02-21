@@ -1037,6 +1037,265 @@ vars, etc. to get to something that makes sense.
 Can tell you size of reduced problem
 
 
+Polyhedral theory
+=====
+
+P = {x in Z+^n : Ax <= b}
+P_LR = {x in R+^n : Ax <= b}
+P_ch = convex-hull(P)
+
+e.g.
+max 5x_1 + 2x_2
+s.t.
+10x_1 + 2x_2 <= 23
+4x_1 + 2x_2 <= 13
+x_i >= 0, x_i in Z_n
+
+x* = (5/3, 19/6)
+
+Here, P = all integer points in the feasible region
+of the linear relaxation P_LR: {(0, 0), (0, 1), ...}
+
+P_LR = feasible region of linear relaxation.
+
+P_ch = convex hull of P, intersection of all convex sets
+that contain P.
+
+Cutting plane/separation problem:
+Add a new constraint that cuts off the optimum of
+LR, but not any integer points.
+Does there exist such a constraint?
+--> Branch and bound tree runs better.
+
+If you're not at an optimal integer solution,
+you can find such an inequality, adding cutting planes
+
+Is the separation problem easy or NP-complete?
+--> NP-complete
+
+--> The cutting plane to use is the IP objective function.
+
+If we can express the convex hull, we're done --
+get a corner extreme point that's integer.
+
+Which inequalities induce P_ch?
+
+Dimension of a set of q vectors: the number of linearly
+independent vectors in the set.
+LI: v_1, ..., v_q in R^n are LI iff the unique soln to
+sum[i in 1..q]( lambda_i * x_i ) = 0
+is lambda_i = 0 forall i
+
+Do row reduction on set of vectors, trying to make 1
+down diagonal: number of 1's down diagonal == dimension
+
+What is the dimension of P_ch?
+-- pick a feasible point in P_ch, how many feasible
+directions can you go?
+
+Affine independence:
+Points x_1, ..., x_q in R^n are affinely independent
+iff the unique solution to
+sum[i in 1..q]( lambda_i * x_i ) == 0
+and
+sum[i in 1..q]( lambda_i ) == 0
+is lambda_i == 0 forall i = 1..q
+
+Dimension of a space == max # of affinely independent
+points minus 1.
+
+Theorem: Equivalent statements:
+-- Points x_1, ..., x_k are affinely independent
+-- Vectors x_1 - x_k, x_2 - x_k, ..., x_(k-1) - x_k are
+    linearly independent
+-- (x_1, 1), ..., (x_k, 1) are linearly independent.
+
+Point as column in matrix.
+Add row of 1's for lambdas in matrix
+
+I can choose some set of affinely independent points in
+my set. How do I know whether I've found a maximal set
+of such points, so that I'm describing the dimension of
+the set of points P_ch?
+
+I may know, e.g. dim(P_ch) >= 2
+If I have dim(P_ch) <= 2 also, then I know my
+exact dimension of P_ch --> 2
+
+Can't ever have more dimensions than # variables.
+If you are at # variables: full-dimensional.
+
+dim(single-point set) == 0
+dim(empty set) == -1 (by convention)
+
+A^T * x <= b is a half-space
+A^T * x == b is a hyperplane
+
+To turn a half-space into a hyperplane:
+A^T * x + s = b
+
+Difference between half-space and hyperplane
+is the view you're looking at it as.
+
+Polyhedron: has a finite number of half-spaces.
+
+Every LP formulation is a polyhedron.
+
+P_ch is a polyhedron also.
+P_LR and P_ch as polyhedra.
+
+Circle isn't a polyhedron. No linear equalities.
+Infinite number of lines, disqualified b/c inf. #
+
+Polyhedra can be expressed in terms of
+extreme points and extreme directions.
+
+Bounded polyhedron --> no extreme ray
+
+If we have a polyhedron Ax <= b, we can define
+the set A^= * x <= b^=  in term of
+I = set of constraints
+
+A^+, b^=
+=
+{ i in I : Ax = b, forall x in Ax <= b }
+
+(the set of tight constraints)
+
+n = dim(Ax <= b) + dim(A^+, b^=)
+
+e.g.
+P defined by:
+x_1 + x_2 + x_3 <= -5
+-x_1 - x_2 - x_3 <= -5
+-x_1 <= 0
+-x_2 <= 0
+-x_3 <= 0
+x_3 <= 3
+x_i are integers
+
+Each point that satisfies this must satisfy
+x_1 + x_2 + x_3 == 5
+
+dim(A^=, b^=) == 1
+
+Adding x_2 >= 5 --> only (0, 5, 0) satisfies.
+Then dim(A^=, b^=) == 3
+
+A polyhedron of dimension n, where dim(A^=, b^=)
+is 0, is full-dimensional.
+
+The constraints of a polyhedron Q can be partitioned into
+A^(<=), b^(<=) and A^=, b^= where every x in Q satisfies
+A^=, b^= and there exists at least one x in Q such that
+A^(<=), b^(<=). For convenience, let M^= be the set of
+row indices that fall into A^=, b^= and M^(<=) be the
+set of row indices that fall into A^(<=), b^(<=).
+
+A point x in Q is called an inner point of Q if
+A_j * x_i <= b_j for all A_j, b_j in A^(<=), b^(<=).
+
+A point x in Q is called an interior point of Q if
+Ax < b.
+
+Every full-dimensional polyhedron has an interior point.
+
+Original constraints:
+Ax <= b
+a^T * x <= b
+
+An inequality alpha^T * x <= beta is valid for P_ch if
+every x in P_ch satisfies alpha^T * x <= beta.
+
+A valid inequality is trivial if it is implied by the
+bounds of the problem.
+
+e.g.
+max 5x_1 + 2x_2
+s.t.
+10x_1 + 2x_2 <= 23
+4x_1 + 2x_2 <= 13
+-x_1 <= 0, -x_2 <= 0 and integer.
+
+* x_1 <= 200: valid
+* x_1 <= 2: valid
+* 2x_1 <= 4: valid (same as one before)
+* x_1 <= 1: invalid ((2, 0) is feasible)
+* x_1 + 2x_2 <= 9: invalid ((0, 6) is feasible)
+* 5x_1 + 2x_2 <= 12: invalid ((1, 4) is feasible)
+* x_1 - x_2 <= 2: valid
+* x_3 >= 0: valid
+
+Figuring out whether an inequality is valid or not
+is hard, generally.
+
+Let alpha^T * x <= beta and gamma^T * x <= omega
+be two valid inequalities. They are equivalent iff there
+exists some lambda >= 0 such that lambda * alpha = gamma
+and lambda * beta = omega.
+
+If there exists lambda such that lambda * alpha >= gamma
+and lambda * beta <= omega, then alpha^T * x <= beta
+dominates gamma^T * x <= omega.
+
+Pruning out dominated inequalities is desirable.
+
+Implied dominance by a bounded region.
+
+Defn: If alpha^T * x <= beta is a valid inequality for
+P_ch, then define the induced face of (alpha, beta)
+to be F = {x in P_ch : alpha^T * x = beta}.
+If F not empty, then F is called a face of P_ch and
+we say that alpha^T * x <= b supports P_ch.
+A face is proper if F != P_ch.
+
+A face F of P_ch is a facet of P iff dim(F) == dim(P_ch) - 1.
+
+Providing one facet-defining inequality for each facet
+is sufficient to describe P_ch.
+
+Convex hull: a continuous space.
+
+Example above: dim(P_ch) == 2
+
+Thus a facet-defining inequality must be valid and induce
+a face of the proper dimension.
+
+The purpose of facets and faces is to decide which
+inequalities are necessary for the description of a
+polyhedron, independent of the objective function.
+
+If F is a facet of P_ch, then there exists at least one
+linear inequality alpha^T * x <= beta (maybe infinite #)
+that represents F.
+
+Theorem: Let alpha^T * x <= beta be a valid inequality.
+Then if there exists a point x in P such that alpha^T * x <= beta,
+then dim({x in P_ch : alpha^t * x = beta}) <= dim(P_ch) - 1.
+
+(provides upper bound on the dimension of a face)
+
+Three steps in proving something is a facet in P_ch:
+1) Find dim(P_ch)
+-- bound from above: typically using # variables and theorem
+   abt dim(polyh) + rank(A^=, b^=) = n
+-- bound from above: typically by finding a number of
+    affinely independent points
+2) Show the ineq alpha^t * x <= beta is a valid ineq
+    for P_ch; Show that no x in P has alpha^t * x >= beta
+3) Find the dimension of induced face F in P_ch
+-- bound from above: typically using theorem
+   abt dim(polyh) + rank(A^=, b^=) = n
+-- bound from above: typically by finding a number of
+    affinely independent points
+
+A valid ineq is a cutting plane if there exists an x in
+P_LR such that alpha^T * x > beta
+
+
+
+
+
 
 
 
