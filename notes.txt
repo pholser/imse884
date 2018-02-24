@@ -1292,17 +1292,264 @@ Three steps in proving something is a facet in P_ch:
 A valid ineq is a cutting plane if there exists an x in
 P_LR such that alpha^T * x > beta
 
+e.g.
+max 5x_1 + 2x_2
+s.t.
+10x_1 + 2x_2 <= 23
+4x_1 + 2x_2 <= 13
+x_1, x_2, >= 0 and integer
 
+Solve graphically, using cutting planes. Prove that at least
+one of the cutting planes is a facet.
 
+1) Solve the linear relaxation.
+x_LP* = (5/3, 19/6); z_LP* = 44/3
 
+2) Find a valid inequality to cut off this x_LP*.
+Better off picking one that goes thru two extreme points
+of P_ch.
+Choose the one thru (0, 6) and (1, 4):
+    2x_1 + x_2 <= 6
 
+3) Re-solve LP with new constraint
+x_LP* = (11/6, 7/3), z_LP* = 83/6
 
+4) Find a valid inequality to cut off this x_LP*.
+Choose the one thru (1, 4) and (2, 1)
+    3x_1 + x_2 <= 7
 
+5) Re-solve LP with new constraint
+x_LP* = (1, 4), z_LP* = 13.
+Done.
 
+Consider 3x_1 + x_2 <= 7. Claim: It is facet-defining.
 
+1) Find dim(P_ch).
+a) Pick (0, 0), (1, 0), (0, 1)
+    These are affinely independent.
+    --> dim(P_ch) >= 2
+b) P_ch subset-of R^2
+    --> dim(P_ch) <= 2
+--> dim(P_ch) == 2
 
+2) Is it a valid inequality?
+    From graph
 
+3)
+a) dim(F) induced by the ineq
+describing points between points on the CH
+(feasible integer points), on the equality face
+(1, 4) and (2, 1)
+they are affinely independent, and in F
+--> dim(F) >= 1
+b) If I can find another feasible point of
+P or P_ch that doesn't meet an inequality,
+the facet F can't be the entire space. e.g. (0, 0)
+--> dim(F) < dim(P_ch)
+--> dim(F) == 1
+--> F is a facet.
 
+In n dimensions....
+
+graph:
+1-2
+1-3
+2-3
+2-4
+3-4
+3-5
+3-7
+4-6
+4-7
+4-8
+5-7
+5-8
+6-7
+7-8
+
+Node packing formulation:
+set of nodes s.t. no two are adjacent.
+
+e.g. above: 2, 5, 6 are not adjacent
+
+x_i = 1 if node i is in the packing, 0 else
+
+max sum[i]( x_i )
+s.t.
+x_1 + x_2 <= 1
+x_1 + x_3 <= 1
+etc. (for each pair of adjacent nodes)
+
+Call this node packing formulation P_np.
+What is (P_np)_ch?
+
+1) dim((P_np)_ch)?
+a) Take (0, 0, 0, 0, 0, 0, 0, 0)
+Feasible? Yes.
+   Take (1, 0, 0, 0, 0, 0, 0, 0)
+Feasible? Yes.
+   Take (0, 1, 0, 0, 0, 0, 0, 0)
+   etc.
+(origin, then e_i forall i in V)
+
+So, dim((P_np)_ch) >= n, where n = |V|
+
+b) # vars = n, so dim((P_np)_ch) <= n
+-->
+dim((P_np)_ch) == n
+
+2) valid ineq?
+x_1 + x_2 + x_3 <= 1
+1, 2, 3 are a clique. Call a clique k_q.
+
+sum[i in k_q]( x_i ) <= 1
+4, 5, 7, 8 are a clique.
+
+3) Show that one of these ineq is facet-defining.
+
+e.g. x_4 + x_5 + x_7 + x_8 <= 1.
+
+a) Show that the induced face isn't the whole space
+--> Find a point that doesn't meet it at equality,
+that is feasible.
+e.g. (0, 0, 0, 0, 1, 0, 0)
+so dim(F) < dim((P_np)_ch)
+
+b) Find eight affinely independent points
+(so dim will be 7)
+feasible, that meet the ineq at equality
+[0  0  0  0  1  0  0  0
+ 0  0  0  0  0  1  0  0
+ 0  0  0  0  0  0  1  0
+ 1  0  0  0  1  0  0  0
+ 0  1  0  0  0  1  0  1
+ 0  0  0  0  0  0  0  1
+ 0  0  1  0  0  0  0  0
+ 0  0  0  1  0  0  1  0
+ 1  1  1  1  1  1  1  1]
+
+so dim((P_np)_ch) == 7
+
+So this clique inequality is facet-defining.
+
+Theorem: A maximal clique inequality is
+facet-defining for (P_np)_ch.
+
+Proof: Let k be a maximal clique.
+sum[i in k]( x_i ) <= 1 is valid.
+0 is in P_np, and is < 1, so that
+dim((P_np)_ch) <= n - 1.
+The points e_i forall i in k are in P_np.
+e_i + e_j forall j in V \ {k},
+and there exists an i in k such that {i, j} not in E
+-- Such an i exists, otherwise your clique
+    isn't maximal.
+So these points are feasible, and
+affinely independent --> QED
+
+Conflict graphs and hypergraphs:
+
+e.g. 5x_1 + 7x_2 + 8x_3 + 9x_4 <= 14
+     8x_1 + 6x_2 + 3x_3 + 5x_4 <= 10
+
+In a conflict graph: nodes represent variables,
+and edges represent infeasibility.
+
+So here, edges would be:
+2-3
+2-4
+3-4
+1-2
+1-3
+1-4
+
+Thus: x_1 + x_2 + x_3 + x_4 <= 1.
+Is this a valid ineq?
+--> Is there a feasible LR point that the ineq
+     cuts off, w/o cutting off integer solns?
+What about (1, 1/3, 0, 0)
+
+Not all variables need to be involved in this.
+
+---
+
+e.g. 5x_1 + 7x_2 + 8x_3 + 9x_4 <= 21
+     8x_1 + 6x_2 + 3x_3 + 5x_4 <= 18
+
+Conflict graph: Now there are no pairs that
+conflict. Max clique is of size 1.
+
+Conflict hypergraph: sets of conflicting nodes
+"become" edges.
+
+"paths" in hypergraphs?
+-- one vertex in common between edges?
+-- all vertices except one in common between edges?
+
+Consider an H_3 hypergraph (three nodes in an edge)
+Then in the example above, we have edges:
+1-3-4
+1-2-4
+2-3-4
+E_(H_3) = { (1, 2, 4), (1, 3, 4), (2, 3, 4)}
+
+-->
+valid ineq:
+e.g.
+x_1 + x_2 + x_4 <= 2
+
+Hyperclique: K_mq
+m = # nodes
+q = edge size
+all possible edges exist
+C(m, q) edges
+
+e.g.
+10x_1 + 6x_2 + 8x_3 + x_4 <= 20
+5x_1 + 7x_2 + 8x_3 + 9x_4 <= 21
+8x_1 + 6x_2 + 3x_3 + 5x_4 <= 18
+
+Conflict 3-hypergraph:
+1-2-3
+1-2-4
+1-3-4
+2-3-4
+
+Valid hyperclique inequality:
+sum[i in K_mq]( x_i ) <= q - 1
+
+x_1 + x_2 + x_3 + x_4 <= 2
+
+Is it helping?
+Find a feasible LR point that violates that
+ineq.
+--> (0, 1/2, 1, 1)
+
+The more space you can cut off...
+
+Are hyperclique inequalities facet-defining?
+Yes, if each vertex is in a minimal edge.
+
+e.g.
+x_0 + 10x_1 + 6x_2 + 8x_3 + x_4 <= 20
+x_0 + 5x_1 + 7x_2 + 8x_3 + 9x_4 <= 21
+17x_0 + 8x_1 + 6x_2 + 3x_3 + 5x_4 <= 18
+
+-- In conflict graph, node 0 connected to
+everyone else.
+-- H_3: 0-1-2, 0-2-3, 0-2-4
+
+Conflict hypergraphs create facet-defining
+inequalities. Lots of good stuff to be found.
+
+Conflict graphs with odd cycles cause problems.
+sum[i in cycle]( x_1 ) <= (n - 1) / 2
+
+Fan: 0-1, 0-2, 0-3, 0-4
+--> 5x_0 + sum[i in 1..4]( x_i ) <= 5
+
+Wheel with hub:
+...
 
 
 
