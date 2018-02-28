@@ -1156,7 +1156,7 @@ If we have a polyhedron Ax <= b, we can define
 the set A^= * x <= b^=  in term of
 I = set of constraints
 
-A^+, b^=
+A^=, b^=
 =
 { i in I : Ax = b, forall x in Ax <= b }
 
@@ -1359,7 +1359,7 @@ graph:
 3-4
 3-5
 3-7
-4-6
+4-5
 4-7
 4-8
 5-7
@@ -1550,6 +1550,76 @@ Fan: 0-1, 0-2, 0-3, 0-4
 
 Wheel with hub:
 ...
+
+Measuring the utility of an ineq by the dimension of its
+face.
+
+Let C_m,k be a matrix whose elements are in {0, 1}.
+Let each column consist of a cyclic permutation of k
+consecutive ones.
+
+C_5,2 = [1  0  0  0  1
+         1  1  0  0  0
+         0  1  1  0  0
+         0  0  1  1  0
+         0  0  0  1  1]
+
+* If m and k are relatively prime, then C_m,k has full rank
+* rank(C_m,k) = m - gcd(m, k) + 1
+
+e.g. G = (E, V)
+A matching of G = a collection of non-adjacent edges
+
+Let x_ij = 1 if edge (i, j) in matching, 0 else
+
+max sum[i, j in E]( x_ij )
+s.t. sum[j : (i, j) in E]( x_ij ) <= 1 forall i in V
+x_ij in {0, 1} forall (i, j) in E
+
+Objective function has no bearing on whether an ineq
+is a facet.
+
+Let P_m be the set of feasible points in a matching.
+How to get to (P_m)_ch?
+
+There are |E| variables, so dim((P_m)_ch) <= |E|.
+
+Consider the points 0, and e_ij forall (i, j) in E.
+All these are feasible, and A.I.
+|E| + 1 A.I. points -> dim((P_m)_ch) == |E|.
+
+Facet-defining ineq?
+
+One obvious choice: fans
+x_24 + x_34 + x_45 <= 1
+But, often implied by the formulation.
+
+Cliques?
+
+Cycles?
+sum[{i, j} in E]( x_ij ) <= floor(|C| / 2)
+--> Are these useful?
+    -- how much LR space cut off?
+Odd cycles? You bet.
+Even cycles don't help as much
+
+Hole: cycle with no chords.
+Proof: An odd hole can induce a facet-defining inequality.
+What conditions must be met for this to be the case?
+
+
+===
+HW3: Hyperclique: find a point feasible to LR of the knapsack, but
+violates the hyperclique ineq we found.
+===
+
+
+
+
+
+
+
+
 
 
 
