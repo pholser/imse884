@@ -1613,7 +1613,224 @@ HW3: Hyperclique: find a point feasible to LR of the knapsack, but
 violates the hyperclique ineq we found.
 ===
 
+Facet-defining ineq for TSP
 
+1 --- 2
+|\   /|
+| \ / |
+| / \ |
+3 --- 4
+
+If formulating as:
+x_ij = 1 if tour has arc (i, j), 0 else.
+
+Feasible tours:
+
+Biggest dimension of polyhedron for TSP:
+1-2-3-4
+1-2-4-3
+1-3-2-4
+1-3-4-2
+1-4-2-3
+1-4-3-2
+
+12 1  1  0  1  0  1
+13 0  1  1  1  1  0
+14 1  0  1  0  1  1
+23 1  0  1  0  1  1
+24 0  1  1  1  1  0
+34 1  1  0  1  0  1
+   1  1  1  1  1  1
+
+Some of these rows/columns are identical, indicative
+of the symmetry of some of the tours.
+
+Dropping duplicated rows and columns...
+you end up with three points in P_tsp
+-- they are affinely independent.
+--> dim((P_tsp)_ch) == 2
+
+Valid inequalities?
+
+x_12 + x_13 + x_14 <= 2
+Does it define a facet?
+
+It's actually the entire space. All points of
+(P_tsp)_ch meet this face at inequality.
+
+x_12 <= 1
+is facet-defining.
+
+x_ij <= 1 is facet-defining.
+
+Others?
+
+x_13 + x_14 >= 1
+
+As soon as you get into a non-fully-dimensional
+polyhedron, you can find many inequalities that
+induce the same face.
+
+e.g. knapsack
+19x_1 + 18x_2 + 17x_3 + 12x_4 + 12x_5 + 11x_6 + 10x_7 + 9x_8 <= 46
+
+coefficients > 0
+All a_i <= b
+
+dim((P_kp)_ch)?
+<= 8 by variables.
+Take 0 and e_i --> dim((P_kp)_ch) == n
+
+Given N = {1, ..., n}
+A set C subset-of N is a cover if sum[i in C]( a_i ) >= b
+
+e.g. {1, 2, 3}
+{1, 2, 3, 4}
+{4, 5, 6, 7, 8}
+
+so x_1 + x_2 + x_3 <= 2
+x_1 + x_2 + x_3 + x_4 <= 3
+x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+-->
+Cover ineq: sum[i in C]( x_i ) <= |C| - 1
+
+LR points that violate these?
+1st: (1, 1, 1/2, ...)
+2nd: (<1, <1, 1, 1, ...)
+
+Not all covers are created equal.
+Most useful covers are minimal covers.
+Minimal cover: sum[i in C \ {j}]( x_i ) <= b
+forall j in C.
+(take any one element of the cover away, it's no longer
+a cover)
+
+dim(C_3): x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+find AI points that meet it at equality...
+--> dim(F) == 4
+
+minimal cover --> cyclic permutation of ones
+
+e.g. knapsack
+19x_1 + 18x_2 + 17x_3 + 12x_4 + 12x_5 + 11x_6 + 10x_7 + 9x_8
+    + 4x_9 <= 46
+
+a cover: {4, 5, 6, 7, 8}
+it is minimal.
+
+Extended cover: E(C)
+= C union { i : a_i >= a_j forall j in C }
+e.g. above: E(C) {1, 2, 3, 4, 5, 6, 7, 8}
+ineq?
+sum[i in E(C)]( x_i ) <= |C| - 1
+
+Point eliminated by ineq_E(C) that isn't by ineq_C?
+
+(0, 0, 4/17, 0, 1, 1, 1, 1, 0)
+
+dim of F induced by ineq_E(C)?
+
+1  0  0  0  0  0  0
+2  0  0  0  0  0  0
+3  0  0  0  0  0  0
+4  0  1  1  1  1  0
+5  1  0  1  1  1  1
+6  1  1  0  1  1  1
+7  1  1  1  0  1  1
+8  1  1  1  1  0  1
+9  0  0  0  0  0  1
+   1  1  1  1  1  1
+
+dim(F) <= 5
+
+Extended cover is stronger ineq, but didn't increase
+our dimension of our face.
+
+Lifting:
+12 types:
+Up, down, middle
+Sequential, simultaneous
+Approximate, exact
+3 * 2 * 2 = 12
+
+e.g. Up, simultaneous, approximate lift.
+
+Exam: Up, sequential, exact.
+
+Lifting:
+e.g. ineq_C
+x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+
+"tilt" the ineq
+
+1  0  0  0  0  0  0
+2  0  0  0  0  0  0
+3  0  0  0  0  0  0
+4  0  1  1  1  1  0
+5  1  0  1  1  1  1
+6  1  1  0  1  1  1
+7  1  1  1  0  1  1
+8  1  1  1  1  0  1
+9  0  0  0  0  0  1
+   1  1  1  1  1  1
+
+Move coefficient(s) so as to catch more points at
+equality, fine more affinely indep pts.
+
+e.g. change x_3 coeff to 2.
+pull in (0, 0, 1, 0, 0, 0, 1, 1, 0)
+
+exact: choose coeff to hit new point on face at eq.
+approximate: choose coeff to make ineq stronger, but
+not increase dimension of induced face.
+
+e.g. additionally change x_2 coeff to 1.
+Sequential lifting.
+pick up (0, 1, 1, 0, 0, 0, 0, 1, 0)
+
+Simultaneous lifting: set new coeffs all at same
+time.
+
+e.g. then additionally set x_1 coeff to 1
+pick up (1, 0, 1, 0, 0, 0, 1, 0, 0)
+
+Ordering in a sequential lift matters.
+
+Tons of knapsack facets.
+
+Algo for exact sequential lifting:
+(any binary IP):
+
+To up-lift x_1:
+
+sum[i]( alpha_i * x_i )
+
+solve:
+max z = sum( coeffs of valid_inequalities on left side )
+s.t. Ax <= b
+     x_1 = 1
+
+Then alpha_i = RHS of valid ineq - z*
+
+Let E subset-of N and
+let sum[i in N \ E]( alpha_i * x_i ) <= beta be
+a valid ineq of P^ch_E
+P^ch_E = { x in P^ch : x_i = 0 forall i in E }
+
+Then solve:
+z* = max sum[i in N \ E]( alpha_i * x_i )
+s.t. sum[i in N \ E]( A_.i * x_i ) <= b
+     x_j = 1 for some j in E
+     x_i in {0, 1} forall i in N
+
+Then the inequality:
+(beta - z*) * x_j + sum[i in N \ E]( alpha_i * x_i )
+<=
+b
+is valid
+and if alpha_j != 0, then it has at least one more
+dimension in P^ch_(E union {j}) than the other ineq has in
+P^ch_E.
 
 
 
