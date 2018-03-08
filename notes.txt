@@ -1916,7 +1916,74 @@ exhibit 9 AI points so dim(F) >= 8
 No Balas question for HW4.
 
 
+Approximate lifting:
+valid ineq:
+sum[i in N \ E]( alpha_i * x_i ) <= beta
 
+When we lift, we typically get an ineq:
+sum[i in E]( alpha'_i * x_i ) +
+sum[i in N \ E]( alpha_i * x_i ) <= beta'
+
+(RHS can change when lifting, using some techniques:
+    down-lifting, mid-lifting)
+
+Approximate lifting's idea is:
+alpha'_i is valid, but may be increased.
+
+To lift, we set a var to 1 and solve another IP...
+seems weird to solve IPs to help solve IPs with
+stronger inequalities.
+
+Approximate lifting: don't solve the other IP's,
+instead use an approximation of that aux IP.
+Willing to sacrifice the stronger ineq in order to
+solve faster.
+-- Ineqs generated this way can't be facet-defining
+
+Balas' theorem:
+If C = {i_1, ..., i_|C|} is a minimal cover,
+and mu_h = sum[k in 1..h]( a_ik ) for h = 1, ..., |C|
+and lambda = mu_|C| - b
+then
+-- if mu_h <= a_l <= mu_(h+1) - lambda, then alpha_l = h
+-- if mu_(h+1) - lambda < a_l < mu_(h+1), then alpha_l in [h, h+1]
+and at most one can have h+1 to guarantee validity
+
+e.g.
+
+19x_1 + 18x_2 + 17x_3 + 12x_4 + 12x_5 + 11x_6
++ 10x_7 + 9x_8 + 4x_9 <= 46
+
+min cover: {4, 5, 6, 7, 8}
+
+mu_h = sum[k in 1..h]( a_ik ) for h = 1, ..., |C|
+lambda = mu_|C| - b
+
+mu_0 = 0
+mu_1 = 12
+mu_2 = 24
+mu_3 = 35
+mu_4 = 45
+mu_5 = 54
+lambda = 54 - 46 = 8
+(how much over the RHS you are with the cover coeffs)
+
+So,
+h = 0: 0 <= a_l <= 4
+       4 < a_l < 12
+h = 1: 12 <= a_l <= 16
+       16 <= a_l <= 24
+h = 2: [24, 27]
+       (27, 35)
+h = 3: [35, 37]
+       (37, 45)
+h = 4: [45, 46]
+       (46, 54)
+
+x_1 coeff 19 --> (h = 1) range -> [1, 2] --> 2*
+x_2 coeff 18 --> (h = 1) range -> [1, 2] --> 1
+x_3 coeff 17 --> (h = 1) range -> [1, 2] --> 1
+2x_1 + x_2 + x_3 + .... <= 4
 
 
 
