@@ -1279,14 +1279,14 @@ Three steps in proving something is a facet in P_ch:
 1) Find dim(P_ch)
 -- bound from above: typically using # variables and theorem
    abt dim(polyh) + rank(A^=, b^=) = n
--- bound from above: typically by finding a number of
+-- bound from below: typically by finding a number of
     affinely independent points
 2) Show the ineq alpha^t * x <= beta is a valid ineq
     for P_ch; Show that no x in P has alpha^t * x >= beta
 3) Find the dimension of induced face F in P_ch
 -- bound from above: typically using theorem
    abt dim(polyh) + rank(A^=, b^=) = n
--- bound from above: typically by finding a number of
+-- bound from below: typically by finding a number of
     affinely independent points
 
 A valid ineq is a cutting plane if there exists an x in
@@ -1682,7 +1682,7 @@ dim((P_kp)_ch)?
 Take 0 and e_i --> dim((P_kp)_ch) == n
 
 Given N = {1, ..., n}
-A set C subset-of N is a cover if sum[i in C]( a_i ) >= b
+A set C subset-of N is a cover if sum[i in C]( a_i ) > b
 
 e.g. {1, 2, 3}
 {1, 2, 3, 4}
@@ -1831,6 +1831,92 @@ is valid
 and if alpha_j != 0, then it has at least one more
 dimension in P^ch_(E union {j}) than the other ineq has in
 P^ch_E.
+
+e.g.:
+10x_1 + 13x_2 + 2x_3  <= 17
+ 4x_1 +  6x_2 + 12x_3 <= 16
+    x_i in {0, 1}
+
+x_1 <= 1 is valid.
+
+Uplift x_2:
+solve:
+max x_1
+s.t.
+10x_1 + 13x_2 + 2x_3  <= 17
+ 4x_1 +  6x_2 + 12x_3 <= 16
+ x_2 == 1
+    x_i in {0, 1}
+z* = 0 --> alpha_2 = 1 - 0 = 1
+--> x_1 + x_2 <= 1
+
+Now uplift x_3:
+solve:
+max x_1 + x_2
+s.t.
+10x_1 + 13x_2 + 2x_3  <= 17
+ 4x_1 +  6x_2 + 12x_3 <= 16
+ x_3 == 1
+    x_i in {0, 1}
+
+z* = 1 -> alpha_3 = 0
+--> x_1 + x_2 <= 1
+No change!
+
+Simultaneous lifting:
+e.g.
+19x_1 + 18x_2 + 17x_3 + 12x_4 + 12x_5 + 11x_6
++ 10x_7 + 9x_8 + 4x_9 <= 46
+
+Take the cover {4, 5, 6, 7, 8}
+--> x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+
+Let E = {1, 2, 3}
+
+Look for
+Alpha * (x_1 + x_2 + x_3)
++ x_4 + x_5 + x_6 + x_7 + x_8
+<= 4
+
+Two views:
+-- C-space (cover space)
+-- E-space
+
+Try to figure which point biggest in (E, C)-space
+
+Let Alpha = M   # very large
+max M(x_1 + x_2 + x_3) + x_4 + x_5 + x_6 + x_7 + x_8
+s.t.
+19x_1 + 18x_2 + 17x_3 + 12x_4 + 12x_5 + 11x_6
++ 10x_7 + 9x_8 + 4x_9 <= 46
+
+z* = 2M + 1
+with soln x_2 = x_3 = x_8 = 1, others 0
+
+Is M(x_1 + x_2 + x_3) + x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+valid?
+--> No, 2M + 1 > 4
+Change M...
+Alpha(0 + 1 + 1) + 0 + ... + 0 + 1 = 4
+--> Alpha = 1.5
+
+max 1.5(x_1 + x_2 + x_3) + x_4 + x_5 + x_6 + x_7 + x_8
+s.t.
+19x_1 + 18x_2 + 17x_3 + 12x_4 + 12x_5 + 11x_6
++ 10x_7 + 9x_8 + 4x_9 <= 46
+
+z* = 4.  Done.
+--> 1.5(x_1 + x_2 + x_3) + x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+is valid.
+
+Is it facet-defining?
+
+exhibit 9 AI points so dim(F) >= 8
+
+No Balas question for HW4.
+
+
+
 
 
 
