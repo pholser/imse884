@@ -37,6 +37,12 @@
 			<ref name="hw2-2.dat" type="data">
 			</ref>
 		</config>
+		<config default="false" name="midterm" category="opl">
+			<ref name="midterm.mod" type="model">
+			</ref>
+			<ref name="midterm.dat" type="data">
+			</ref>
+		</config>
 	</configs>
 	
 </project>

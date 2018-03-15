@@ -1986,6 +1986,154 @@ x_3 coeff 17 --> (h = 1) range -> [1, 2] --> 1
 2x_1 + x_2 + x_3 + .... <= 4
 
 
+Midterm review:
+-- Mail Dr. Easton with proctor info
+-- Cheat sheet: 3 pg front/back
+-- No calculators
+-- 60 min
+
+-- modeling
+-- branch-and-bound
+    -- 2D (branch on x_1 first)
+    -- knapsack
+-- cutting planes
+    -- 2D
+    -- more difficult
+        -- matching or node-packing polyhedron
+            -- find a valid inequality from a wheel
+            -- provide conditions where wheel is
+                facet-defining
+
+
+-- sequential uplifting of valid ineq
+
+If slope of obj between two of the ineq's slopes,
+optimum occurs at intersection of those ineqs.
+     7   2
+
+  6   1    3
+
+    5     4
+
+1 = hub, spokes from 1-{2..7}
+connection all around the perimeter
+
+Within an induced subgraph -- no other edges
+
+
+e.g. 10x_1 + 8x_2 + 13x_3 <= 1152
+to make this stronger:
+10x_1 + 8x_2 + 13x_3 <= 115
+
+e.g. 10.1x_1 + 8.3x_2 + 13x_3 <= 115.2
+How to make this stronger?
+e.g. 10x_1 + 8x_2 + 13x_3 <= 115
+
+Chvatal-Gomory cuts:
+Idea: Take any fractional coeffs on LHS, force
+down to integer, force RHS down to integer
+
+Starting with valid ineq:
+alpha_ij * x_i <= beta_j
+-- Multiply both sides by constants mu_j >= 0
+-- Then floor(sum[j]( mu_j * alpha_ij )) * x_i
+    <=
+    floor(mu_j * beta_j)
+    is valid.
+
+Node-packing: hole of size 5
+x_1 + x_2 <= 1
+x_2 + x_3 <= 1
+x_3 + x_4 <= 1
+x_4 + x_5 <= 1
+x_5 + x_1 <= 1
+
+want to get:
+x_1 + x_2 + x_3 + x_4 + x_5 <= 2
+
+mu_1(x_1 + x_2 <= 1)
+mu_2(x_2 + x_3 <= 1)
+mu_3(x_3 + x_4 <= 1)
+mu_4(x_4 + x_5 <= 1)
+mu_5(x_5 + x_1 <= 1)
+--------------------
+Setting all mu_j to 1:
+
+2x_1 + 2x_2 + 2x_3 + 2x_4 + 2x_5 <= 5
+
+You want integers on LHS, RHS larger fractional part
+
+mu_j = 1/2
+-->
+x_1 + x_2 + x_3 + x_4 + x_5 <= 2.5
+C-G procedure makes:
+x_1 + x_2 + x_3 + x_4 + x_5 <= 2
+
+Now, this valid ineq can be added to the others.
+
+Rank 0 ineq: in original formulation
+Rank 1 ineq: generated, as in C-G
+Rank 2 ineq: combining rank 0 and rank 1 ineqs.
+
+e.g.:
+12x_4 + 12x_5 + 11x_6 + 10x_7 + 9x_8 <= 46
+(0-1 knapsack cover ineq)
+
+Goal: x_4 + x_5 + x_6 + x_7 + x_8 <= 4
+
+1/3:
+4x_4 + 4x_5 + 3x_6 + 3x_7 + 3x_8 <= 15
+
+1/2:
+2x_4 + 2x_5 + x_6 + x_7 + x_8 <= 7
+
+combine the first one and the 1/3 one:
+1/13:
+16/13x_4 + 16/13x_5 + 14/13x_6 + 13/13x_7 + 12/13x_8
+<=
+61/13
+-->
+x_4 + x_5 + x_6 + x_7 <= 4. Ugh. Tautology.
+
+e.g. clique inequality, for K_4, node packing polyhedron
+x_1 + x_2 <= 1
+x_1 + x_3 <= 1
+x_1 + x_4 <= 1
+x_2 + x_3 <= 1
+x_2 + x_4 <= 1
+x_3 + x_4 <= 1
+
+goal: x_1 + x_2 + x_3 + x_4 <= 1
+
+Considering only 1-2, 1-3, 1-4:
+mult them by 1/2:
+
+x_1 + x_2 + x_3 <= 1.5
+Good, the K_3 ineq.
+also,
+x_1 + x_2 + x_4 <= 1
+x_1 + x_3 + x_4 <= 1
+x_2 + x_3 + x_4 <= 1
+
+sum them all:
+
+3x_1 + 3x_2 + 3x_3 + 3x_4 <= 4
+x_1 + x_2 + x_3 + x_4 <= 4/3
+Rank 2 ineq.
+(in general how do you know it's rank 2?)
+
+Generally, the deeper the rank, the stronger the ineq.
+
+Can get rank-3 ineq for K-5 similarly
+Could it have been rank 2?
+
+
+
+
+
+
+
+
 
 
 
