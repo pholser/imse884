@@ -2128,6 +2128,50 @@ Can get rank-3 ineq for K-5 similarly
 Could it have been rank 2?
 
 
+e.g. knapsack problem:
+Result: finding optimal soln to KP is NP-hard even if
+every exact sequentially uplifted inequality is
+included.
+-->
+There exist lots of other facets.
+
+Exact lifting over general int vars.
+
+
+Project:
+1) Implement feasibility cuts
+    -- e.g. TSP
+    -- OPL, C, Python
+2) Multiple knapsack problem
+    -- Solve LR
+    -- Find a violated cover
+    -- Add cover cuts (extended cover cuts)
+    -- Re-solve LR
+    -- ~ 3 times
+    -- Solve IP
+    -- Compare, decide whether the cuts actually help
+
+
+
+TSP formulations:
+
+x_ij = 1 if in the tour, 0 else
+sum[i]( x_ij ) == 1 forall j
+sum[j]( x_ij ) == 1 forall i
+But disconnected subtours!
+
+1  --- 2 --- 3 --- 4 --- 1
+
+5 --- 6 --- 7 --- 8 --- 9 --- 5
+
+To elim subtours, need to take the sum of
+all possible x_ij in the subtour, and
+constrain to <= |subtour| - 1
+
+Classical:
+find a subtour, draw an arc around it, and
+need at least two edges out
+(check Nemhauser/Wolsey)
 
 
 
