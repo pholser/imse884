@@ -2021,7 +2021,7 @@ connection all around the perimeter
 Within an induced subgraph -- no other edges
 
 
-e.g. 10x_1 + 8x_2 + 13x_3 <= 1152
+e.g. 10x_1 + 8x_2 + 13x_3 <= 115.2
 to make this stronger:
 10x_1 + 8x_2 + 13x_3 <= 115
 
@@ -2033,12 +2033,12 @@ Chvatal-Gomory cuts:
 Idea: Take any fractional coeffs on LHS, force
 down to integer, force RHS down to integer
 
-Starting with valid ineq:
+Starting with valid ineqs:
 alpha_ij * x_i <= beta_j
--- Multiply both sides by constants mu_j >= 0
--- Then floor(sum[j]( mu_j * alpha_ij )) * x_i
+-- Multiply both sides of all by constants u_j >= 0
+-- Then floor(sum[j]( u_j * alpha_ij )) * x_i
     <=
-    floor(mu_j * beta_j)
+    floor(u_j * beta_j)
     is valid.
 
 Node-packing: hole of size 5
@@ -2051,19 +2051,19 @@ x_5 + x_1 <= 1
 want to get:
 x_1 + x_2 + x_3 + x_4 + x_5 <= 2
 
-mu_1(x_1 + x_2 <= 1)
-mu_2(x_2 + x_3 <= 1)
-mu_3(x_3 + x_4 <= 1)
-mu_4(x_4 + x_5 <= 1)
-mu_5(x_5 + x_1 <= 1)
+u_1(x_1 + x_2 <= 1)
+u_2(x_2 + x_3 <= 1)
+u_3(x_3 + x_4 <= 1)
+u_4(x_4 + x_5 <= 1)
+u_5(x_5 + x_1 <= 1)
 --------------------
-Setting all mu_j to 1:
+Setting all u_j to 1:
 
 2x_1 + 2x_2 + 2x_3 + 2x_4 + 2x_5 <= 5
 
 You want integers on LHS, RHS larger fractional part
 
-mu_j = 1/2
+u_j = 1/2
 -->
 x_1 + x_2 + x_3 + x_4 + x_5 <= 2.5
 C-G procedure makes:
@@ -2172,6 +2172,176 @@ Classical:
 find a subtour, draw an arc around it, and
 need at least two edges out
 (check Nemhauser/Wolsey)
+
+
+Chvatal-Gomory cuts:
+e.g.
+15x_1 + 17x_2 <= 96
+14x_1 +  7x_2 <= 47
+
+How to get to something like
+x_1 + x_2 <= ?
+
+u_1 (15x_1 + 17x_2 <= 96)
+u_2 (14x_1 +  7x_2 <= 47)
+
+What abt u_1 == 3/58, u_2 == 1/58
+
+59/58 x_1 + 58/58 x+2 <= 335/58
+flooring:
+x_1 + x_2 <= 5
+
+Cuts off LR point (11/15, 5)
+
+Good method to generate these?
+
+Theorem: All valid inequalities are either
+C-G inequalities or dominated by C-G
+inequalities.
+
+1 -- 2 -- 3 -- 1 : K_3
+
+x_1 + x_2 <= 1
+x_2 + x_3 <= 1
+x_1 + x_3 <= 1
+
+Multi all by 1/2, add them up:
+x_1 + x_2 + x_3 <= 1.5
+floor RHS:
+x_1 + x_2 + x_3 <= 1
+
+This is a rank-1 inequality.
+
+Rank 0: original inequalities of prob
+Rank 1: Make new one that didn't exist,
+using C-G process.
+Rank 2: is not a rank 0 or rank 1
+C-G inequality, but can be made from rank 0
+and rank 1 C-G inequalities.
+Rank k: is not a rank 0 thru k-1 C-G ineq,
+but can be made from rank 0 thru rank k-1
+C-G inequalities.
+
+Extremely difficult to prove an exact rank
+on a C-G ineq.
+Easier to get an upper bound on the rank.
+
+K_2 = rank 0
+K_3 = rank 1
+K_4, K_5 = rank 2
+K_6 thru K_9 = rank 3
+
+K_10: x_1 + ... + x_10 <= 1
+C(10, 5) ineqs = 252
+x_1 shows up C(9, 4) = 126 times
+Let u = 1/126
+-->
+x_1 + ... + x_10 <= 252/126 = 2
+Can't get K_10 with rank 3 ineqs.
+Go to rank 4.
+Rank 4 continues up to and including K_17
+2(k - 1) - 1
+
+Ballpark the rank of a K_2073 ineq?
+log2(2073) ~ 11
+
+upper bound is log2(n)
+
+The higher the rank you can get, the stronger
+the valid ineq is.
+
+
+e.g.
+max x_1 + ... + x_n
+2x_1 + 2x_2 + ... + 2x_n <= n
+where n is odd
+
+Symmetry cuts:
+make an invalid cut -- eliminate some feasible
+solutions, so long as you don't cut off an optimum
+
+what abt: x_1 >= x_2?
+x_2 >= x_3?
+...
+x_(n-1) >= x_n
+
+Now, LR is (1, 1, 1, 1, ..., 1, 1/2, 0, 0, ..., 0)
+Lop off whole right branch when branch on x_(n+1/2)
+Left branch -- we're integer. done.
+
+e.g. VRP:
+x_ijk = 1 if truck k goes from i to j, 0 else
+Trucks are interchangeable!
+sum[i, j]( x_ijk ) <= sum[i, j]( x_ij(k+!) )
+
+go from hub (0) to lowest possible number destination
+
+Must argue that symmetry cuts are independent of each other
+
+
+Optimality cuts:
+Eliminate non-optimal solns.
+These are non-valid cuts, they will cut off feasible
+integer points; but they're known to be non-optimal.
+
+e.g. in branch-and-bound, we fathom when can't do better
+than bound.
+
+e.g. traveling tournament problem
+Find min distance for a double round-robin
+e.g. NL East: ATL, MIA, MTL, NYM, PHI, PIT
+Every team plays every other team, once on road,
+once away.
+2 or three aways in a row (maybe 1-level homestand?)
+2 or three homes in a row (maybe 1-level road trip?)
+
+Find a feasible schedule, minimize total distance.
+
+-- Found best tour for every team, by solving IP
+ATL: 1500 mi
+MIA: 1900 mi
+NYM: 1200 mi
+PHI: 1300 mi
+...
+
+16 teams:
+Partial soln: Optimal soln has five trips for everyone:
+    2763
+Best 6-trip schedule:
+    3217
+
+Add cuts into IP
+Manually argue that no optimal soln will exist via these
+cuts.
+
+e.g.
+max 5x_1 + 4x_2 + 3x_3
+s.t. 3x_1 + 2x_2 + 4x_3 <= 9
+x_i >= 0 and integer
+
+add x_1 >= x_3
+    x_2 >= x_3
+
+e.g. VRP
+Symmetry cuts:
+-- Truck 1 does the most visits
+-- Truck 1 must visit customer 1
+These two cannot be applied together.
+
+You can tell if symmetry cuts/optimality cuts
+didn't work by....?
+-- Solve small problems
+    -- CPLEX
+    -- and with cuts
+-- If solns the same, gives you more confidence that your
+    model is correct.
+
+Midterm:
+80 A, 60 B
+
+Get good at solving 2-D LR by hand
+Get good at 2-D B-and-B by hand
+Get good at 2-D cutting planes
 
 
 
