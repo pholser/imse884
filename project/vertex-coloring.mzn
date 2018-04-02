@@ -5,11 +5,13 @@ int: number_of_colors = number_of_vertices;
 set of int: COLOR = 1..number_of_colors;
 
 
-array[VERTEX, COLOR] of var 0..1: x;
-array[COLOR] of var 0..1: u;
+array[VERTEX, COLOR] of var float: x;
+array[COLOR] of var float: u;
+constraint forall (v in VERTEX, k in COLOR) (x[v, k] >= 0 /\ x[v, k] <= 1);
+constraint forall (k in COLOR) (u[k] >= 0 /\ u[k] <= 1);
 
 
-var int: obj = sum (k in COLOR) ( u[k] );
+var float: obj = sum (k in COLOR) ( u[k] );
 solve minimize obj;
 
 
@@ -55,4 +57,6 @@ output(
      endif | v in VERTEX, k in COLOR]
     ++
     ["# of colors used = \(obj)\n"]
+    ++
+    ["x = \(x)\nu = \(u)"]
 );

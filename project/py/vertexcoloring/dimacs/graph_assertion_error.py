@@ -1,0 +1,2 @@
+class GraphAssertionError(Exception):
+    pass

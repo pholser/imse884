@@ -1,3 +1,4 @@
 [
-  "tests/test_dimacs_parser.py::test_edge_count"
+  "tests/test_dimacs_parser.py::test_edges", 
+  "tests/test_dimacs_parser.py::test_nodes"
 ]
