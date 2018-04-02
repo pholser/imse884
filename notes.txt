@@ -2139,6 +2139,9 @@ Exact lifting over general int vars.
 
 
 Project:
+Create branching style
+Create own cutting planes
+
 1) Implement feasibility cuts
     -- e.g. TSP
     -- OPL, C, Python
@@ -2148,6 +2151,13 @@ Project:
     -- Add cover cuts (extended cover cuts)
     -- Re-solve LR
     -- ~ 3 times
+    -- Solve IP
+    -- Compare, decide whether the cuts actually help
+3) Graph coloring
+    -- Solve LR
+    -- Find violated ineq like for cliques, etc.
+    -- add those cuts, re-solve
+    -- ~ n times
     -- Solve IP
     -- Compare, decide whether the cuts actually help
 
