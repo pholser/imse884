@@ -1,0 +1,7 @@
+c Small graph with a 3-clique.
+c This should have a 3-coloring.
+p edge 4 4
+e 1 3
+e 1 4
+e 2 4
+e 3 4

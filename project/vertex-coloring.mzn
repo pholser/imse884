@@ -38,17 +38,29 @@ constraint
         x[v, k] <= u[k]
     );
 
+% Sample clique constraint
+% constraint
+%     forall (k in COLOR) (
+%         x[1, k] + x[3, k] + x[4, k] <= u[k]
+%    );
+    
+% constraint
+%     forall (k in COLOR) (
+%         x[2, k] + x[4, k] <= u[k]
+%     );
+
 % Symmetry-breaking: color used only if some nodes get it.
-constraint
-    forall (k in COLOR) (
-        u[k] <= sum (v in VERTEX) ( x[v, k] )
-    );
+% constraint
+%     forall (k in COLOR) (
+%         u[k] <= sum (v in VERTEX) ( x[v, k] )
+%     );
 
 % Symmetry-breaking: use lesser-numbered colors first.
-constraint
-    forall (k in 1..(number_of_colors - 1)) (
-        u[k] >= u[k + 1]
-    );
+% constraint
+%     forall (k in 1..(number_of_colors - 1)) (
+%         u[k] >= u[k + 1]
+%     );
+
 
 output(
     [if fix(x[v, k]) == 1
@@ -58,5 +70,5 @@ output(
     ++
     ["# of colors used = \(obj)\n"]
     ++
-    ["x = \(x)\nu = \(u)"]
+    [show2d(x), "\n", show(u)]
 );

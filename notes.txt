@@ -2354,6 +2354,138 @@ Get good at 2-D B-and-B by hand
 Get good at 2-D cutting planes
 
 
+Modular arithmetic
+=====
+a mod b == remainder of a / b
+
+Modular cuts:
+for equality constraints only.
+
+Let P = {x in Z+^n : sum[j in N]( a_j * x_j ) == a_0 }
+where a_j in R forall j
+
+Let d be a positive integer, and
+P_d^ch = { x in Z+^n : sum[j in N]( a_j * x_j ) == a_0 + kd }
+for some integer k.
+
+If we obtain a valid ineq for P_d^ch, then we have a valid
+inequality for P_d.
+
+Given an equality constraint
+sum[j in N]( a_j * x_j ) == b
+with x_j in Z+
+
+Given some d in Z+, let r_j be the remainder when a_j is divided
+by d,
+and let s be the remainder when b is divided by d.
+
+Then sum[j in N]( r_j * x_j ) = s (mod d)
+and since s < d, and sum[j in N]( r_j * x_j ) >= 0,
+implies
+sum[j in N( r_j * x_j ) >= s.
+
+This is a modular cut.
+
+e.g.
+2x_1 + 12x_2 + 16x_3 + 3x_4 = 31
+x_4 must be >= 1 and odd, because it's the only odd coeff that can
+help meet the RHS.
+
+mod'ing by 3:
+2x_1 + x_3 >= 1
+           (== 1 or 4, or 7, or 10, ...)
+
+e.g.
+63x_1 + 25x_2 + 37x_3 + 19x_4 + 9x_5 - 5x_6 = 79
+mod 5 modular cut:
+3x_1 + 0x_2 + 2x_3 + 4x_4 + 4x_5 - 0x_6 >= 4
+Does this cut off an LR point?
+(..., x_2 = 79/25 ; satisfies 1st, but not the cut)
+
+When looking for a strong modulus:
+Goals: Small coeffs on LHS are beneficial;
+larger coeffs on RHS better.
+No zero on RHS.
+
+mod 3 modular cut:
+0x_1 + x_2 + x_3 + x_4 + 0x_5 + x_6 >= 1
+x_2 + x_3 + x_4 + x_6 >= 1
+
+mod 9:
+7x_2 + x_3 + x_4 + 4x_6 >= 7
+
+
+Gomory cuts:
+Take any fractional row RHS in final simplex,
+Mod 1 and cut.
+
+sum[j in N( r_j * x_j ) >= s
+becomes:
+sum[j in N][( a_j - floor(a_j) ) * x_j ] >= b - floor(b)
+
+e.g.
+max z - x_1 + x_2 = 0
+s.t. 2x_1 + 3x_2 + s_1 = 8
+     3x_1 + 2x_2 + s_2 = 8
+     x_1 + x_2 - e_1 = 1
+
+z  x_1   x_2   s_1   s_2    e_1   RHS
+=====================================
+1   0     0    1/5   1/5     0    16/5
+0   1     0   -2/5   3/5     0     8/5
+0   0     1    3/5  -2/5     0     8/5
+0   0     0   -1/5  -1/5     1    11/5
+
+Pick row 1:
+x_1 - 2/5s_1 + 3/5s_2 = 8/5
+
+mod by 1:
+0x_1 + 3/5s_1 + 2/5s_2 >= 3/5
+
+Does this cut off a point?
+current optimum:
+z* = 16/5,
+x_1 = 8/5, x_2 = 8/5, s_1 = 0, s_2 = 0, e_1 = 11/5
+
+Can apply these successive to LR, before branching
+
+Add this Gomory cut to tableau:
+
+z  x_1   x_2   s_1   s_2    e_1   e_2   RHS
+===========================================
+1   0     0    1/5   1/5     0     0    16/5
+0   1     0   -2/5   3/5     0     0     8/5
+0   0     1    3/5  -2/5     0     0     8/5
+0   0     0   -1/5  -1/5     1     0    11/5
+0   0     0    3/5   3/5     0    -1     3/5
+
+No basis after adding this row: pivot
+
+z  x_1   x_2   s_1   s_2    e_1   e_2   RHS
+===========================================
+1   0     0    1/5   1/5     0     0    16/5
+0   1     0   -2/5   3/5     0     0     8/5
+0   0     1    3/5  -2/5     0     0     8/5
+0   0     0   -1/5  -1/5     1     0    11/5
+0   0     0   -3/5  -3/5     0     1    -3/5
+
+Dual simplex the negative RHS out:
+
+Row 4
+Pivot on a negative column value:
+s_2:
+
+z  x_1   x_2   s_1   s_2    e_1   e_2   RHS
+===========================================
+1   0     0     0    0       0   1/3     3
+0   1     0    -1    0       0     0     1
+0   0     1     1    0       0  -2/3     2
+0   0     0     0    0       1   1/3     2
+0   0     0     1    1       0   5/3     1
+
+Back-substituting the Gomory cut involving
+slack/surplus vars into x_1/x_2 vars.
+
 
 
 
