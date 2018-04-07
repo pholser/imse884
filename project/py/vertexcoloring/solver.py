@@ -1,4 +1,6 @@
 from dimacs.parser import Parser
+from networkx.algorithms.clique import find_cliques
+from networkx.algorithms.operators.unary import complement
 
 
 class Solver:
@@ -18,8 +20,11 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
 
+    print 'Reading graph from %s...' % (args.graph)
     graph = Parser().parse(args.graph)
-    print 'Number of nodes: %d\nNumber of edges: %d' % (
-        len(graph.nodes),
-        len(graph.edges)
-    )
+    print '...done.'
+
+    for q in filter(lambda k: len(k) > 2, find_cliques(graph)):
+        print q
+#     for i in find_cliques(complement(graph)):
+#        print i

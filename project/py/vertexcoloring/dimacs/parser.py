@@ -19,17 +19,19 @@ class Parser(object):
                     continue     # skip blank lines
 
                 pieces = line.split()
+                indicator = pieces[0]
+                if 'c' == indicator:
+                    continue     # skip comment lines
+
                 if len(pieces) < 2:
                     raise FormatError(
                         pieces,
                         line_number,
                         'Need at least two pieces on the line'
                     )
+                args = pieces[1:]
 
-                indicator, args = pieces[0], pieces[1:]
-                if 'c' == indicator:
-                    continue     # skip comment lines
-                elif 'p' == indicator:
+                if 'p' == indicator:
                     if problem_line_seen:
                         raise FormatError(
                             pieces,
@@ -74,7 +76,8 @@ class Parser(object):
                     graph.number_of_nodes()
                 )
             )
-        if graph.number_of_edges() != expected_number_of_edges:
+        if graph.number_of_edges() != expected_number_of_edges \
+                 and graph.number_of_edges() != expected_number_of_edges / 2:
             raise GraphAssertionError(
                 "Expected graph with %d edges, got %d" % (
                     expected_number_of_edges,

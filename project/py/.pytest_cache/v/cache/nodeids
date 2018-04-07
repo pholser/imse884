@@ -1,4 +1,3 @@
 [
-  "tests/test_dimacs_parser.py::test_edges", 
-  "tests/test_dimacs_parser.py::test_nodes"
+  "tests/test_color_assignment_lpsolve_format.py::test_format"
 ]

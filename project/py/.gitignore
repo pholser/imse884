@@ -1,0 +1,2 @@
+*.log
+.pytest_cache/

@@ -6,12 +6,12 @@ set of int: COLOR = 1..number_of_colors;
 
 
 array[VERTEX, COLOR] of var float: x;
-array[COLOR] of var float: u;
+array[COLOR] of var float: w;
 constraint forall (v in VERTEX, k in COLOR) (x[v, k] >= 0 /\ x[v, k] <= 1);
-constraint forall (k in COLOR) (u[k] >= 0 /\ u[k] <= 1);
+constraint forall (k in COLOR) (w[k] >= 0 /\ w[k] <= 1);
 
 
-var float: obj = sum (k in COLOR) ( u[k] );
+var float: obj = sum (k in COLOR) ( w[k] );
 solve minimize obj;
 
 
@@ -29,37 +29,8 @@ constraint
         k in COLOR
         where edge[v1, v2] == 1) (
 
-        x[v1, k] + x[v2, k] <= u[k]
+        x[v1, k] + x[v2, k] <= w[k]
     );
-
-% A node can get a particular color only if that color is in fact used.
-constraint
-    forall (v in VERTEX, k in COLOR) (
-        x[v, k] <= u[k]
-    );
-
-% Sample clique constraint
-% constraint
-%     forall (k in COLOR) (
-%         x[1, k] + x[3, k] + x[4, k] <= u[k]
-%    );
-    
-% constraint
-%     forall (k in COLOR) (
-%         x[2, k] + x[4, k] <= u[k]
-%     );
-
-% Symmetry-breaking: color used only if some nodes get it.
-% constraint
-%     forall (k in COLOR) (
-%         u[k] <= sum (v in VERTEX) ( x[v, k] )
-%     );
-
-% Symmetry-breaking: use lesser-numbered colors first.
-% constraint
-%     forall (k in 1..(number_of_colors - 1)) (
-%         u[k] >= u[k + 1]
-%     );
 
 
 output(
@@ -70,5 +41,5 @@ output(
     ++
     ["# of colors used = \(obj)\n"]
     ++
-    [show2d(x), "\n", show(u)]
+    [show2d(x), "\n", show(w)]
 );
