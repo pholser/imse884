@@ -1,8 +1,9 @@
+from textwrap import dedent
+
 import pytest
 
-from textwrap import dedent
 from vertexcoloring.dimacs.parser import Parser
-from vertexcoloring.formulation.color_assignment import ColorAssignment
+from vertexcoloring.formulation.colorassignment.lp_format import LPFormat
 
 
 @pytest.fixture
@@ -12,7 +13,7 @@ def small_graph():
 
 @pytest.fixture
 def lp_solve_format(small_graph):
-    return ColorAssignment(small_graph).format_as_lpsolve()
+    return LPFormat(small_graph).emit()
 
 
 def test_format(lp_solve_format):
