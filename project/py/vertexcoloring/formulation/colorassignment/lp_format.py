@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from vertexcoloring.formulation.colorassignment.solution import Solution
 
 
@@ -34,12 +32,12 @@ class LPFormat(object):
                 )
 
     def emit_bounds(self, lines):
-        lines.append('Binary')
+        lines.append('Bounds')
         for n in self.nodes:
-            lines.append(
-                ' '.join([self.node_color_var(n, k) for k in self.colors])
-            )
-        lines.append(' '.join([self.color_used_var(k) for k in self.colors]))
+            for k in self.colors:
+                lines.append('0 <= ' + self.node_color_var(n, k) + ' <= 1')
+        for k in self.colors:
+            lines.append('0 <= ' + self.color_used_var(k) + ' <= 1')
 
     def emit_end(self, lines):
         lines.append('End')
@@ -74,15 +72,4 @@ class LPFormat(object):
         return 'x' + n + ',' + k
 
     def solution(self, cplex_solution):
-        objective_value = cplex_solution.get_objective_value()
-        color_classes = defaultdict(list)
-
-        for k in self.colors:
-            if cplex_solution.get_values(self.color_used_var(k)) > 0.999:
-                color_classes[k] = []
-        for n in self.nodes:
-            for k in self.colors:
-                if cplex_solution.get_values(self.node_color_var(n, k)) > 0.999:
-                    color_classes[k].append(n)
-
-        return Solution(objective_value, color_classes)
+        return Solution(self, cplex_solution)

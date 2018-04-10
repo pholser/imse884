@@ -1,11 +1,6 @@
 from dimacs.parser import Parser
 from formulation.colorassignment.color_assignment import ColorAssignment
 
-
-class Solver:
-    pass
-
-
 import argparse as arg
 
 if __name__ == '__main__':
@@ -37,7 +32,12 @@ if __name__ == '__main__':
     problem = formulation.problem_from_lpsolve(args.problem_file)
     solution = problem.solve()
 
-    print 'Number of colors used: %d' % solution.objective_value
-    print 'Color classes:'
-    for k, nodes in solution.color_classes.iteritems():
-        print 'Color', k, ':', nodes
+    print 'Objective value:', solution.objective_value()
+    for k in solution.colors():
+        if solution.color_used(k) > 0:
+            print 'Color', k, 'used:', solution.color_used(k)
+    for n in solution.nodes():
+        for k in solution.colors():
+            if solution.node_colored_as(n, k) > 0:
+                print 'Node', n, 'colored as', k, ':', \
+                    solution.node_colored_as(n, k)
