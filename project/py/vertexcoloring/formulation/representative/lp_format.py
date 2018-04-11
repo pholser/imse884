@@ -31,7 +31,9 @@ class LPFormat(object):
 
     def emit_objective(self, lines):
         lines.append('Minimize')
-        lines.append('color_reps: ' + ' + '.join(self.represents_color_of_vars()))
+        lines.append(
+            'color_reps: ' + ' + '.join(self.represents_own_color_class_vars())
+        )
 
     def emit_constraints(self, lines):
         lines.append('Subject To')
@@ -47,16 +49,22 @@ class LPFormat(object):
         lines.append('Binary')
         for n in self.nodes:
             lines.append(
-                ' '.join([
-                    self.represents_color_of_var(n, v) for v in self.nodes
-                    if v in chain({n}, self.antigraph.neighbors(n))
-                ]))
+                ' '.join(self.represents_color_class_of_vars(n)))
+
+    def all_vars(self):
+        return [vs for n in self.nodes for vs in self.represents_color_class_of_vars(n)]
+
+    def represents_color_class_of_vars(self, n):
+        return [
+            self.represents_color_class_of_var(n, v)
+            for v in sorted(chain({n}, self.antigraph.neighbors(n)))
+        ]
 
     def emit_lr_bounds(self, lines):
         lines.append('Bounds')
         for n in self.nodes:
-            for u in sorted(chain({n}, self.antigraph.neighbors(n))):
-                lines.append('0 <= ' + self.represents_color_of_var(n, u) + ' <= 1')
+            for v in sorted(chain({n}, self.antigraph.neighbors(n))):
+                lines.append('0 <= ' + self.represents_color_class_of_var(n, v) + ' <= 1')
 
     def emit_end(self, lines):
         lines.append('End')
@@ -64,19 +72,19 @@ class LPFormat(object):
     def solution(self, cplex_solution):
         return Solution(self, cplex_solution)
 
-    def represents_color_of_vars(self):
+    def represents_own_color_class_vars(self):
         return [
-            self.represents_color_of_var(n, n) for n in self.nodes
+            self.represents_color_class_of_var(n, n) for n in self.nodes
         ]
 
-    def represents_color_of_var(self, representative, other):
+    def represents_color_class_of_var(self, representative, other):
         return 'x' + representative + ',' + other
 
     def representative_constraint(self, n):
         return self.representative_constraint_name(n) \
                + ': ' \
                + ' + '.join([
-                   self.represents_color_of_var(u, n)
+                   self.represents_color_class_of_var(u, n)
                    for u in chain({n}, self.antigraph.neighbors(n))
                ]) \
                + ' >= 1'
@@ -88,11 +96,11 @@ class LPFormat(object):
         return self.distinct_representatives_for_neighbors_constraint_name(n, v, w) \
                + ': ' \
                + ' + '.join([
-                   self.represents_color_of_var(n, v),
-                   self.represents_color_of_var(n, w)
+                   self.represents_color_class_of_var(n, v),
+                   self.represents_color_class_of_var(n, w)
                ]) \
                + ' - ' \
-               + self.represents_color_of_var(n, n) \
+               + self.represents_color_class_of_var(n, n) \
                + ' <= 0'
 
     def distinct_representatives_for_neighbors_constraint_name(self, n, v, w):

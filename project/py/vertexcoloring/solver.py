@@ -23,32 +23,29 @@ if __name__ == '__main__':
         help='Path to write CPLEX LP file for problem to',
         default='./vertexcoloring.lp'
     )
+    arg_parser.add_argument(
+        '-t', '--problem-file-type',
+        help='Flavor of problem to write',
+        choices=['ip', 'lr'],
+        default='ip'
+    )
 
     args = arg_parser.parse_args()
 
-    print 'Reading graph from %s...' % (args.graph)
+    print 'Reading graph from %s...' % args.graph
     graph = Parser().parse(args.graph)
     print '...done.'
 
     formulation = {
-        'rep' : Representative,
-        'assign' : ColorAssignment
+        'rep': Representative,
+        'assign': ColorAssignment
     }[args.formulation](graph)
 
-    formulation.emit_ip_to(args.problem_file)
+    formulation.emit_to(args.problem_file, args.problem_file_type)
 
-    # TODO: delegate the cplex machinery to the formulation
-    # TODO: get formulation to extract right var values, obj, ...
-
-    problem = formulation.problem_from_lpsolve(args.problem_file)
+    problem = formulation.problem_from_file(args.problem_file)
     solution = problem.solve()
 
     print 'Objective value:', solution.objective_value()
-    for k in solution.colors():
-        if solution.color_used(k) > 0:
-            print 'Color', k, 'used:', solution.color_used(k)
-    for n in solution.nodes():
-        for k in solution.colors():
-            if solution.node_colored_as(n, k) > 0:
-                print 'Node', n, 'colored as', k, ':', \
-                    solution.node_colored_as(n, k)
+    for n, v in solution.values().iteritems():
+        print 'Value of variable %s: %f' % (n, v)

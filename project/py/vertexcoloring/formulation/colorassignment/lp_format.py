@@ -1,3 +1,4 @@
+from itertools import chain
 from vertexcoloring.formulation.colorassignment.solution import Solution
 
 
@@ -44,10 +45,8 @@ class LPFormat(object):
     def emit_ip_bounds(self, lines):
         lines.append('Binary')
         for n in self.nodes:
-            lines.append(
-                ' '.join([self.node_color_var(n, k) for k in self.colors])
-            )
-        lines.append(' '.join([self.color_used_var(k) for k in self.colors]))
+            lines.append(' '.join(self.node_color_vars(n)))
+        lines.append(' '.join(self.color_used_vars()))
 
     def emit_lr_bounds(self, lines):
         lines.append('Bounds')
@@ -62,7 +61,7 @@ class LPFormat(object):
 
     def nodes_getting_color_constraint(self, n):
         return self.node_getting_color_constraint_name(n) + ': ' \
-               + ' + '.join([self.node_color_var(n, k) for k in self.colors]) \
+               + ' + '.join(self.node_color_vars(n)) \
                + ' = 1'
 
     def node_getting_color_constraint_name(self, n):
@@ -80,11 +79,21 @@ class LPFormat(object):
     def adjacent_nodes_colored_differently_constraint_name(self, e, k):
         return 'e' + e[0] + ',' + e[1] + '_' + k
 
+    def all_vars(self):
+        vars = [v for vs in self.all_node_color_vars() for v in vs]
+        return vars + self.color_used_vars()
+
     def color_used_vars(self):
         return [self.color_used_var(k) for k in self.colors]
 
     def color_used_var(self, color):
         return 'w' + color
+
+    def all_node_color_vars(self):
+        return [self.node_color_vars(n) for n in self.nodes]
+
+    def node_color_vars(self, n):
+        return [self.node_color_var(n, k) for k in self.colors]
 
     def node_color_var(self, n, k):
         return 'x' + n + ',' + k

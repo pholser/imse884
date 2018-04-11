@@ -7,9 +7,12 @@ class Representative(object):
         self.graph = graph
         self.format = LPFormat(graph)
 
-    def emit_lpsolve_to(self, path):
+    def emit_to(self, path, problem_type):
         with open(path, 'w') as f:
-            f.write(self.format.emit_ip())
+            if 'lr' == problem_type:
+                f.write(self.format.emit_lr())
+            else:
+                f.write(self.format.emit_ip())
 
-    def problem_from_lpsolve(self, path):
+    def problem_from_file(self, path):
         return Problem(self.format, path)
