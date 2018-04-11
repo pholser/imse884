@@ -1,4 +1,5 @@
 videos/
 *.pyc
+.pytest_cache/
 ~*
 .idea/

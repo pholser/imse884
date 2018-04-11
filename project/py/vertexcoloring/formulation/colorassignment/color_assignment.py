@@ -7,9 +7,9 @@ class ColorAssignment(object):
         self.graph = graph
         self.format = LPFormat(graph)
 
-    def emit_lpsolve_to(self, path):
+    def emit_ip_to(self, path):
         with open(path, 'w') as f:
-            f.write(self.format.emit())
+            f.write(self.format.emit_ip())
 
     def problem_from_lpsolve(self, path):
         return Problem(self.format, path)

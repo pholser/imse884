@@ -7,12 +7,22 @@ class LPFormat(object):
         self.edges = sorted(map(sorted, graph.edges()))
         self.colors = self.nodes
 
-    def emit(self):
+    def emit_ip(self):
         lines = []
 
         self.emit_objective(lines)
         self.emit_constraints(lines)
-        self.emit_bounds(lines)
+        self.emit_ip_bounds(lines)
+        self.emit_end(lines)
+
+        return "\n".join(lines)
+
+    def emit_lr(self):
+        lines = []
+
+        self.emit_objective(lines)
+        self.emit_constraints(lines)
+        self.emit_lr_bounds(lines)
         self.emit_end(lines)
 
         return "\n".join(lines)
@@ -31,7 +41,15 @@ class LPFormat(object):
                     self.adjacent_nodes_colored_differently_constraint(e, k)
                 )
 
-    def emit_bounds(self, lines):
+    def emit_ip_bounds(self, lines):
+        lines.append('Binary')
+        for n in self.nodes:
+            lines.append(
+                ' '.join([self.node_color_var(n, k) for k in self.colors])
+            )
+        lines.append(' '.join([self.color_used_var(k) for k in self.colors]))
+
+    def emit_lr_bounds(self, lines):
         lines.append('Bounds')
         for n in self.nodes:
             for k in self.colors:
