@@ -1,4 +1,5 @@
-from itertools import chain
+import re
+
 from vertexcoloring.formulation.colorassignment.solution import Solution
 
 
@@ -65,7 +66,7 @@ class LPFormat(object):
                + ' = 1'
 
     def node_getting_color_constraint_name(self, n):
-        return 'n' + n
+        return 'n%d' % n
 
     def adjacent_nodes_colored_differently_constraint(self, e, k):
         return self.adjacent_nodes_colored_differently_constraint_name(e, k) \
@@ -77,26 +78,34 @@ class LPFormat(object):
                + ' <= 0'
 
     def adjacent_nodes_colored_differently_constraint_name(self, e, k):
-        return 'e' + e[0] + ',' + e[1] + '_' + k
+        return 'e%d,%d_%d' % (e[0], e[1], k)
 
     def all_vars(self):
-        vars = [v for vs in self.all_node_color_vars() for v in vs]
-        return vars + self.color_used_vars()
+        return self.all_node_color_vars() + self.color_used_vars()
 
     def color_used_vars(self):
         return [self.color_used_var(k) for k in self.colors]
 
     def color_used_var(self, color):
-        return 'w' + color
+        return 'w%d' % color
+
+    def color_for_used_var(self, var):
+        return int(re.match('^w(.*)$', var).group(1))
 
     def all_node_color_vars(self):
-        return [self.node_color_vars(n) for n in self.nodes]
+        all = []
+        for n in self.nodes:
+            all.extend(self.node_color_vars(n))
+        return all
 
     def node_color_vars(self, n):
         return [self.node_color_var(n, k) for k in self.colors]
 
     def node_color_var(self, n, k):
-        return 'x' + n + ',' + k
+        return 'x%d,%d' % (n, k)
+
+    def node_color_pairing_for_var(self, var):
+        return map(int, re.match('^x(.*),(.*)$', var).group(1, 2))
 
     def solution(self, cplex_solution):
         return Solution(self, cplex_solution)

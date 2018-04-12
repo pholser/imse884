@@ -1,8 +1,37 @@
+import argparse as arg
+import networkx as nx
+import matplotlib.pyplot as plt
+
 from dimacs.parser import Parser
 from formulation.colorassignment.color_assignment import ColorAssignment
 from formulation.representative.representative import Representative
+from matplotlib import colors as mcolors
+from operator import itemgetter
 
-import argparse as arg
+
+def plot(graph, solution):
+    graph_pos = nx.shell_layout(graph)
+
+    node_list = []
+    color_list = []
+    for n, k in solution.colors_by_node().iteritems():
+        node_list.append(n)
+        color_list.append(k)
+
+    color_indices = map(lambda k: color_list.index(k), color_list)
+    color_names = itemgetter(*color_indices)(mcolors.cnames.keys())
+
+    nx.draw_networkx_nodes(
+        graph,
+        graph_pos,
+        nodelist=node_list,
+        node_color=color_names,
+        alpha=0.3)
+    nx.draw_networkx_edges(graph, graph_pos, edge_color='lightslategray')
+    nx.draw_networkx_labels(graph, graph_pos, font_size=12, font_family='sans-serif')
+
+    plt.show()
+
 
 if __name__ == '__main__':
     arg_parser = arg.ArgumentParser()
@@ -49,3 +78,5 @@ if __name__ == '__main__':
     print 'Objective value:', solution.objective_value()
     for n, v in solution.values().iteritems():
         print 'Value of variable %s: %f' % (n, v)
+
+    plot(graph, solution)

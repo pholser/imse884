@@ -1,3 +1,5 @@
+import re
+
 from itertools import chain
 from networkx.algorithms.operators.unary import complement
 from vertexcoloring.formulation.representative.solution import Solution
@@ -77,20 +79,27 @@ class LPFormat(object):
             self.represents_color_class_of_var(n, n) for n in self.nodes
         ]
 
+    def color_class_for_representative_var(self, var):
+        return int(re.match('^x(.*),(.*)$', var).group(1))
+
     def represents_color_class_of_var(self, representative, other):
-        return 'x' + representative + ',' + other
+        return 'x%d,%d' % (representative, other)
+
+    def representative_pairing_for_var(self, var):
+        match = re.match('^x(.*),(.*)$', var)
+        return int(match.group(2)), int(match.group(1))
 
     def representative_constraint(self, n):
         return self.representative_constraint_name(n) \
                + ': ' \
                + ' + '.join([
                    self.represents_color_class_of_var(u, n)
-                   for u in chain({n}, self.antigraph.neighbors(n))
+                   for u in chain({n}, sorted(self.antigraph.neighbors(n)))
                ]) \
                + ' >= 1'
 
     def representative_constraint_name(self, n):
-        return 'rep' + n
+        return 'rep%d' % n
 
     def distinct_representatives_for_neighbors_constraint(self, n, v, w):
         return self.distinct_representatives_for_neighbors_constraint_name(n, v, w) \
@@ -104,4 +113,4 @@ class LPFormat(object):
                + ' <= 0'
 
     def distinct_representatives_for_neighbors_constraint_name(self, n, v, w):
-        return 'uqrep' + n + '_' + v + ',' + w
+        return 'uqrep%d_%d,%d' % (n, v, w)

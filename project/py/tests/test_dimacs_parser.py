@@ -15,11 +15,11 @@ def small_graph(a_parser):
 
 def test_edges(small_graph):
     assert len(small_graph.edges) == 4
-    assert small_graph.has_edge('0', '1')
-    assert small_graph.has_edge('1', '2')
-    assert small_graph.has_edge('1', '3')
-    assert small_graph.has_edge('3', '4')
+    assert small_graph.has_edge(0, 1)
+    assert small_graph.has_edge(1, 2)
+    assert small_graph.has_edge(1, 3)
+    assert small_graph.has_edge(3, 4)
 
 
 def test_nodes(small_graph):
-    assert set(small_graph.nodes) == {'0', '1', '2', '3', '4'}
+    assert set(small_graph.nodes) == {0, 1, 2, 3, 4}

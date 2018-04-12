@@ -67,7 +67,7 @@ class Parser(object):
                             line_number,
                             'Expecting edge line with two endpoints'
                         )
-                    graph.add_edge(args[0], args[1])
+                    graph.add_edge(int(args[0]), int(args[1]))
 
         if graph.number_of_nodes() != expected_number_of_vertices:
             raise GraphAssertionError(

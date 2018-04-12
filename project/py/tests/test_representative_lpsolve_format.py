@@ -31,14 +31,14 @@ def test_format_ip(lp_solve_format_ip):
         Minimize
         color_reps: x0,0 + x1,1 + x2,2 + x3,3 + x4,4
         Subject To
-        rep0: x0,0 + x3,0 + x2,0 + x4,0 >= 1
+        rep0: x0,0 + x2,0 + x3,0 + x4,0 >= 1
         rep1: x1,1 + x4,1 >= 1
         rep2: x2,2 + x0,2 + x3,2 + x4,2 >= 1
         rep3: x3,3 + x0,3 + x2,3 >= 1
-        rep4: x4,4 + x1,4 + x0,4 + x2,4 >= 1
+        rep4: x4,4 + x0,4 + x1,4 + x2,4 >= 1
         uqrep0_3,4: x0,3 + x0,4 - x0,0 <= 0
         uqrep2_3,4: x2,3 + x2,4 - x2,2 <= 0
-        uqrep4_1,0: x4,1 + x4,0 - x4,4 <= 0
+        uqrep4_0,1: x4,0 + x4,1 - x4,4 <= 0
         uqrep4_1,2: x4,1 + x4,2 - x4,4 <= 0
         Binary
         x0,0 x0,2 x0,3 x0,4
@@ -55,14 +55,14 @@ def test_format_lr(lp_solve_format_lr):
         Minimize
         color_reps: x0,0 + x1,1 + x2,2 + x3,3 + x4,4
         Subject To
-        rep0: x0,0 + x3,0 + x2,0 + x4,0 >= 1
+        rep0: x0,0 + x2,0 + x3,0 + x4,0 >= 1
         rep1: x1,1 + x4,1 >= 1
         rep2: x2,2 + x0,2 + x3,2 + x4,2 >= 1
         rep3: x3,3 + x0,3 + x2,3 >= 1
-        rep4: x4,4 + x1,4 + x0,4 + x2,4 >= 1
+        rep4: x4,4 + x0,4 + x1,4 + x2,4 >= 1
         uqrep0_3,4: x0,3 + x0,4 - x0,0 <= 0
         uqrep2_3,4: x2,3 + x2,4 - x2,2 <= 0
-        uqrep4_1,0: x4,1 + x4,0 - x4,4 <= 0
+        uqrep4_0,1: x4,0 + x4,1 - x4,4 <= 0
         uqrep4_1,2: x4,1 + x4,2 - x4,4 <= 0
         Bounds
         0 <= x0,0 <= 1

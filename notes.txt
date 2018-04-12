@@ -2486,7 +2486,99 @@ z  x_1   x_2   s_1   s_2    e_1   e_2   RHS
 Back-substituting the Gomory cut involving
 slack/surplus vars into x_1/x_2 vars.
 
+Theoretically:
+-- Will Gomory cuts eventually end in an integer soln?
+   -- Yes
+-- Floating-point numbers on computer vs. actual rationals
+    when implementing Gomory cuts:
+    -- Diminishing returns after first few...
+        -- b/c of computational rounding error
+        -- but each cut fast
+    -- Fractional:
+        -- reaches z_IP more quickly.
+        -- each cut successively slower
 
+Cuts:
+-- Pro:
+    -- eliminate LR points
+-- Con:
+    -- takes time to find cuts
+    -- might not always be useful (cutting off in unfruitful region)
+    -- Differing degrees of utility
+    -- Basis +1
+        -- pool of cuts
+
+Cut is inactive at a node in B-and-B tree if slack_thatcut is BV
+
+Branch-and-cut:
+-- instead of branching at a node, add a cut
+    -- resolve, cut off that LR
+    -- one child
+-- Two different types of cuts in a branch-and-cut solution:
+    -- local: apply to a deeper B-and-B node and its children
+    -- global: can apply to any node
+
+e.g. KP constraint
+20x_1 + 18x_2 + 17x_3 + 15x_4 <= 48
+
+x_4 = 0 -->
+x_4 = 1 --> x_1 + x_2 + x_3 <= 1
+    (not valid to original problem)
+    (local cut: use all fixed values above it to create
+     useful constraints)
+    (applies at that node and beneath)
+    (stronger!)
+
+CPLEX does a weird branch-and-cut
+
+
+Disjunctive cuts (D-cuts):
+-- Take a valid inequality for set 1 of points
+-- Take a valid inequality for set 2 of points
+-- Merge them to get a valid ineq for set 1 union set 2
+-- Kind of the idea of a local cut.
+
+Procedure:
+Step 1:
+sum[j]( u * a_j * x_j ) <= u * b for all u >= 0
+
+Step 2:
+Given delta in Z+ (thing to branch on):
+a) If sum[j]( alpha_j * x_j - lambda * ( x_k - delta ) ) <= beta
+    is valid for P_ch for some lambda >= 0
+and
+b) if sum[j]( alpha_j * x_j + gamma( x_k - (delta + 1) ) ) <= beta
+    is valid for P_ch for some gamma >= 0
+Then
+c) sum[j]( alpha_j * x_j ) <= beta
+    is valid for P_ch
+
+e.g.
+-x_1 + x_2 <= 1/2
+1/2 * x_1 + x_2 <= 5/4
+x_1, x_2 integer
+
+Choose x_1:
+ineq 1: (-x_1 + lambda * x_1) + x_2 - lambda( x_1 - 0 ) <= 1/2
+ineq 2: (1/2 * x_1 - gamma*x_1) + x_2 + gamma( x_1 - 1 ) <= 5/4 - gamma
+-->
+lambda - 1 = 1/2 - gamma
+1/2 = 5/4 - gamma
+gamma = 3/4 >= 0
+lambda - 1 = -1/4
+lambda = 3/4 >= 0
+-->
+-1/4 * x_1 - x_2 - 3/4(x_1) <= 1/2
+-1/4 * x_1 + x_2 + 3/4(x_1 - 1) <= 1/2
+-->
+-1/4x_1 + x_2 <= 1/2
+done.
+
+
+
+
+
+Mon May 7: final
 
 
 
