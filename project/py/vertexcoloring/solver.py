@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse as arg
 import networkx as nx
 import matplotlib.pyplot as plt
