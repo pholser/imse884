@@ -29,10 +29,12 @@ class Solution(object):
         )
 
     def colors_by_node(self):
+        all_node_color_vars = set(self.format.all_node_color_vars())
+
         node_color_vars = {
             k for k, v in filter(
                 lambda e:
-                    e[0] in self.format.all_node_color_vars()
+                    e[0] in all_node_color_vars
                     and e[1] >= 0.999,
                 self.values().iteritems()
             )

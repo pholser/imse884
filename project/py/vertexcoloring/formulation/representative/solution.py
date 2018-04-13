@@ -16,12 +16,15 @@ class Solution(object):
         }
 
     def used_colors(self):
+        represents_own_color_class_vars = \
+            self.format.represents_own_color_class_vars()
+
         return map(
             self.format.color_class_for_representative_var,
             {
                 k for k, v in filter(
                     lambda e:
-                        e[0] in self.format.represents_own_color_class_vars()
+                        e[0] in represents_own_color_class_vars
                         and e[1] >= 0.999,
                     self.values().iteritems()
                 )
