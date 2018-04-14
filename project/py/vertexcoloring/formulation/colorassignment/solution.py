@@ -16,16 +16,18 @@ class Solution(object):
         }
 
     def used_colors(self):
-        return map(
-            self.format.color_for_used_var,
-            {
-                k for k, v in filter(
-                    lambda e:
-                        e[0] in self.format.color_used_vars()
-                        and e[1] >= 0.999,
-                    self.values().iteritems()
-                )
-            }
+        return sorted(
+            map(
+                self.format.color_for_used_var,
+                {
+                    k for k, v in filter(
+                        lambda e:
+                            e[0] in self.format.color_used_vars()
+                            and e[1] >= 0.999,
+                        self.values().iteritems()
+                    )
+                }
+            )
         )
 
     def colors_by_node(self):

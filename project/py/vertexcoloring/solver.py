@@ -79,8 +79,9 @@ if __name__ == '__main__':
     problem = formulation.problem_from_file(args.problem_file)
     solution = problem.solve()
 
-    print 'Objective value:', solution.objective_value()
-    for n, v in solution.values().iteritems():
+    print 'Number of colors used:', solution.objective_value()
+
+    for n, v in sorted(solution.values().iteritems()):
         print 'Value of variable %s: %f' % (n, v)
 
     if 'ip' == args.problem_file_type:

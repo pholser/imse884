@@ -42,6 +42,14 @@ class LPFormat(object):
                 lines.append(
                     self.adjacent_nodes_colored_differently_constraint(e, k)
                 )
+        for k in self.colors:
+            lines.append(
+                self.color_used_only_if_color_marks_a_node_constraint(k)
+            )
+        for k in self.colors[:-1]:
+            lines.append(
+                self.use_lower_numbered_colors_first_constraint(k)
+            )
 
     def emit_ip_bounds(self, lines):
         lines.append('Binary')
@@ -79,6 +87,25 @@ class LPFormat(object):
 
     def adjacent_nodes_colored_differently_constraint_name(self, e, k):
         return 'e%d,%d_%d' % (e[0], e[1], k)
+
+    def color_used_only_if_color_marks_a_node_constraint(self, k):
+        return self.color_used_only_if_color_marks_a_node_constraint_name(k) \
+            + ': ' \
+            + ' + '.join([self.node_color_var(n, k) for n in self.nodes]) \
+            + ' - ' + self.color_used_var(k) \
+            + ' >= 0'
+
+    def color_used_only_if_color_marks_a_node_constraint_name(self, k):
+        return 's1_%d' % k
+
+    def use_lower_numbered_colors_first_constraint(self, k):
+        return self.use_lower_numbered_colors_first_constraint_name(k) \
+            + ': ' \
+            + self.color_used_var(k) + ' - ' + self.color_used_var(k + 1) \
+            + ' >= 0'
+
+    def use_lower_numbered_colors_first_constraint_name(self, k):
+        return 's2_%d' % k
 
     def all_vars(self):
         return self.all_node_color_vars() + self.color_used_vars()
