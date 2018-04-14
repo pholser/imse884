@@ -15,7 +15,9 @@ class Probability(object):
 
 
 if __name__ == '__main__':
-    arg_parser = arg.ArgumentParser()
+    arg_parser = arg.ArgumentParser(
+        formatter_class=arg.ArgumentDefaultsHelpFormatter
+    )
 
     arg_parser.add_argument(
         '-n', '--number-of-nodes',

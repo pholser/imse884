@@ -1,5 +1,5 @@
-from vertexcoloring.formulation.representative.lp_format import LPFormat
-from vertexcoloring.formulation.representative.problem import Problem
+from lp_format import LPFormat
+from problem import Problem
 
 
 class Representative(object):

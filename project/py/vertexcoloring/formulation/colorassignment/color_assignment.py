@@ -1,5 +1,5 @@
-from vertexcoloring.formulation.colorassignment.lp_format import LPFormat
-from vertexcoloring.formulation.colorassignment.problem import Problem
+from lp_format import LPFormat
+from problem import Problem
 
 
 class ColorAssignment(object):

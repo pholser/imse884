@@ -36,7 +36,9 @@ def plot(graph, solution):
 
 
 if __name__ == '__main__':
-    arg_parser = arg.ArgumentParser()
+    arg_parser = arg.ArgumentParser(
+        formatter_class=arg.ArgumentDefaultsHelpFormatter
+    )
 
     arg_parser.add_argument(
         '-g', '--graph',
@@ -81,4 +83,5 @@ if __name__ == '__main__':
     for n, v in solution.values().iteritems():
         print 'Value of variable %s: %f' % (n, v)
 
-    plot(graph, solution)
+    if 'ip' == args.problem_file_type:
+        plot(graph, solution)

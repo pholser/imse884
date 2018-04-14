@@ -1,6 +1,6 @@
 import re
 
-from vertexcoloring.formulation.colorassignment.solution import Solution
+from solution import Solution
 
 
 class LPFormat(object):

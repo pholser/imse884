@@ -2,7 +2,7 @@ import re
 
 from itertools import chain
 from networkx.algorithms.operators.unary import complement
-from vertexcoloring.formulation.representative.solution import Solution
+from solution import Solution
 
 
 class LPFormat(object):

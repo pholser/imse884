@@ -2575,6 +2575,115 @@ lambda = 3/4 >= 0
 done.
 
 
+Every valid ineq is dominated by a D-cut.
+
+Final tableau:
+
+BV
+x_1   x_2   x_3   x_4   x_5   | RHS
+ 1    1/2  -7/5   2/3   -1    | 10/3
+
+Dictionary-style:
+
+BV    RHS    NBV -->
+x_1 = 10/3 - 1/2*x_2 + 7/5*x_3 - 2/3*x_4 + x_5
+
+If pivoting in x_2:
+(increasing x_2)
+What stops x_2 from increasing without bound is:
+whatever value would take x_1 negative.
+--> x_2 <= (10/3) / (1/2)
+do same for all other constraints...
+take the least value of x_2 that keeps us feasible
+
+x_1 = 10/3 - 1/2*x_2 + 7/5*x_3 - 2/3*x_4 + x_5
+
+x_1 is fractional. We would like to get it integer.
+Disjunct around x_1 = 3 and x_1 = 4.
+
+sum[j in N]( pi_j * x_j ) <= -1 is valid
+where
+pi_j = min {
+    a_j / (floor(a_0) - a_0),
+    a_j / (ceil(a_0) - a_0)
+}
+
+(alternatively, pi_j = floor(a_0) + 1 - a_0)
+
+e.g. above:
+pi_2 = min {
+    a_2 / (floor(a_0) - a_0),
+    a_2 / (ceil(a_0) - a_0)
+}
+=
+min { -1/2 / (3 - 10/3), -1/2 / (4 - 10/3) }
+= min {3/2, -3/4}
+= -3/4
+...
+pi_3 = -21/5
+pi_4 = -1
+pi_5 = -3
+-->
+-3/4*x_2 - 21/5*x_3 - x_4 - 3x_5 <= -1 is valid.
+
+Fixed charge modeling:
+x_1 + x_2 + x_3 + x_4 <= M * y_1
+--> x_1 <= M * y_1, x_2 <= M * y_1, x_3 <= M * y_1, x_4 <= M * y_1
+   are facet-defining inequalities.
+
+Difference between modeling and cut generation?
+e.g. KP:
+10x_1 + 18x_2 + 17x_3 <= 37
+cover ineq:
+x_1 + x_2 + x_3 <= 2
+
+Could I have modeled using the 2nd constraint
+to begin with?
+
+In some sense, every cut you add, if it's valid, is
+part of the model.
+
+Best cuts are those that will get you to optimal
+integer solution more quickly.
+How would you figure out the ideal cut?
+
+
+Superadditive function and valid inequalities:
+
+A function f: (D subset-of R^m) -> R is called
+superadditive over D if:
+f(d_1) + f(d_2) <= f(d_1 + d_2)
+for all d_1, d_2, d_1 + d_2 in D.
+
+Is x^2 superadditive?
+Let d_1 = 1, d_2 = 3.
+Then 1^2 + 3^2 <= 4^2
+It is superadditive over D = { x in R : x >= 0 }
+
+a^2 + b^2 <= a^2 + 2ab + b^2
+
+Most useful superadditive fn: floor
+
+C-G cuts are superadditive
+-->
+all cuts are dominated by a superadditive cut.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
