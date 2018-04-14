@@ -1,7 +1,7 @@
 import cplex
 
 
-class Problem(object):
+class ProblemFromFile(object):
     def __init__(self, format, path):
         self.format = format
         self.cplex = cplex.Cplex(path)

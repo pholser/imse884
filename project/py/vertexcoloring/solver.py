@@ -57,8 +57,8 @@ if __name__ == '__main__':
         default='./vertexcoloring.lp'
     )
     arg_parser.add_argument(
-        '-t', '--problem-file-type',
-        help='Flavor of problem to write',
+        '-s', '--solve-as',
+        help='Whether to solve as IP, or LR with cuts',
         choices=['ip', 'lr'],
         default='ip'
     )
@@ -74,9 +74,10 @@ if __name__ == '__main__':
         'assign': ColorAssignment
     }[args.formulation](graph)
 
-    formulation.emit_to(args.problem_file, args.problem_file_type)
+    problem = formulation.problem(args.solve_as)
+    if args.problem_file:
+        problem.emit_to(args.problem_file)
 
-    problem = formulation.problem_from_file(args.problem_file)
     solution = problem.solve()
 
     print 'Number of colors used:', solution.objective_value()
@@ -84,5 +85,5 @@ if __name__ == '__main__':
     for n, v in sorted(solution.values().iteritems()):
         print 'Value of variable %s: %f' % (n, v)
 
-    if 'ip' == args.problem_file_type:
+    if 'ip' == args.solve_as:
         plot(graph, solution)

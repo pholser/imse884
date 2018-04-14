@@ -1,5 +1,5 @@
 from lp_format import LPFormat
-from problem import Problem
+from problem_from_file import ProblemFromFile
 
 
 class Representative(object):
@@ -7,12 +7,12 @@ class Representative(object):
         self.graph = graph
         self.format = LPFormat(graph)
 
-    def emit_to(self, path, problem_type):
+    def emit_to(self, path, solve_as):
         with open(path, 'w') as f:
-            if 'lr' == problem_type:
+            if 'lr' == solve_as:
                 f.write(self.format.emit_lr())
             else:
                 f.write(self.format.emit_ip())
 
     def problem_from_file(self, path):
-        return Problem(self.format, path)
+        return ProblemFromFile(self.format, path)
