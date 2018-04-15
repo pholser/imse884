@@ -10,7 +10,7 @@ class ColorUsedOnlyIfMarksNodeConstraint(object):
         return [
             [self.problem.node_color_var(n, self.k) for n in self.problem.nodes]
             + [self.problem.color_used_var(self.k)],
-            [1.0 for n in self.problem.nodes] + [-1.0]
+            [1.0] * len(self.problem.nodes) + [-1.0]
         ]
 
     def rhs(self):

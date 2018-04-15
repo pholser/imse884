@@ -56,6 +56,12 @@ class Problem(object):
             names=map(lambda c: c.name(), constraints)
         )
 
+    def suppress_output(self):
+        self.cx.set_log_stream(None)
+        self.cx.set_error_stream(None)
+        self.cx.set_warning_stream(None)
+        self.cx.set_results_stream(None)
+
     def solve(self):
         self.cx.solve()
         return Solution(self, self.cx.solution)
