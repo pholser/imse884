@@ -9,7 +9,7 @@ class NodeGettingColorConstraint(object):
     def terms(self):
         return [
             [self.format.node_color_var(self.n, k) for k in self.format.colors],
-            [1.0 for k in self.format.colors]
+            [1.0] * len(self.format.colors)
         ]
 
     def rhs(self):

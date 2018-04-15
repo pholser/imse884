@@ -8,6 +8,7 @@ setup(
     author_email='pholser@ksu.edu',
     packages=find_packages(),
     install_requires=[
+        'cplex>=12.8.0.0',
         'networkx>=2.1',
         'matplotlib>=2.2.2',
         'pytest>=3.5.0'

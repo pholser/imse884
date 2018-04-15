@@ -1,4 +1,5 @@
 from lp_format import LPFormat
+from problem import Problem
 from problem_from_file import ProblemFromFile
 
 
@@ -16,3 +17,6 @@ class Representative(object):
 
     def problem_from_file(self, path):
         return ProblemFromFile(self.format, path)
+
+    def problem(self, solve_as):
+        return Problem(self.graph, solve_as)

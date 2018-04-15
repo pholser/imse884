@@ -100,45 +100,45 @@ def test_adjacent_node_color_constraint_terms(small_problem):
     )
 
     assert [0, 5, 25] == pairs[0].ind
-    assert [1.0, 1.0, -1] == pairs[0].val
+    assert [1.0, 1.0, -1.0] == pairs[0].val
     assert [1, 6, 26] == pairs[1].ind
-    assert [1.0, 1.0, -1] == pairs[1].val
+    assert [1.0, 1.0, -1.0] == pairs[1].val
     assert [2, 7, 27] == pairs[2].ind
-    assert [1.0, 1.0, -1] == pairs[2].val
+    assert [1.0, 1.0, -1.0] == pairs[2].val
     assert [3, 8, 28] == pairs[3].ind
-    assert [1.0, 1.0, -1] == pairs[3].val
+    assert [1.0, 1.0, -1.0] == pairs[3].val
     assert [4, 9, 29] == pairs[4].ind
-    assert [1.0, 1.0, -1] == pairs[4].val
+    assert [1.0, 1.0, -1.0] == pairs[4].val
     assert [5, 10, 25] == pairs[5].ind
-    assert [1.0, 1.0, -1] == pairs[5].val
+    assert [1.0, 1.0, -1.0] == pairs[5].val
     assert [6, 11, 26] == pairs[6].ind
-    assert [1.0, 1.0, -1] == pairs[6].val
+    assert [1.0, 1.0, -1.0] == pairs[6].val
     assert [7, 12, 27] == pairs[7].ind
-    assert [1.0, 1.0, -1] == pairs[7].val
+    assert [1.0, 1.0, -1.0] == pairs[7].val
     assert [8, 13, 28] == pairs[8].ind
-    assert [1.0, 1.0, -1] == pairs[8].val
+    assert [1.0, 1.0, -1.0] == pairs[8].val
     assert [9, 14, 29] == pairs[9].ind
-    assert [1.0, 1.0, -1] == pairs[9].val
+    assert [1.0, 1.0, -1.0] == pairs[9].val
     assert [5, 15, 25] == pairs[10].ind
-    assert [1.0, 1.0, -1] == pairs[10].val
+    assert [1.0, 1.0, -1.0] == pairs[10].val
     assert [6, 16, 26] == pairs[11].ind
-    assert [1.0, 1.0, -1] == pairs[11].val
+    assert [1.0, 1.0, -1.0] == pairs[11].val
     assert [7, 17, 27] == pairs[12].ind
-    assert [1.0, 1.0, -1] == pairs[12].val
+    assert [1.0, 1.0, -1.0] == pairs[12].val
     assert [8, 18, 28] == pairs[13].ind
-    assert [1.0, 1.0, -1] == pairs[13].val
+    assert [1.0, 1.0, -1.0] == pairs[13].val
     assert [9, 19, 29] == pairs[14].ind
-    assert [1.0, 1.0, -1] == pairs[14].val
+    assert [1.0, 1.0, -1.0] == pairs[14].val
     assert [15, 20, 25] == pairs[15].ind
-    assert [1.0, 1.0, -1] == pairs[15].val
+    assert [1.0, 1.0, -1.0] == pairs[15].val
     assert [16, 21, 26] == pairs[16].ind
-    assert [1.0, 1.0, -1] == pairs[16].val
+    assert [1.0, 1.0, -1.0] == pairs[16].val
     assert [17, 22, 27] == pairs[17].ind
-    assert [1.0, 1.0, -1] == pairs[17].val
+    assert [1.0, 1.0, -1.0] == pairs[17].val
     assert [18, 23, 28] == pairs[18].ind
-    assert [1.0, 1.0, -1] == pairs[18].val
+    assert [1.0, 1.0, -1.0] == pairs[18].val
     assert [19, 24, 29] == pairs[19].ind
-    assert [1.0, 1.0, -1] == pairs[19].val
+    assert [1.0, 1.0, -1.0] == pairs[19].val
 
 
 def test_adjacent_node_color_constraint_senses(small_problem):
