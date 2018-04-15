@@ -1,6 +1,6 @@
 class DistinctRepresentativeForNeighborsConstraint(object):
-    def __init__(self, format, n, v, w):
-        self.format = format
+    def __init__(self, problem, n, v, w):
+        self.problem = problem
         self.n = n
         self.v = v
         self.w = w
@@ -10,9 +10,9 @@ class DistinctRepresentativeForNeighborsConstraint(object):
 
     def terms(self):
         vars = [
-            self.format.represents_color_class_of_var(self.n, self.v),
-            self.format.represents_color_class_of_var(self.n, self.w),
-            self.format.represents_color_class_of_var(self.n, self.n)
+            self.problem.represents_color_class_of_var(self.n, self.v),
+            self.problem.represents_color_class_of_var(self.n, self.w),
+            self.problem.represents_color_class_of_var(self.n, self.n)
         ]
         return [
             vars,

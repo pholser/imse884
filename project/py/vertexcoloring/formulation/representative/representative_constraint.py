@@ -2,8 +2,8 @@ from itertools import chain
 
 
 class RepresentativeConstraint(object):
-    def __init__(self, format, n):
-        self.format = format
+    def __init__(self, problem, n):
+        self.problem = problem
         self.n = n
 
     def name(self):
@@ -11,10 +11,10 @@ class RepresentativeConstraint(object):
 
     def terms(self):
         vars = [
-            self.format.represents_color_class_of_var(u, self.n)
+            self.problem.represents_color_class_of_var(u, self.n)
             for u in chain(
                 {self.n},
-                sorted(self.format.antigraph.neighbors(self.n))
+                sorted(self.problem.antigraph.neighbors(self.n))
             )
         ]
         return [

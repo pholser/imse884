@@ -1,6 +1,6 @@
 class ColorUsedOnlyIfMarksNodeConstraint(object):
-    def __init__(self, format, k):
-        self.format = format
+    def __init__(self, problem, k):
+        self.problem = problem
         self.k = k
 
     def name(self):
@@ -8,9 +8,9 @@ class ColorUsedOnlyIfMarksNodeConstraint(object):
 
     def terms(self):
         return [
-            [self.format.node_color_var(n, self.k) for n in self.format.nodes]
-            + [self.format.color_used_var(self.k)],
-            [1.0 for n in self.format.nodes] + [-1.0]
+            [self.problem.node_color_var(n, self.k) for n in self.problem.nodes]
+            + [self.problem.color_used_var(self.k)],
+            [1.0 for n in self.problem.nodes] + [-1.0]
         ]
 
     def rhs(self):

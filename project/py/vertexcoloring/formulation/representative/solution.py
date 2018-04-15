@@ -2,8 +2,8 @@ from collections import defaultdict
 
 
 class Solution(object):
-    def __init__(self, format, cplex_solution):
-        self.format = format
+    def __init__(self, problem, cplex_solution):
+        self.problem = problem
         self.cplex_solution = cplex_solution
 
     def objective_value(self):
@@ -12,15 +12,15 @@ class Solution(object):
     def values(self):
         return {
             v: self.cplex_solution.get_values(v)
-            for v in self.format.all_vars()
+            for v in self.problem.all_vars()
         }
 
     def used_colors(self):
         represents_own_color_class_vars = \
-            self.format.represents_own_color_class_vars()
+            self.problem.represents_own_color_class_vars()
 
         return map(
-            self.format.color_class_for_representative_var,
+            self.problem.color_class_for_representative_var,
             {
                 k for k, v in filter(
                     lambda e:
@@ -37,14 +37,14 @@ class Solution(object):
         representative_vars = {
             k for k, v in filter(
                 lambda e:
-                    self.format.color_class_for_representative_var(e[0]) in color_classes
-                    and e[1] >= 0.999,
+                self.problem.color_class_for_representative_var(e[0]) in color_classes
+                and e[1] >= 0.999,
                 self.values().iteritems()
             )
         }
         return dict(
             map(
-                self.format.representative_pairing_for_var,
+                self.problem.representative_pairing_for_var,
                 representative_vars
             )
         )

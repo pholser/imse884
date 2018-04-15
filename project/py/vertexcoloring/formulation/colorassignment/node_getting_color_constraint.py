@@ -1,6 +1,6 @@
 class NodeGettingColorConstraint(object):
-    def __init__(self, format, n):
-        self.format = format
+    def __init__(self, problem, n):
+        self.problem = problem
         self.n = n
 
     def name(self):
@@ -8,8 +8,8 @@ class NodeGettingColorConstraint(object):
 
     def terms(self):
         return [
-            [self.format.node_color_var(self.n, k) for k in self.format.colors],
-            [1.0] * len(self.format.colors)
+            [self.problem.node_color_var(self.n, k) for k in self.problem.colors],
+            [1.0] * len(self.problem.colors)
         ]
 
     def rhs(self):

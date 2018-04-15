@@ -1,6 +1,6 @@
 class UseLowerNumberedColorFirstConstraint(object):
-    def __init__(self, format, k):
-        self.format = format
+    def __init__(self, problem, k):
+        self.problem = problem
         self.k = k
 
     def name(self):
@@ -8,8 +8,8 @@ class UseLowerNumberedColorFirstConstraint(object):
 
     def terms(self):
         return [
-            [self.format.color_used_var(self.k),
-             self.format.color_used_var(self.k + 1)],
+            [self.problem.color_used_var(self.k),
+             self.problem.color_used_var(self.k + 1)],
             [1.0, -1.0]
         ]
 

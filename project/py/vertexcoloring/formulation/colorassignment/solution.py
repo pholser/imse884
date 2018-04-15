@@ -2,8 +2,8 @@ from collections import defaultdict
 
 
 class Solution(object):
-    def __init__(self, format, cplex_solution):
-        self.format = format
+    def __init__(self, problem, cplex_solution):
+        self.problem = problem
         self.cplex_solution = cplex_solution
 
     def objective_value(self):
@@ -12,17 +12,17 @@ class Solution(object):
     def values(self):
         return {
             v: self.cplex_solution.get_values(v)
-            for v in self.format.all_vars()
+            for v in self.problem.all_vars()
         }
 
     def used_colors(self):
         return sorted(
             map(
-                self.format.color_for_used_var,
+                self.problem.color_for_used_var,
                 {
                     k for k, v in filter(
                         lambda e:
-                            e[0] in self.format.color_used_vars()
+                            e[0] in self.problem.color_used_vars()
                             and e[1] >= 0.999,
                         self.values().iteritems()
                     )
@@ -31,7 +31,7 @@ class Solution(object):
         )
 
     def colors_by_node(self):
-        all_node_color_vars = set(self.format.all_node_color_vars())
+        all_node_color_vars = set(self.problem.all_node_color_vars())
 
         node_color_vars = {
             k for k, v in filter(
@@ -43,7 +43,7 @@ class Solution(object):
         }
         return dict(
             map(
-                self.format.node_color_pairing_for_var,
+                self.problem.node_color_pairing_for_var,
                 node_color_vars
             )
         )

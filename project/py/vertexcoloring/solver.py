@@ -3,10 +3,10 @@
 import argparse as arg
 import networkx as nx
 import matplotlib.pyplot as plt
+import formulation.colorassignment.problem as assign
+import formulation.representative.problem as rep
 
 from dimacs.parser import Parser
-from formulation.colorassignment.color_assignment import ColorAssignment
-from formulation.representative.representative import Representative
 from matplotlib import colors as mcolors
 from operator import itemgetter
 
@@ -69,12 +69,11 @@ if __name__ == '__main__':
     graph = Parser().parse(args.graph)
     print '...done.'
 
-    formulation = {
-        'rep': Representative,
-        'assign': ColorAssignment
-    }[args.formulation](graph)
+    problem = {
+        'rep': rep.Problem,
+        'assign': assign.Problem
+    }[args.formulation](graph, args.solve_as)
 
-    problem = formulation.problem(args.solve_as)
     if args.problem_file:
         problem.emit_to(args.problem_file)
 
