@@ -15,24 +15,29 @@ class Problem(object):
         self.edges = sorted(map(sorted, graph.edges()))
         self.colors = self.nodes
         self.solve_as = solve_as
-        self.cx = cplex.Cplex()
-        self.cx.objective.set_sense(self.cx.objective.sense.minimize)
-        self.var_names = self.all_node_color_vars() + self.color_used_vars()
-        self.objective = [0.0] * len(self.all_node_color_vars()) \
-            + [1.0] * len(self.color_used_vars())
+        self.cx = self.init_cplex()
 
-        if 'ip' == solve_as:
-            self.cx.variables.add(
-                obj=self.objective,
-                types=[self.cx.variables.type.binary] * len(self.var_names),
-                names=self.var_names
+    def init_cplex(self):
+        cx = cplex.Cplex()
+
+        cx.objective.set_sense(cx.objective.sense.minimize)
+
+        var_names = self.all_node_color_vars() + self.color_used_vars()
+        objective = [0.0] * len(self.all_node_color_vars()) \
+            + [1.0] * len(self.color_used_vars())
+        if 'ip' == self.solve_as:
+            cx.variables.add(
+                obj=objective,
+                types=[self.cx.variables.type.binary] * len(var_names),
+                names=var_names
             )
         else:
-            self.cx.variables.add(
-                obj=self.objective,
-                ub=[1.0] * len(self.var_names),
-                names=self.var_names
+            cx.variables.add(
+                obj=objective,
+                ub=[1.0] * len(var_names),
+                names=var_names
             )
+
         constraints = [
             NodeGettingColorConstraint(self, n)
             for n in self.nodes
@@ -49,12 +54,14 @@ class Problem(object):
             [UseLowerNumberedColorFirstConstraint(self, k)
              for k in self.colors[:-1]]
         )
-        self.cx.linear_constraints.add(
+        cx.linear_constraints.add(
             lin_expr=map(lambda c: c.terms(), constraints),
             senses=map(lambda c: c.sense(), constraints),
             rhs=map(lambda c: c.rhs(), constraints),
             names=map(lambda c: c.name(), constraints)
         )
+
+        return cx
 
     def suppress_output(self):
         self.cx.set_log_stream(None)
