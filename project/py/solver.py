@@ -52,15 +52,20 @@ if __name__ == '__main__':
         default='assign'
     )
     arg_parser.add_argument(
-        '-p', '--problem-file',
+        '-d', '--problem-file-dir',
         help='Path to write CPLEX LP file for problem to',
-        default='./vertexcoloring.lp'
+        default='.'
     )
     arg_parser.add_argument(
         '-s', '--solve-as',
         help='Whether to solve as IP, or LR with cuts',
         choices=['ip', 'lr'],
         default='ip'
+    )
+    arg_parser.add_argument(
+        '-p', '--plot-if-integer',
+        action='store_true',
+        help='Plot final solution if it is integer'
     )
 
     args = arg_parser.parse_args()
@@ -74,6 +79,7 @@ if __name__ == '__main__':
     new_clique_cuts = []
     problem = None
     solution = None
+    iter = 0
 
     while keep_cutting:
         if not problem:
@@ -85,11 +91,13 @@ if __name__ == '__main__':
                 q.id: q for q in problem.clique_cuts()
             }
 
+        print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
         problem.add_cuts(new_clique_cuts)
         problem.suppress_output()
-
-        if args.problem_file:
-            problem.emit_to(args.problem_file)
+        problem.emit_to(
+            args.problem_file_dir
+            + ('/vertexcoloring.%d.lp' % iter)
+        )
 
         solution = problem.solve()
         print 'Linear relaxation solution time:', solution.running_time
@@ -102,10 +110,12 @@ if __name__ == '__main__':
             del candidate_clique_cuts[q.id]
 
         keep_cutting = len(new_clique_cuts) > 0
+        iter += 1
 
+    print 'No more cuts to add.'
     print 'Number of colors used:', solution.objective_value()
     for n, v in sorted(solution.values().iteritems()):
         print 'Value of variable %s: %f' % (n, v)
 
-    if solution.is_integer():
+    if solution.is_integer() and args.plot_if_integer:
         plot(graph, solution)
