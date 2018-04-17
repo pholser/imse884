@@ -100,7 +100,7 @@ if __name__ == '__main__':
     problem_name = os.path.splitext(os.path.basename(args.graph))[0]
     problem = None
     solution = None
-    iter = 0
+    iteration = 0
 
     while keep_cutting:
         if not problem:
@@ -122,7 +122,7 @@ if __name__ == '__main__':
         problem_file_path = '%s/vertexcoloring.%s.%d.lp' % (
             args.problem_file_dir,
             problem_name,
-            iter
+            iteration
         )
         problem.emit_to(problem_file_path)
 
@@ -140,7 +140,7 @@ if __name__ == '__main__':
             claimed_clique_cuts.append(q)
 
         keep_cutting = len(new_clique_cuts) > 0
-        iter += 1
+        iteration += 1
 
     print 'No more cuts to add.'
     print 'Number of colors used:', solution.objective_value()

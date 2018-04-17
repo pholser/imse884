@@ -8,7 +8,7 @@ from vertexcoloring.dimacs.formatter import Formatter
 
 class Probability(object):
     def __eq__(self, other):
-        return other >= 0.0 and other <= 1.0
+        return 0.0 <= other <= 1.0
 
     def __repr__(self):
         return '0...1'

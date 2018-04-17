@@ -33,4 +33,5 @@ class CliqueCut(object):
         )
         clique_rep_values = solution.value_of(clique_rep_vars)
         own_rep_value = solution.value_of(own_rep_var)
+
         return sum(clique_rep_values) - own_rep_value <= self.rhs()

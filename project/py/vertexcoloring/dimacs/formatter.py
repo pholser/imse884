@@ -1,5 +1,6 @@
 from itertools import chain
 
+
 class Formatter(object):
     def format(self, graph):
         return "\n".join(

@@ -95,9 +95,6 @@ class Problem(object):
                 i += 1
                 yield CliqueCut(self, u, q, i)
 
-    # TODO: write tests for clique_cuts for both formulations
-    # TODO: write tests for cliquecut.allows for both formulations
-
     def emit_to(self, path):
         self.cx.write(path, 'lp')
 

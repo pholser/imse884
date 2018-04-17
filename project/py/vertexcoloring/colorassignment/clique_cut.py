@@ -29,4 +29,5 @@ class CliqueCut(object):
         color_used_var = self.problem.color_used_var(self.color)
         clique_values = solution.value_of(clique_vars)
         color_used_value = solution.value_of(color_used_var)
+
         return sum(clique_values) - color_used_value <= self.rhs()
