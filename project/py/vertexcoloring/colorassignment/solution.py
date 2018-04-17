@@ -1,10 +1,13 @@
 from collections import defaultdict
 
+from ..is_close import isclose
+
 
 class Solution(object):
-    def __init__(self, problem, cplex_solution):
+    def __init__(self, problem, cplex_solution, running_time):
         self.problem = problem
         self.cplex_solution = cplex_solution
+        self.running_time = running_time
 
     def objective_value(self):
         return self.cplex_solution.get_objective_value()
@@ -14,6 +17,9 @@ class Solution(object):
             v: self.cplex_solution.get_values(v)
             for v in self.problem.all_vars()
         }
+
+    def is_integer(self):
+        return all(isclose(val, abs(val)) for val in self.values().itervalues())
 
     def used_colors(self):
         return sorted(

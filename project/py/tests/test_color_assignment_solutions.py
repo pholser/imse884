@@ -1,7 +1,7 @@
 import pytest
 
 from vertexcoloring.dimacs.parser import Parser
-from vertexcoloring.formulation.colorassignment.problem import Problem
+from vertexcoloring.colorassignment import Problem
 
 
 @pytest.fixture

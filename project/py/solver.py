@@ -3,10 +3,10 @@
 import argparse as arg
 import networkx as nx
 import matplotlib.pyplot as plt
-import formulation.colorassignment.problem as assign
-import formulation.representative.problem as rep
+import vertexcoloring.colorassignment.problem as assign
+import vertexcoloring.representative.problem as rep
 
-from dimacs.parser import Parser
+from vertexcoloring.dimacs.parser import Parser
 from matplotlib import colors as mcolors
 from operator import itemgetter
 
@@ -80,9 +80,8 @@ if __name__ == '__main__':
     solution = problem.solve()
 
     print 'Number of colors used:', solution.objective_value()
-
     for n, v in sorted(solution.values().iteritems()):
         print 'Value of variable %s: %f' % (n, v)
 
-    if 'ip' == args.solve_as:
+    if solution.is_integer():
         plot(graph, solution)

@@ -28,7 +28,7 @@ class Problem(object):
         if 'ip' == self.solve_as:
             cx.variables.add(
                 obj=objective,
-                types=[self.cx.variables.type.binary] * len(var_names),
+                types=[cx.variables.type.binary] * len(var_names),
                 names=var_names
             )
         else:
@@ -70,8 +70,10 @@ class Problem(object):
         self.cx.set_results_stream(None)
 
     def solve(self):
+        start = self.cx.get_dettime()
         self.cx.solve()
-        return Solution(self, self.cx.solution)
+        end = self.cx.get_dettime()
+        return Solution(self, self.cx.solution, end - start)
 
     def emit_to(self, path):
         self.cx.write(path, 'lp')

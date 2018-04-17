@@ -69,8 +69,10 @@ class Problem(object):
         self.cx.set_results_stream(None)
 
     def solve(self):
+        start = self.cx.get_dettime()
         self.cx.solve()
-        return Solution(self, self.cx.solution)
+        end = self.cx.get_dettime()
+        return Solution(self, self.cx.solution, end - start)
 
     def emit_to(self, path):
         self.cx.write(path, 'lp')

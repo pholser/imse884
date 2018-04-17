@@ -3,7 +3,7 @@
 import argparse as arg
 import networkx as nx
 
-from dimacs.formatter import Formatter
+from vertexcoloring.dimacs.formatter import Formatter
 
 
 class Probability(object):
