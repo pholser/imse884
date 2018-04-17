@@ -3,13 +3,13 @@
 import argparse as arg
 import networkx as nx
 import matplotlib.pyplot as plt
+import os
 import vertexcoloring.colorassignment.problem as assign
 import vertexcoloring.representative.problem as rep
 
 from vertexcoloring.dimacs.parser import Parser
 from matplotlib import colors as mcolors
 from operator import itemgetter
-from os.path import basename, splitext
 
 
 def plot(graph, solution):
@@ -92,7 +92,7 @@ if __name__ == '__main__':
     candidate_clique_cuts = {}
     new_clique_cuts = []
     claimed_clique_cuts = []
-    problem_name = splitext(basename(args.graph))[0]
+    problem_name = os.path.splitext(os.path.basename(args.graph))[0]
     problem = None
     solution = None
     iter = 0
