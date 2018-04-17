@@ -36,6 +36,13 @@ def plot(graph, solution):
     plt.show()
 
 
+def new_problem(formulation, graph, solve_as):
+    return {
+        'rep': rep.Problem,
+        'assign': assign.Problem
+    }[formulation](graph, solve_as)
+
+
 if __name__ == '__main__':
     arg_parser = arg.ArgumentParser(
         formatter_class=arg.ArgumentDefaultsHelpFormatter
@@ -68,6 +75,12 @@ if __name__ == '__main__':
         action='store_true',
         help='Plot final solution if it is integer'
     )
+    arg_parser.add_argument(
+        '-r', '--restart-mode',
+        help='Warm restart allows reuse of previous LR solutions, cold starts from scratch',
+        choices=['warm', 'cold'],
+        default='warm'
+    )
 
     args = arg_parser.parse_args()
 
@@ -78,6 +91,7 @@ if __name__ == '__main__':
     keep_cutting = True
     candidate_clique_cuts = {}
     new_clique_cuts = []
+    claimed_clique_cuts = []
     problem_name = splitext(basename(args.graph))[0]
     problem = None
     solution = None
@@ -85,16 +99,20 @@ if __name__ == '__main__':
 
     while keep_cutting:
         if not problem:
-            problem = {
-                'rep': rep.Problem,
-                'assign': assign.Problem
-            }[args.formulation](graph, args.solve_as)
+            problem = new_problem(args.formulation, graph, args.solve_as)
             candidate_clique_cuts = {
                 q.id: q for q in problem.clique_cuts()
             }
+        if args.restart_mode == 'warm':
+            print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
+            problem.add_cuts(new_clique_cuts)
+        else:
+            problem = new_problem(args.formulation, graph, args.solve_as)
+            print 'Solving from beginning with additional', \
+                len(claimed_clique_cuts), \
+                'clique cuts.'
+            problem.add_cuts(claimed_clique_cuts)
 
-        print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
-        problem.add_cuts(new_clique_cuts)
         problem.suppress_output()
         problem_file_path = '%s/vertexcoloring.%s.%d.lp' % (
             args.problem_file_dir,
@@ -112,6 +130,7 @@ if __name__ == '__main__':
             candidate_clique_cuts.itervalues())
         for q in new_clique_cuts:
             del candidate_clique_cuts[q.id]
+            claimed_clique_cuts.append(q)
 
         keep_cutting = len(new_clique_cuts) > 0
         iter += 1
