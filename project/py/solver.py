@@ -76,6 +76,11 @@ if __name__ == '__main__':
         help='Plot final solution if it is integer'
     )
     arg_parser.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Show values of variables in intermediate solutions'
+    )
+    arg_parser.add_argument(
         '-r', '--restart-mode',
         help='Warm restart allows reuse of previous LR solutions, cold starts from scratch',
         choices=['warm', 'cold'],
@@ -122,8 +127,10 @@ if __name__ == '__main__':
         problem.emit_to(problem_file_path)
 
         solution = problem.solve()
-        print 'Linear relaxation solution time:', solution.running_time
+        print 'Solution time:', solution.running_time
         print 'Objective value:', solution.objective_value()
+        if args.verbose:
+            solution.show()
 
         new_clique_cuts = filter(
             lambda cut: not cut.allows(solution),
@@ -137,8 +144,7 @@ if __name__ == '__main__':
 
     print 'No more cuts to add.'
     print 'Number of colors used:', solution.objective_value()
-    for n, v in sorted(solution.values().iteritems()):
-        print 'Value of variable %s: %f' % (n, v)
+    solution.show()
 
     if solution.is_integer() and args.plot_if_integer:
         plot(graph, solution)

@@ -1,3 +1,5 @@
+import sys
+
 from collections import defaultdict
 
 from ..is_close import isclose
@@ -17,6 +19,10 @@ class Solution(object):
             v: self.cplex_solution.get_values(v)
             for v in self.problem.all_vars()
         }
+
+    def show(self, to=sys.stdout):
+        for n, v in sorted(self.values().iteritems()):
+            print >> to, 'Value of variable %s: %f' % (n, v)
 
     def value_of(self, *vars):
         return self.cplex_solution.get_values(*vars)
