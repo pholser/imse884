@@ -2,7 +2,9 @@ import cplex
 import re
 
 from adjacent_node_color_constraint import AdjacentNodeColorConstraint
+from clique_cut import CliqueCut
 from color_used_only_if_marks_node_constraint import ColorUsedOnlyIfMarksNodeConstraint
+from networkx.algorithms.clique import find_cliques
 from node_getting_color_constraint import NodeGettingColorConstraint
 from solution import Solution
 from use_lower_numbered_color_first_constraint import UseLowerNumberedColorFirstConstraint
@@ -74,6 +76,22 @@ class Problem(object):
         self.cx.solve()
         end = self.cx.get_dettime()
         return Solution(self, self.cx.solution, end - start)
+
+    def add_cuts(self, cuts):
+        for cut in cuts:
+            self.cx.linear_constraints.add(
+                lin_expr=[cut.terms()],
+                senses=[cut.sense()],
+                rhs=[cut.rhs()],
+                names=[cut.name()]
+            )
+
+    def clique_cuts(self):
+        i = 0
+        for q in filter(lambda cl: len(cl) > 2, find_cliques(self.graph)):
+            for k in self.colors:
+                i += 1
+                yield CliqueCut(self, q, k, i)
 
     def emit_to(self, path):
         self.cx.write(path, 'lp')

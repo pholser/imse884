@@ -69,15 +69,39 @@ if __name__ == '__main__':
     graph = Parser().parse(args.graph)
     print '...done.'
 
-    problem = {
-        'rep': rep.Problem,
-        'assign': assign.Problem
-    }[args.formulation](graph, args.solve_as)
+    keep_cutting = True
+    candidate_clique_cuts = {}
+    new_clique_cuts = []
+    problem = None
+    solution = None
 
-    if args.problem_file:
-        problem.emit_to(args.problem_file)
+    while keep_cutting:
+        if not problem:
+            problem = {
+                'rep': rep.Problem,
+                'assign': assign.Problem
+            }[args.formulation](graph, args.solve_as)
+            candidate_clique_cuts = {
+                q.id: q for q in problem.clique_cuts()
+            }
 
-    solution = problem.solve()
+        problem.add_cuts(new_clique_cuts)
+        problem.suppress_output()
+
+        if args.problem_file:
+            problem.emit_to(args.problem_file)
+
+        solution = problem.solve()
+        print 'Linear relaxation solution time:', solution.running_time
+        print 'Objective value:', solution.objective_value()
+
+        new_clique_cuts = filter(
+            lambda cut: not cut.allows(solution),
+            candidate_clique_cuts.itervalues())
+        for q in new_clique_cuts:
+            del candidate_clique_cuts[q.id]
+
+        keep_cutting = len(new_clique_cuts) > 0
 
     print 'Number of colors used:', solution.objective_value()
     for n, v in sorted(solution.values().iteritems()):

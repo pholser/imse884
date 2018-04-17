@@ -18,8 +18,11 @@ class Solution(object):
             for v in self.problem.all_vars()
         }
 
+    def value_of(self, *vars):
+        return self.cplex_solution.get_values(*vars)
+
     def is_integer(self):
-        return all(isclose(val, abs(val)) for val in self.values().itervalues())
+        return all(isclose(val, int(val)) for val in self.values().itervalues())
 
     def used_colors(self):
         return sorted(

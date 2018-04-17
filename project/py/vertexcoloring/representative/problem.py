@@ -1,9 +1,11 @@
 import cplex
 import re
 
+from clique_cut import CliqueCut
 from distinct_representatives_for_neighbors_constraint \
     import DistinctRepresentativeForNeighborsConstraint
 from itertools import chain
+from networkx.algorithms.clique import find_cliques
 from networkx.algorithms.operators.unary import complement
 from representative_constraint import RepresentativeConstraint
 from solution import Solution
@@ -73,6 +75,28 @@ class Problem(object):
         self.cx.solve()
         end = self.cx.get_dettime()
         return Solution(self, self.cx.solution, end - start)
+
+    def add_cuts(self, cuts):
+        for cut in cuts:
+            self.cx.linear_constraints.add(
+                lin_expr=[cut.terms()],
+                senses=[cut.sense()],
+                rhs=[cut.rhs()],
+                names=[cut.name()]
+            )
+
+    def clique_cuts(self):
+        i = 0
+        for u in self.nodes:
+            for q in filter(
+                lambda cl: len(cl) > 2,
+                find_cliques(self.graph.subgraph(self.antigraph.neighbors(u)))
+            ):
+                i += 1
+                yield CliqueCut(self, u, q, i)
+
+    # TODO: write tests for clique_cuts for both formulations
+    # TODO: write tests for cliquecut.allows for both formulations
 
     def emit_to(self, path):
         self.cx.write(path, 'lp')
