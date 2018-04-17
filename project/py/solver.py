@@ -9,6 +9,7 @@ import vertexcoloring.representative.problem as rep
 from vertexcoloring.dimacs.parser import Parser
 from matplotlib import colors as mcolors
 from operator import itemgetter
+from os.path import basename, splitext
 
 
 def plot(graph, solution):
@@ -77,6 +78,7 @@ if __name__ == '__main__':
     keep_cutting = True
     candidate_clique_cuts = {}
     new_clique_cuts = []
+    problem_name = splitext(basename(args.graph))[0]
     problem = None
     solution = None
     iter = 0
@@ -94,10 +96,12 @@ if __name__ == '__main__':
         print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
         problem.add_cuts(new_clique_cuts)
         problem.suppress_output()
-        problem.emit_to(
-            args.problem_file_dir
-            + ('/vertexcoloring.%d.lp' % iter)
+        problem_file_path = '%s/vertexcoloring.%s.%d.lp' % (
+            args.problem_file_dir,
+            problem_name,
+            iter
         )
+        problem.emit_to(problem_file_path)
 
         solution = problem.solve()
         print 'Linear relaxation solution time:', solution.running_time
