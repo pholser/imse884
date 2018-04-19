@@ -6,7 +6,7 @@ import networkx as nx
 from vertexcoloring.dimacs.formatter import Formatter
 
 
-class Probability(object):
+class ProbabilityRange(object):
     def __eq__(self, other):
         return 0.0 <= other <= 1.0
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
         '-p', '--probability-of-edge-creation',
         help='Probability of an edge between any two nodes',
         type=float,
-        choices=[Probability()],
+        choices=[ProbabilityRange()],
         default=0.5,
     )
     arg_parser.add_argument(
