@@ -2669,6 +2669,115 @@ C-G cuts are superadditive
 all cuts are dominated by a superadditive cut.
 
 
+Functions that are non-decreasing and superadditive
+yield valid inequalities.
+
+Really only need superadditivity over D =
+{Z intersect {x : Ax <= b}}
+
+If F and G are superadditive functions, then so is:
+K = lambda * F  for lambda >= 0
+K = |F|
+K = F + G
+K = min(F, G)
+
+If F_i for i = 1 to k is superadditive,
+then the composite H(F_1, ..., F_k) is also superadditive.
+
+Furthermore, if F_i for i = 1 to k is nondecreasing,
+then so is H(F_1, ..., F_k)
+
+Thm: Let sum[i]( alpha_i * x_i ) <= beta be a valid ineq
+and f be a superadditive function.
+Then:
+sum[i]( f(alpha_i) * x_i ) <= f(beta) is valid.
+
+e.g.
+13/4 x_1 - 13/2 x_2 + 8/3 x_3 + x_4 <= 17/4
+
+Let f(x) = floor(x)
+
+Then,
+3x_1 - 7x_2 + 2x_3 + x_4 <= 4
+
+e.g.
+3x_1 + 0.2x_2 + 6x_3 + 0.5x_4 <= 10
+
+Let f(x) = x^2, where x >= 0
+
+Then
+9x_1 + 0.04x_2 + 36x_3 + 0.25x_4 <= 100
+
+
+Can use superadditive functions to improve
+Balas' lifting theorem.
+
+Let F_alpha(d) = {
+    floor(d)  if 0 <= d - floor(d) <= alpha
+    floor(d) + (d - floor(d) - alpha) / (1 - alpha)
+              if alpha < d - floor(d) <= 1
+}
+
+A step function that angles up at points dictated by
+alpha.
+
+e.g.
+13/4 x_1 - 13/2 x_2 + 8/3 x_3 + x_4 <= 17/4
+
+if alpha = 1/4:
+3x_1 - 20/3 x_2 + 9/4 x_3 + x_4 <= 4
+
+Gu: This is the best superadditive function you
+can get, that meets certain properties.
+
+e.g.
+12 2/3 x_1 + 15.1 x_2 + 6 4/9 x_3 + 12 5/6 x_4 <= 18 1/3
+Choose alpha = 1/3
+-->
+12 1/2 x_1 + 15 x_2 + 6 1/6 x_3 + 12 3/4 x_4 <= 18
+
+e.g. KP
+33x_1 + 32x_2 + 18x_3 + 17x_4 + 16x_5 + 11x_6 <= 41
+
+cover: {x_3, x_4, x_5}
+x_3 + x_4 + x_5 <= 2
+
+Given a knapsack (sorted in descending order)
+and a cover C (also sorted).
+Let mu_h = sum[k in 1..h]( a_j_k ) for h in 1, ..., |C|;
+let mu_0 = 0
+Let lambda = mu_|C| - b >= 1
+
+Then the alpha_j lifting coefficient can be taken
+in the following cases:
+
+i) If mu_h - lambda - beta_h <= a_j <= mu_(h+1) - lambda,
+    then alpha_j = h.
+ii) If mu_h - lambda < a_j <= mu_h - lambda + beta_h,
+    then alpha_j = h - (mu_h - lambda + beta_h - a_j) / beta_1
+
+where beta_h = max { 0, a_(h+1) - (a_1 - lambda)}
+
+(Gu, Nemhauser, Salvesberg) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
