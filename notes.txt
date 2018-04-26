@@ -2036,7 +2036,7 @@ down to integer, force RHS down to integer
 Starting with valid ineqs:
 alpha_ij * x_i <= beta_j
 -- Multiply both sides of all by constants u_j >= 0
--- Then floor(sum[j]( u_j * alpha_ij )) * x_i
+-- Then sum[j]( floor(u_j * alpha_ij) * x_i )
     <=
     floor(u_j * beta_j)
     is valid.
@@ -2197,7 +2197,7 @@ u_2 (14x_1 +  7x_2 <= 47)
 
 What abt u_1 == 3/58, u_2 == 1/58
 
-59/58 x_1 + 58/58 x+2 <= 335/58
+59/58 x_1 + 58/58 x_2 <= 335/58
 flooring:
 x_1 + x_2 <= 5
 
@@ -2440,7 +2440,7 @@ Pick row 1:
 x_1 - 2/5s_1 + 3/5s_2 = 8/5
 
 mod by 1:
-0x_1 + 3/5s_1 + 2/5s_2 >= 3/5
+0x_1 + 3/5s_1 + 3/5s_2 >= 3/5
 
 Does this cut off a point?
 current optimum:
@@ -2537,6 +2537,13 @@ Disjunctive cuts (D-cuts):
 -- Take a valid inequality for set 2 of points
 -- Merge them to get a valid ineq for set 1 union set 2
 -- Kind of the idea of a local cut.
+
+If sum[j in N]( pi^1_j * x_j ) <= pi^1_0 is valid for S_1 subset-of R+^n,
+and sum[j in N]( pi^2_j * x_j ) <= pi^2_0 is valid for S_2 subset-of R+^n,
+then
+    sum[j in N]( min( pi^1_j, pi^2_j ) * x_j ) <= max( pi^1_0, pi^2_0 )
+    is valid for S_1 union S_2.
+
 
 Procedure:
 Step 1:
@@ -2758,14 +2765,274 @@ ii) If mu_h - lambda < a_j <= mu_h - lambda + beta_h,
 
 where beta_h = max { 0, a_(h+1) - (a_1 - lambda)}
 
-(Gu, Nemhauser, Salvesberg) 
+(Gu, Nemhauser, Salvesberg)
 
 
+Mixed-integer rounding (MIR):
+
+max c^T * x + d^T * y
+st. Ax + Dy <= b
+    x in Z_n, y >= 0
+
+e.g.
+-5x - y <= -12
+0 <= x <= 5, and integer
+y >= 0
+
+P = { rays emanating up, along integer points of x }
+P_ch = { intersection of all convex sets that contain P }
+
+Valid ineq for P_ch?
+
+P_LR?
+
+The y-inequalities don't help us cut anything off.
+But, the cut that goes thru (3, 0) and (2, 2) does
 
 
+e.g.
+3x_1 - 7x_2 + 2x_3 + y <= 13/3
+x in Z^3, y in R
+
+18y_1 + 17y_2 + 16y_3
+y >= 0
+Can we consider these just one var instead of three?
+
+Maybe unless some of the coeffs are negative.
+
+3x_1 - 7x_2 + 2x_3 + alpha^(+) * y^(+) - alpha^(-) * y^(-) <= 13/3
+y^(+) >= 0
+y^(-) >= 0
+y = y^(+) - y^(-) and is unrestricted
+y has one corner point.
+
+Focus on the integer vars and the RHS
+
+Bound on
+3x_1 - 7x_2 + 2x_3, can set = 4
+or
+3x_1 - 7x_2 + 2x_3, can set = 5
+
+(floor the RHS, ceil the RHS)
+
+3x_1 - 7x_2 + 2x_3 = 4
+If alpha^(+) > 0, if y^(+) > 0
+3x_1 - 7x_2 + 2x_3 + 2y^(+) <= 4
+   not valid!
+   alpha^(+) <= 0
+
+3x_1 - 7x_2 + 2x_3 = 5
+--> y^(+) = 0
+--> y^(-) = 2/3
+--> alpha^(-) = 3/2
+--> alpha^(-) = 1 / (ceil(b) - b)
+
+If I eliminate all continuous vars, I can
+go <= 4 or >= 5.
+
+If I'm <= 4, then alpha^(+) < 0.
+If I'm >= 5, then y^(-) >= 2/3
+
+Add in 3x_1 - 7x_2 + 2x_3 - 3/2 y^(-) <= 4
+
+e.g.
+x + y <= 5/2
+x in Z, y in R
+
+1 / (floor(5/2) - 5/2) = 2
+
+-->
+x - 2y <= floor(5/2) == 2
+
+Let T = {
+    x in Z+^n, y in R+^n :
+    sum[j in N]( a_j * x_j ) + sum[j in J]( g_j * y_j ) <= b
+    a_j, g_j, b in R
+}
+
+Then the ineq:
+sum[j in N]( floor(a_j) * x_j )
++ 1/(ceil(b) - b) * sum[j in J-]( g_j * y_j ) <= floor(b)
+where J- = {j in J : g_j < 0}
+is valid for T.
+
+e.g.
+2.1x_1 + 3x_2 + y_1 + 3y_2 <= 4.25
+x in Z, y >= 0
+-->
+2x_1 + 3x_2 - 1/(3/4)y_1 - 1/(3/4)3y_2 <= 4
+-->
+2x_1 + 3x_2 - 4/3 y_1 - 4y_2 <= 4
+
+e.g.
+y_1 + y_2 <= 7,
+y_1 <= 5x_1
+y_2 <= 5x_2
+-->
+1/3 y_1 + 1/3 y_2 <= 7/3
+-5/3 x_1 + 1/3 y_1 <= 0
+-5/3 x_2 + 1/3 y_2 <= 0
+-->
+-5/3 x_1 + -5/3 x_2 + 1/3(y_1 + y_2) <= 0
+-2x_1 - 2x_2 + 1/(1/3) [1/3(y_1 +....)]
+....
 
 
+MIR procedure:
 
+
+Combinatorial optimization
+-----
+Can i guarantee an integer solution just by solving
+the LR?
+
+Integral polyhedron:
+-- every non-empty face has at least one integer point.
+-- every extreme point is in Z^n
+Kind of equivalent to having P_ch.
+--> If you solve the LR, the optimum is integer.
+--> max c^T * x has integer solution for all c in R^n
+    -- you can get to any extreme point with an obj value
+
+Totally dual integral: A system of linear inequalities
+is TDI if for all integral c such that z_LP =
+max { cx : Ax <= b } is finite,
+the dual min { yb : yA = c. y in R+^m } has
+an integral solution.
+
+If Ax <= b is TDI and b is integral, then
+P = { x in R^n : Ax <= b } is integral.
+
+e.g. Bipartite graph with weighted edges.
+Goal: Assign values to nodes so that there is
+a maximum value, and the two nodes in an edge
+are less than the edge weight.
+
+IP: max sum[i in 1..n]( c_i * x_i )
+s.t. x_i + x_j <= w_ij forall (i, j) in E
+
+dual:
+min sum[i, j in E]( w_ij * y_ij )
+s.t. sum[j]( y_ij ) >= c_i forall i
+
+This is a transportation problem, known to be
+integer --> The primal is integer too.
+
+IP dual is not well-defined.
+
+TDI systems are sensitive to scale.
+(could lose your integer solns)
+
+Totally unimodular matrix:
+A is TUM if every square submatrix
+has determinant == 0, 1, or -1.
+(not necessarily contiguous)
+
+Recognizing this is NP-complete.
+
+Equivalent:
+-- A is TUM
+-- A^T is TUM
+-- (A | I) is TUM  --> slacks in simplex
+-- (A^T
+     I)  is TUM    --> toss in bounds
+-- A matrix obtained by deleting a row (column) of A is TUM
+-- A matrix obtained by multiplying a row or column of A by –1 is TUM
+-- A matrix obtained by interchanging two rows (cols) of A is TUM
+-- A matrix obtained by duplicating a row or column of A is TUM
+-- A matrix obtained by a pivot of A is TUM
+
+If A is TUM, and b in Z^m,
+then (A | b) is an integral polyhedron.
+
+Proof:
+        0
+A_n * x_NB + B * x_B = b
+
+B * x_B = b
+Mult by B^(-1), or back-substitute/Gaussian elimination...
+or Cramer's Rule
+x_1 = det(b | B_(2...n)) | / det(B)
+x_2 = det(B_1 | b | B_(3...n)) / det(B)
+...
+x_i = det(B with ith column replaced by b) / det(B)
+det(B) is 1 or -1
+numerator is integer.
+
+If A is TUM, and b is integer, then all extreme points
+of Ax <= b are integer. Converse true also.
+
+Theorem: if A is a (-1, 0, 1) matrix, and there
+are at most two nonzeros in any column and the
+sum of any column is -1, 0 or 1, then A is TUM.
+
+Theorem: A is TUM iff for every J subset-of N =
+{1, ..., n} there exists a partition J_1, J_2
+of J such that |sum[j in J_1]( a_ij ) - sum[j in J_2]( a_ij )| <= 1
+for i in 1...m
+
+Theorem: A is TUM iff for every Q subset-of M =
+{1, ..., m} there exists a partition Q_1, Q_2
+of Q such that |sum[i in Q_1]( a_ij ) - sum[i in Q_2]( a_ij )| <= 1
+for j in 1...n
+
+e.g.
+[1  0  0  1  0
+ 0  1  1  0  0
+ 1  1  0  1  0
+ 0  0 -1  0 -1
+ 0 -1  0  1  0
+-1  0  1  0  1
+]
+
+How many Q's are there?
+C(6, 6) + C(6, 5) + C(6, 4) + C(6, 3) + C(6, 2) + C(6, 1)
+== 2^6
+Lots! Exponentially many.
+
+
+The node-edge matrix of a bipartite graph is TUM.
+      edge   edge   edge   edge
+node
+node
+node
+node
+
+Transportation problems!
+Complete bipartite graph: network coverage
+
+Tripartite graph TUM?
+-- Odd cycles cause problems.
+
+Network flow problems:
+shortest path, max flow, ...
+
+(flow out) - (flow in) == something (often zero)
+                       == demand (-) / supply (+)
+x_a,d - x_c,a == 5
+x_c,a + x_c,b - x_d,c == 0
+...
+
+       arc   arc   arc  arc
+node
+node
+node
+
+Consists of only 0, -1, 1.
+
+
+Interval matrix:
+[0  0  1  0  0
+ 1  0  1  0  1
+ 1  1  1  0  1
+ 1  1  0  1  1
+ 0  1  0  1  1
+ 0  1  0  1  1
+ 0  0  0  1  0]
+
+no loops
+
+e.g. employee shifts
 
 
 
@@ -2797,41 +3064,3 @@ where beta_h = max { 0, a_(h+1) - (a_1 - lambda)}
 
 
 Mon May 7: final
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.
