@@ -70,7 +70,7 @@ class Parser(object):
                     graph.add_edge(int(args[0]), int(args[1]))
 
         if graph.number_of_nodes() != expected_number_of_nodes:
-            min_node = min(graph.nodes())
+            min_node = min(graph.nodes()) if len(graph.nodes()) > 0 else 0
             node_range = set(range(min_node, min_node + expected_number_of_nodes))
             for n in node_range - set(graph.nodes()):
                 graph.add_node(n)
