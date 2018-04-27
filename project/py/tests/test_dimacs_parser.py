@@ -43,5 +43,5 @@ def test_some_disconnected(some_disconnected_graph):
 
 
 def all_disconnected(all_disconnected_graph):
-    assert set(some_disconnected_graph.nodes()) == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-    assert len(some_disconnected_graph.edges()) == 0
+    assert set(all_disconnected_graph.nodes()) == {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+    assert len(all_disconnected_graph.edges()) == 0
