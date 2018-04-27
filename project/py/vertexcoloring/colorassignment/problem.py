@@ -8,9 +8,10 @@ from networkx.algorithms.clique import find_cliques
 from node_getting_color_constraint import NodeGettingColorConstraint
 from solution import Solution
 from use_lower_numbered_color_first_constraint import UseLowerNumberedColorFirstConstraint
+from ..vertex_coloring_problem import VertexColoringProblem
 
 
-class Problem(object):
+class Problem(VertexColoringProblem):
     def __init__(self, graph, solve_as):
         self.graph = graph
         self.nodes = sorted(graph.nodes)

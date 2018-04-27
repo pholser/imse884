@@ -1,4 +1,7 @@
-class DistinctRepresentativeForNeighborsConstraint(object):
+from ..constraint import Constraint
+
+
+class DistinctRepresentativeForNeighborsConstraint(Constraint):
     def __init__(self, problem, n, v, w):
         self.problem = problem
         self.n = n

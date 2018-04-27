@@ -1,4 +1,7 @@
-class NodeGettingColorConstraint(object):
+from ..constraint import Constraint
+
+
+class NodeGettingColorConstraint(Constraint):
     def __init__(self, problem, n):
         self.problem = problem
         self.n = n

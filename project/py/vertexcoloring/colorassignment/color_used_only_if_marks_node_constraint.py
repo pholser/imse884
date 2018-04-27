@@ -1,4 +1,7 @@
-class ColorUsedOnlyIfMarksNodeConstraint(object):
+from ..constraint import Constraint
+
+
+class ColorUsedOnlyIfMarksNodeConstraint(Constraint):
     def __init__(self, problem, k):
         self.problem = problem
         self.k = k

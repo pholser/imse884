@@ -1,11 +1,11 @@
 import sys
 
 from collections import defaultdict
-
 from ..is_close import isclose
+from ..vertex_coloring_solution import VertexColoringSolution
 
 
-class Solution(object):
+class Solution(VertexColoringSolution):
     def __init__(self, problem, cplex_solution, running_time):
         self.problem = problem
         self.cplex_solution = cplex_solution
@@ -24,8 +24,8 @@ class Solution(object):
         for n, v in sorted(self.values().iteritems()):
             print >> to, 'Value of variable %s: %f' % (n, v)
 
-    def value_of(self, *vars):
-        return self.cplex_solution.get_values(*vars)
+    def value_of(self, *variable_names):
+        return self.cplex_solution.get_values(*variable_names)
 
     def is_integer(self):
         return all(isclose(val, int(val)) for val in self.values().itervalues())

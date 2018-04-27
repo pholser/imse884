@@ -9,9 +9,10 @@ from networkx.algorithms.clique import find_cliques
 from networkx.algorithms.operators.unary import complement
 from representative_constraint import RepresentativeConstraint
 from solution import Solution
+from ..vertex_coloring_problem import VertexColoringProblem
 
 
-class Problem(object):
+class Problem(VertexColoringProblem):
     def __init__(self, graph, solve_as):
         self.graph = graph
         self.antigraph = complement(graph)
@@ -121,4 +122,3 @@ class Problem(object):
     def representative_pairing_for_var(self, var):
         match = re.match('^x(.*),(.*)$', var)
         return int(match.group(2)), int(match.group(1))
-

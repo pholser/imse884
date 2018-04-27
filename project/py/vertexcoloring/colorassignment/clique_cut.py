@@ -1,9 +1,12 @@
-class CliqueCut(object):
-    def __init__(self, problem, clique, color, id):
+from ..constraint import Constraint
+
+
+class CliqueCut(Constraint):
+    def __init__(self, problem, clique, color, cut_id):
         self.problem = problem
         self.clique = sorted(clique)
         self.color = color
-        self.id = id
+        self.id = cut_id
 
     def name(self):
         return 'q%d' % self.id

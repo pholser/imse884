@@ -1,4 +1,7 @@
-class AdjacentNodeColorConstraint(object):
+from ..constraint import Constraint
+
+
+class AdjacentNodeColorConstraint(Constraint):
     def __init__(self, problem, n1, n2, k):
         self.problem = problem
         self.n1 = n1

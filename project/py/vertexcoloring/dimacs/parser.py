@@ -9,11 +9,11 @@ class Parser(object):
 
         problem_line_seen = False
         line_number = 0
-        expected_number_of_vertices = 0
+        expected_number_of_nodes = 0
         expected_number_of_edges = 0
 
-        with open(file_path) as file:
-            for line in file:
+        with open(file_path) as f:
+            for line in f:
                 line_number += 1
                 if not line.strip():
                     continue     # skip blank lines
@@ -52,7 +52,7 @@ class Parser(object):
                         )
 
                     problem_line_seen = True
-                    expected_number_of_vertices, expected_number_of_edges = \
+                    expected_number_of_nodes, expected_number_of_edges = \
                         int(args[1]), int(args[2])
                 elif 'e' == indicator:
                     if not problem_line_seen:
@@ -69,17 +69,23 @@ class Parser(object):
                         )
                     graph.add_edge(int(args[0]), int(args[1]))
 
-        if graph.number_of_nodes() != expected_number_of_vertices:
-            raise GraphAssertionError(
-                "Expected graph with %d vertices, got %d" % (
-                    expected_number_of_vertices,
-                    graph.number_of_nodes()
+        if graph.number_of_nodes() != expected_number_of_nodes:
+            min_node = min(graph.nodes())
+            node_range = set(range(min_node, min_node + expected_number_of_nodes))
+            for n in node_range - set(graph.nodes()):
+                graph.add_node(n)
+
+            if graph.number_of_nodes() != expected_number_of_nodes:
+                raise GraphAssertionError(
+                    'Expected graph with %d nodes, got %d' % (
+                        expected_number_of_nodes,
+                       graph.number_of_nodes()
+                    )
                 )
-            )
         if graph.number_of_edges() != expected_number_of_edges \
-                 and graph.number_of_edges() != expected_number_of_edges / 2:
+                and graph.number_of_edges() != expected_number_of_edges / 2:
             raise GraphAssertionError(
-                "Expected graph with %d edges, got %d" % (
+                'Expected graph with %d edges, got %d' % (
                     expected_number_of_edges,
                     graph.number_of_edges()
                 )

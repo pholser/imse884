@@ -1,4 +1,7 @@
-class UseLowerNumberedColorFirstConstraint(object):
+from ..constraint import Constraint
+
+
+class UseLowerNumberedColorFirstConstraint(Constraint):
     def __init__(self, problem, k):
         self.problem = problem
         self.k = k

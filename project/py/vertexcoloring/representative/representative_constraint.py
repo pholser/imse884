@@ -1,7 +1,8 @@
+from ..constraint import Constraint
 from itertools import chain
 
 
-class RepresentativeConstraint(object):
+class RepresentativeConstraint(Constraint):
     def __init__(self, problem, n):
         self.problem = problem
         self.n = n
