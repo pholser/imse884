@@ -110,13 +110,13 @@ if __name__ == '__main__':
             }
         if args.restart_mode == 'warm':
             print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
-            problem.add_cuts(new_clique_cuts)
+            problem.add_constraints(new_clique_cuts)
         else:
             problem = new_problem(args.formulation, graph, args.solve_as)
             print 'Solving from beginning with additional', \
                 len(claimed_clique_cuts), \
                 'clique cuts.'
-            problem.add_cuts(claimed_clique_cuts)
+            problem.add_constraints(claimed_clique_cuts)
 
         problem.suppress_output()
         problem_file_path = '%s/vertexcoloring.%s.%d.lp' % (

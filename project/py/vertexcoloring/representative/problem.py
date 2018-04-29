@@ -44,7 +44,7 @@ class Problem(VertexColoringProblem):
               ).edges()
             ]
         )
-        self.add_cuts(constraints)
+        self.add_constraints(constraints)
 
     def solve(self):
         cplex_solution, solution_time = self.cplex_solve()

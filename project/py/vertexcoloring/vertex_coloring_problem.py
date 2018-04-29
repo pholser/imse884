@@ -27,7 +27,7 @@ class VertexColoringProblem:
                 names=var_names
             )
 
-    def add_cuts(self, cuts):
+    def add_constraints(self, cuts):
         self.cx.linear_constraints.add(
             lin_expr=map(lambda c: c.terms(), cuts),
             senses=map(lambda c: c.sense(), cuts),
