@@ -1,25 +1,62 @@
+import cplex
+
 from abc import ABCMeta, abstractmethod
 
 
 class VertexColoringProblem:
     __metaclass__ = ABCMeta
 
+    def __init__(self, solve_as):
+        self.cx = cplex.Cplex()
+        self.solve_as = solve_as
+
+    def set_sense_minimize(self):
+        self.cx.objective.set_sense(self.cx.objective.sense.minimize)
+
+    def set_objective(self, coefficients, var_names):
+        if 'ip' == self.solve_as:
+            self.cx.variables.add(
+                obj=coefficients,
+                types=[self.cx.variables.type.binary] * len(var_names),
+                names=var_names
+            )
+        else:
+            self.cx.variables.add(
+                obj=coefficients,
+                ub=[1.0] * len(var_names),
+                names=var_names
+            )
+
+    def add_cuts(self, cuts):
+        self.cx.linear_constraints.add(
+            lin_expr=map(lambda c: c.terms(), cuts),
+            senses=map(lambda c: c.sense(), cuts),
+            rhs=map(lambda c: c.rhs(), cuts),
+            names=map(lambda c: c.name(), cuts)
+        )
+
+    def suppress_output(self):
+        self.cx.set_log_stream(None)
+        self.cx.set_error_stream(None)
+        self.cx.set_warning_stream(None)
+        self.cx.set_results_stream(None)
+
+    def emit_to(self, path):
+        self.cx.write(path, 'lp')
+
+    def cplex_solve(self):
+        start = self.cx.get_dettime()
+        self.cx.solve()
+        end = self.cx.get_dettime()
+        return self.cx.solution, end - start
+
+    def cplex_solution(self):
+        return self.cx.solution
+
     @abstractmethod
     def clique_cuts(self):
         pass
 
     @abstractmethod
-    def add_cuts(self, cuts):
-        pass
-
-    @abstractmethod
-    def suppress_output(self):
-        pass
-
-    @abstractmethod
     def solve(self):
-        pass
-
-    @abstractmethod
-    def emit_to(self, file_path):
         pass

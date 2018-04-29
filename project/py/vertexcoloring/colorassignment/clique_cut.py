@@ -1,7 +1,8 @@
 from ..constraint import Constraint
+from ..cut import Cut
 
 
-class CliqueCut(Constraint):
+class CliqueCut(Constraint, Cut):
     def __init__(self, problem, clique, color, cut_id):
         self.problem = problem
         self.clique = sorted(clique)

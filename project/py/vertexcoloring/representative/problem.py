@@ -1,4 +1,3 @@
-import cplex
 import re
 
 from clique_cut import CliqueCut
@@ -14,34 +13,23 @@ from ..vertex_coloring_problem import VertexColoringProblem
 
 class Problem(VertexColoringProblem):
     def __init__(self, graph, solve_as):
+        super(Problem, self).__init__(solve_as)
+
         self.graph = graph
         self.antigraph = complement(graph)
         self.nodes = sorted(graph.nodes())
-        self.solve_as = solve_as
-        self.cx = self.init_cplex()
+        self.init_cplex()
 
     def init_cplex(self):
-        cx = cplex.Cplex()
+        self.set_sense_minimize()
 
-        cx.objective.set_sense(cx.objective.sense.minimize)
         var_names = self.all_vars()
         reps_own_color_var_names = self.represents_own_color_class_vars()
-        objective = [
+        objective_coefficients = [
             1.0 if v in reps_own_color_var_names else 0.0
             for v in var_names]
 
-        if 'ip' == self.solve_as:
-            cx.variables.add(
-                obj=objective,
-                types=[cx.variables.type.binary] * len(var_names),
-                names=var_names
-            )
-        else:
-            cx.variables.add(
-                obj=objective,
-                ub=[1.0] * len(var_names),
-                names=var_names
-            )
+        self.set_objective(objective_coefficients, var_names)
 
         constraints = [
             RepresentativeConstraint(self, n)
@@ -56,35 +44,11 @@ class Problem(VertexColoringProblem):
               ).edges()
             ]
         )
-        cx.linear_constraints.add(
-            lin_expr=map(lambda c: c.terms(), constraints),
-            senses=map(lambda c: c.sense(), constraints),
-            rhs=map(lambda c: c.rhs(), constraints),
-            names=map(lambda c: c.name(), constraints)
-        )
-
-        return cx
-
-    def suppress_output(self):
-        self.cx.set_log_stream(None)
-        self.cx.set_error_stream(None)
-        self.cx.set_warning_stream(None)
-        self.cx.set_results_stream(None)
+        self.add_cuts(constraints)
 
     def solve(self):
-        start = self.cx.get_dettime()
-        self.cx.solve()
-        end = self.cx.get_dettime()
-        return Solution(self, self.cx.solution, end - start)
-
-    def add_cuts(self, cuts):
-        for cut in cuts:
-            self.cx.linear_constraints.add(
-                lin_expr=[cut.terms()],
-                senses=[cut.sense()],
-                rhs=[cut.rhs()],
-                names=[cut.name()]
-            )
+        cplex_solution, solution_time = self.cplex_solve()
+        return Solution(self, cplex_solution, solution_time)
 
     def clique_cuts(self):
         i = 0
@@ -95,9 +59,6 @@ class Problem(VertexColoringProblem):
             ):
                 i += 1
                 yield CliqueCut(self, u, q, i)
-
-    def emit_to(self, path):
-        self.cx.write(path, 'lp')
 
     def all_vars(self):
         return [vs for n in self.nodes for vs in self.represents_color_class_of_vars(n)]
