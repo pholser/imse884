@@ -3034,6 +3034,71 @@ no loops
 
 e.g. employee shifts
 
+If a_ij = a_kj = 1, and k > i + 1,
+then a_lj = 1 for all i < l < k.
+
+Can convert interval matrix into a
+network flow matrix.
+
+Are interval matrices TUM?
+-- yes
+
+Recognizing network matrices is NP-complete.
+
+Can create any network matrix by these
+two, and invoking theorems.
+
+|  1  –1  0   0  –1 |
+| -1   1  -1  0    0 |
+|  0  -1   1  -1   0 |
+|  0   0  -1   1  -1 |
+| -1   0  0   -1   1 |
+
+|  1   1   1   1   1 |
+|  1   1   1   0   0 |
+|  1   0   1   1   0 |
+|  1   0   0   1   1 |
+|  1   1   0   0   1 |
+
+
+Balanced and totally balanced matrices
+----
+A as 0-1 matrix
+Ax >= 1
+
+Can I get an A structure such that it's something
+like TUM, yield mostly integer solns, etc.?
+
+[1 1 1 0 0 1
+ 1 1 1 1 0 0
+ 0 0 1 1 0 1
+ 0 1 1 1 1 1]
+
+Row 4 doesn't matter.
+
+A 0-1 matrix is totally balanced, if it does not
+contain a submatrix M_k for any k >= 3.
+
+M_k, k >= 3 is the family of k x k 0-1 submatrices,
+all of whose row and column sums equal 2, that do
+not contain the (1 1
+                 1 1) submatrix.
+
+A 0-1 matrix is balanced, if it does not
+contain a submatrix M_k for any k >= 3 and odd.
+
+If A is (totally) balanced, then these matrices
+are (totally) balanced:
+-- (A | I)
+-- A^T
+-- Any matrix obtained by permuting rows or columns of A
+-- Any submatrix of A
+
+If A is (0,1) TUM, then A is balanced.
+
+A graph is perfect if no odd holes or anti-holes of
+size of odd size.
+
 
 
 
