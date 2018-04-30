@@ -1,0 +1,43 @@
+Reading graph from ./tests/data/benchmark/10_0.8.col...
+...done.
+Solution time: 0.0833368301392
+Objective value: 5.0
+Adding 2 violated clique cuts.
+Solution time: 0.0272884368896
+Objective value: 5.0
+No more cuts to add.
+Number of colors used: 5.0
+Value of variable x0,0: 0.000000
+Value of variable x0,3: 0.000000
+Value of variable x0,6: 0.000000
+Value of variable x0,9: 0.000000
+Value of variable x1,1: 0.000000
+Value of variable x1,9: 1.000000
+Value of variable x2,2: 1.000000
+Value of variable x2,7: 1.000000
+Value of variable x3,0: 0.000000
+Value of variable x3,3: 0.000000
+Value of variable x3,5: 0.000000
+Value of variable x4,4: 1.000000
+Value of variable x4,5: 0.000000
+Value of variable x4,6: 0.000000
+Value of variable x4,8: 1.000000
+Value of variable x5,3: 1.000000
+Value of variable x5,4: 0.000000
+Value of variable x5,5: 1.000000
+Value of variable x5,9: 0.000000
+Value of variable x6,0: 1.000000
+Value of variable x6,4: 0.000000
+Value of variable x6,6: 1.000000
+Value of variable x7,2: 0.000000
+Value of variable x7,7: 0.000000
+Value of variable x7,9: 0.000000
+Value of variable x8,4: 0.000000
+Value of variable x8,8: 0.000000
+Value of variable x8,9: 0.000000
+Value of variable x9,0: 0.000000
+Value of variable x9,1: 1.000000
+Value of variable x9,5: 0.000000
+Value of variable x9,7: 0.000000
+Value of variable x9,8: 0.000000
+Value of variable x9,9: 1.000000

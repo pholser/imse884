@@ -1,0 +1,54 @@
+Reading graph from ./tests/data/benchmark/10_0.6.col...
+...done.
+Solution time: 0.464651107788
+Objective value: 4.0
+No more cuts to add.
+Number of colors used: 4.0
+Value of variable x0,0: 1.000000
+Value of variable x0,1: 0.000000
+Value of variable x0,2: 1.000000
+Value of variable x0,9: 1.000000
+Value of variable x1,0: 0.000000
+Value of variable x1,1: 1.000000
+Value of variable x1,6: 1.000000
+Value of variable x1,8: 1.000000
+Value of variable x2,0: 0.000000
+Value of variable x2,2: 0.000000
+Value of variable x2,3: 0.000000
+Value of variable x2,7: 0.000000
+Value of variable x2,8: 0.000000
+Value of variable x2,9: 0.000000
+Value of variable x3,2: 0.000000
+Value of variable x3,3: 0.000000
+Value of variable x3,5: 0.000000
+Value of variable x3,7: 1.000000
+Value of variable x4,4: 1.000000
+Value of variable x4,5: 0.000000
+Value of variable x4,7: 1.000000
+Value of variable x4,9: 1.000000
+Value of variable x5,3: 0.000000
+Value of variable x5,4: 0.000000
+Value of variable x5,5: 0.000000
+Value of variable x5,7: 0.000000
+Value of variable x5,8: 0.000000
+Value of variable x6,1: 0.000000
+Value of variable x6,6: 0.000000
+Value of variable x6,7: 0.000000
+Value of variable x6,8: 0.000000
+Value of variable x7,2: 0.000000
+Value of variable x7,3: 1.000000
+Value of variable x7,4: 0.000000
+Value of variable x7,5: 1.000000
+Value of variable x7,6: 0.000000
+Value of variable x7,7: 1.000000
+Value of variable x7,9: 0.000000
+Value of variable x8,1: 0.000000
+Value of variable x8,2: 0.000000
+Value of variable x8,5: 0.000000
+Value of variable x8,6: 0.000000
+Value of variable x8,8: 0.000000
+Value of variable x9,0: 0.000000
+Value of variable x9,2: 0.000000
+Value of variable x9,4: 0.000000
+Value of variable x9,7: 0.000000
+Value of variable x9,9: 0.000000
