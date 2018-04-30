@@ -1,4 +1,5 @@
 import networkx as nx
+
 from format_error import FormatError
 from graph_assertion_error import GraphAssertionError
 
@@ -79,7 +80,7 @@ class Parser(object):
                 raise GraphAssertionError(
                     'Expected graph with %d nodes, got %d' % (
                         expected_number_of_nodes,
-                       graph.number_of_nodes()
+                        graph.number_of_nodes()
                     )
                 )
         if graph.number_of_edges() != expected_number_of_edges \
