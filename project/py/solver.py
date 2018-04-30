@@ -108,15 +108,16 @@ if __name__ == '__main__':
             candidate_clique_cuts = {
                 q.id: q for q in problem.clique_cuts()
             }
-        if args.restart_mode == 'warm':
-            print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
-            problem.add_constraints(new_clique_cuts)
         else:
-            problem = new_problem(args.formulation, graph, args.solve_as)
-            print 'Solving from beginning with additional', \
-                len(claimed_clique_cuts), \
-                'clique cuts.'
-            problem.add_constraints(claimed_clique_cuts)
+            if args.restart_mode == 'warm':
+                print 'Adding', len(new_clique_cuts), 'violated clique cuts.'
+                problem.add_constraints(new_clique_cuts)
+            else:
+                problem = new_problem(args.formulation, graph, args.solve_as)
+                print 'Solving from beginning with additional', \
+                    len(claimed_clique_cuts), \
+                    'clique cuts.'
+                problem.add_constraints(claimed_clique_cuts)
 
         problem.suppress_output()
         problem_file_path = '%s/vertexcoloring.%s.%d.lp' % (
@@ -127,6 +128,7 @@ if __name__ == '__main__':
         problem.emit_to(problem_file_path)
 
         solution = problem.solve()
+
         print 'Solution time:', solution.running_time
         print 'Objective value:', solution.objective_value()
         if args.verbose:
