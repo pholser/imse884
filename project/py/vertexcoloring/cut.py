@@ -1,7 +1,9 @@
 from abc import ABCMeta, abstractmethod
 
+from constraint import Constraint
 
-class Cut:
+
+class Cut(Constraint):
     __metaclass__ = ABCMeta
 
     @abstractmethod

@@ -61,7 +61,10 @@ class Problem(VertexColoringProblem):
                 yield CliqueCut(self, u, q, i)
 
     def all_vars(self):
-        return [vs for n in self.nodes for vs in self.represents_color_class_of_vars(n)]
+        return [
+            vs for n in self.nodes
+            for vs in self.represents_color_class_of_vars(n)
+        ]
 
     def represents_color_class_of_vars(self, n):
         return [

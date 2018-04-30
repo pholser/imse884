@@ -27,12 +27,12 @@ class VertexColoringProblem:
                 names=var_names
             )
 
-    def add_constraints(self, cuts):
+    def add_constraints(self, constraints):
         self.cx.linear_constraints.add(
-            lin_expr=map(lambda c: c.terms(), cuts),
-            senses=map(lambda c: c.sense(), cuts),
-            rhs=map(lambda c: c.rhs(), cuts),
-            names=map(lambda c: c.name(), cuts)
+            lin_expr=map(lambda c: c.terms(), constraints),
+            senses=map(lambda c: c.sense(), constraints),
+            rhs=map(lambda c: c.rhs(), constraints),
+            names=map(lambda c: c.name(), constraints)
         )
 
     def suppress_output(self):
@@ -50,13 +50,14 @@ class VertexColoringProblem:
         end = self.cx.get_dettime()
         return self.cx.solution, end - start
 
-    def cplex_solution(self):
-        return self.cx.solution
-
     @abstractmethod
     def clique_cuts(self):
         pass
 
     @abstractmethod
     def solve(self):
+        pass
+
+    @abstractmethod
+    def all_vars(self):
         pass
