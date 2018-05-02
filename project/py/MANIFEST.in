@@ -1,5 +1,6 @@
 include README.md
 include *.py
+include *.docx
 recursive-include *.py
 recursive-include tests *.py
 recursive-include tests/data *.col
