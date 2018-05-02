@@ -1,0 +1,15 @@
+number_of_employees = 16;
+number_of_hours_in_workday = 12;
+regular_hourly_wage = 25;
+overtime_hourly_wage = 40;
+offhours_hourly_wage_bump = 5;
+factory_employee_capacity = 13;
+daily_overtime_hours_cap = 2;
+daily_labor_hours_requirement = 120;
+fulltime_daily_hours_min = 8;
+fulltime_daily_hours_max = 10;
+parttime_daily_hours_min = 3;
+parttime_daily_hours_max = 5;
+
+is_full_time = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0];
+offhours = [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1];

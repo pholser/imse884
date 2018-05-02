@@ -3100,6 +3100,87 @@ A graph is perfect if no odd holes or anti-holes of
 size of odd size.
 
 
+Matroids
+----
+Let N = {1, ..., n} be a set of base elements.
+Let F = a family of subsets of N
+
+I = (N, F) is an independent system
+if H_1 subset-of F implies H_2 subset-of F
+forall H_2 subset-of H_1, and {} in F.
+
+e.g. solutions of a knapsack constraint
+10x_1 + 18x_2 + 13x_3 + 5x_4 + 7x_5 <= 32
+N = {1, 2, 3, 4, 5}
+F = All subsets of F s.t. vars == 1 satisfy:
+= {{1, 2}, {1, 4, 5}, {2, 3}, ...}
+
+H in F is maximal if H union {j} not in F
+forall j in I \ H
+
+Any subset not in F is dependent.
+e.g. {1, 2, 3, 4, 5}
+like covers on a knapsack constraint.
+
+minimal dependent set <-> minimal covers
+
+e.g. node packing: every subset of a node packing
+is still a node packing --> independent set
+
+e.g. matchings, cliques --> independent set
+
+An independent system is a matroid
+if every basis -- maximal independent set --
+has the same cardinality.
+
+e.g. KP problem is not a matroid.
+
+e.g. trees of a graph -- is a matroid.
+
+Every maximal independent set of a matroid
+can be found by taking a maximal independent set
+and removing one element then adding another element.
+
+e.g. matric matroid:
+Let A be an mxn matrix.
+Then N is the set of columns.
+H subset-of N is independent if and only if
+the columns of H are linearly independent.
+
+e.g. Graphic Matroid.
+Let G = (V, E) be a graph.
+Let H subset-of E, then if G_H = (V, H) contains no cycles,
+then H is said to be dependent.
+
+e.g. Partition Matroid.
+Given m disjoint finite sets E_i for i = 1, ..., m
+and E = union[i in 1..m]( E_i ).
+H subset-of E is independent if |H intersect E_i| <= 1
+for all E_i.
+
+Why is this important?
+The greedy algorithm solves I
+<-->
+I is a matroid.
+
+Give every element i in N a weight w_i.
+Choose best-weighted elements first, until
+no more choices are valid.
+
+sum[j in S]( x_j ) <= m(S) forall S subset-of N
+   can reduce down to all independent sets
+
+triple intersection of matroids? --> TSP
+
+
+
+
+
+
+
+
+
+
 
 
 
