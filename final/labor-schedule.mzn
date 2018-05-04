@@ -7,7 +7,6 @@ set of int: WORKHOUR = 1..number_of_hours_in_workday;
 int: regular_hourly_wage;
 int: overtime_hourly_wage;
 int: offhours_hourly_wage_bump;
-int: daily_overtime_hours_cap;
 int: factory_employee_capacity;
 int: daily_labor_hours_requirement;
 int: fulltime_daily_hours_min;
@@ -22,18 +21,47 @@ array[WORKHOUR] of 0..1: offhours;
 /* Decision variables */
 
 array[EMPLOYEE, WORKHOUR] of var 0..1: working;
+array[EMPLOYEE, WORKHOUR] of var int: regular_wages;
+array[EMPLOYEE, WORKHOUR] of var int: offhours_wages;
+array[EMPLOYEE, WORKHOUR] of var int: overtime_wages;
 
 
 /* Objective */
 
 var int: obj =
     sum (e in EMPLOYEE, h in WORKHOUR) (
-        regular_hourly_wage * working[e, h]
+        regular_wages[e, h]
+        +
+        offhours_wages[e, h]
+        +
+        overtime_wages[e, h]
     );
 solve minimize obj;
 
 
 /* Constraints */
+
+% Definition of wages paid.
+constraint
+    forall (e in EMPLOYEE, h in WORKHOUR) (
+        regular_wages[e, h] == regular_hourly_wage * working[e, h]
+    );
+constraint
+    forall (e in EMPLOYEE, h in WORKHOUR) (
+        offhours_wages[e, h]
+        ==
+        ((1 - is_full_time[e]) * offhours[h] * offhours_hourly_wage_bump * working[e, h])
+    );
+constraint
+    forall (e in EMPLOYEE, h in WORKHOUR) (
+        overtime_wages[e, h]
+        ==
+        is_full_time[e]
+        *
+        (overtime_hourly_wage - regular_hourly_wage)
+        * max(0, sum (w in WORKHOUR where w <= h) (working[e, h]) - fulltime_daily_hours_min)
+        * working[e, h] 
+    );
 
 % Full-time employees work at minimum and at most a certain number of hours each day.
 constraint
@@ -80,6 +108,26 @@ constraint
     >=
     daily_labor_hours_requirement;
 
+/*
+Employee 1: 0 + 25 + 25 + 25 + 25 + 25  + 25 + 25 + 25 + 40 + 40 + 0
+Employee 2: 0 + 25 + 25 + 25 + 25 + 25  + 25 + 25 + 25 + 40 + 40 + 0
+Employee 3: 0 + 25 + 25 + 25 + 25 + 25  + 25 + 25 + 25 + 40 + 40 + 0
+Employee 4: 0 + 25 + 25 + 25 + 25 + 25  + 25 + 25 + 25 + 40 + 40 + 0
+Employee 5: 0 + 0 + 25 + 25 + 25 + 25   + 25 + 25 + 25 + 25 + 40 + 0
+Employee 6: 0 + 0 + 25 + 25 + 25 + 25   + 25 + 25 + 25 + 25 + 40 + 40
+Employee 7: 0 + 0 + 25 + 25 + 25 + 25   + 25 + 25 + 25 + 25 + 40 + 40
+Employee 8: 0 + 25 + 25 + 25 + 25 + 25  + 25 + 25 + 25 + 40 + 40 + 0
+Employee 9: 0 + 0 + 25 + 25 + 25 + 25   + 25 + 25 + 25 + 25 + 40 + 40
+Employee10: 25 + 25 + 25 + 25 + 25 + 25 + 25 + 25 + 40 + 40 + 0 + 0
+Employee11: 0 + 0 + 25 + 25 + 25 + 25   + 25 + 0  + 0  + 0  + 0 + 0
+Employee12: 0 + 0 + 0 + 0 + 0 + 0       + 25 + 25 + 25 + 0  + 0 + 0
+Employee13: 0 + 0 + 25 + 25 + 25 + 0    + 0 + 0 + 0 + 0 + 0 + 0
+Employee14: 0 + 0 + 0 + 0 + 0 + 0       + 0 + 25 + 25 + 25 + 30 + 0
+Employee15: 0 + 0 + 25 + 25 + 25 + 0    + 0 + 0 + 0 + 0 + 0 + 0
+Employee16: 0 + 0 + 0 + 0 + 0 + 25      + 25 + 25 + 0 + 0 + 0 + 0
+
+wages[e]
+==
 
 /* Output */
 
@@ -109,4 +157,7 @@ output([
         endif | e in EMPLOYEE
     ])
     ++ "\n" | h in WORKHOUR]);
-    
+output([show2d(regular_wages) ++ "\n"]);
+output([show2d(offhours_wages) ++ "\n"]);
+output([show2d(overtime_wages) ++ "\n"]);
+output(["obj = \(obj)\n"]);
