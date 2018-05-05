@@ -98,13 +98,9 @@ subject to {
 
     // Definition of an overtime-working full-timer.
     forall (e in EMPLOYEE) (
-        is_full_time[e] == 1
-        =>
-        (
-            employee_total_hours[e]
-            <=
-            (fulltime_daily_hours_min + 1) * employee_works_overtime[e]
-        )
+        employee_total_hours[e]
+        <=
+        (fulltime_daily_hours_min + 1) * employee_works_overtime[e]
     );
 
     // Definition of overtime hours.
@@ -163,22 +159,18 @@ subject to {
     // a certain number of hours each day.
     // The ceiling on hours per day accounts for the overtime limit
     // of no more than 2 hours per day.
-    forall (e in EMPLOYEE) (
-        is_full_time[e] == 1
-        =>
-        (employee_total_hours[e] >= fulltime_daily_hours_min
+    forall (e in EMPLOYEE : is_full_time[e] == 1) (
+        employee_total_hours[e] >= fulltime_daily_hours_min
             &&
-            employee_total_hours[e] <= fulltime_daily_hours_max)
+            employee_total_hours[e] <= fulltime_daily_hours_max
     );
 
     // Part-time employees work at minimum/at most
     // a certain number of hours each day.
-    forall (e in EMPLOYEE) (
-        is_full_time[e] == 0
-        =>
-        (employee_total_hours[e] >= parttime_daily_hours_min
+    forall (e in EMPLOYEE : is_full_time[e] == 0) (
+        employee_total_hours[e] >= parttime_daily_hours_min
             &&
-             employee_total_hours[e] <= parttime_daily_hours_max)
+            employee_total_hours[e] <= parttime_daily_hours_max
     );
 
     // At most a certain number of employees may be working at a time.
