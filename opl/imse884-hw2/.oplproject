@@ -44,8 +44,6 @@
 			</ref>
 		</config>
 		<config default="false" name="final" category="opl">
-			<ref name="final.dat" type="data">
-			</ref>
 			<ref name="final.mod" type="model">
 			</ref>
 		</config>

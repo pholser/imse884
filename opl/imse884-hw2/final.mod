@@ -1,22 +1,29 @@
 /* Parameters */
 
-int number_of_employees = ...;
+int number_of_employees = 16;
 range EMPLOYEE = 1..number_of_employees;
-int number_of_hours_in_workday = ...;
+int number_of_hours_in_workday = 12;
 range WORKHOUR = 1..number_of_hours_in_workday;
-string WORKHOUR_LABELS[WORKHOUR] = ...;
-int regular_hourly_wage = ...;
-int overtime_hourly_wage_increase = ...;
-int offhours_hourly_wage_bump =...;
-int factory_employee_capacity = ...;
-int daily_labor_hours_requirement = ...;
-int fulltime_daily_hours_min = ...;
-int fulltime_daily_hours_max = ...;
-int parttime_daily_hours_min = ...;
-int parttime_daily_hours_max = ...;
+string WORKHOUR_LABELS[WORKHOUR] = [
+    "7am", "8am", "9am", "10am", "11am", "12n",
+    "1pm", "2pm", "3pm", "4pm", "5pm", "6pm"
+];
+int regular_hourly_wage = 25;
+int overtime_hourly_wage_increase = 15;
+int offhours_hourly_wage_bump = 5;
+int factory_employee_capacity = 13;
+int daily_labor_hours_requirement = 120;
+int fulltime_daily_hours_min = 8;
+int fulltime_daily_hours_max = 10;
+int parttime_daily_hours_min = 3;
+int parttime_daily_hours_max = 5;
 
-int is_full_time[EMPLOYEE] = ...;
-int offhours[WORKHOUR] = ...;
+int is_full_time[EMPLOYEE] = [
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0];
+int offhours[WORKHOUR] = [
+    1, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 1, 1];
 
 
 /* Decision variables */
@@ -26,17 +33,25 @@ dvar int+ working[EMPLOYEE, WORKHOUR] in (0..1);
 
 // How much regular wage is an employee paid for this hour?
 dvar int+ regular_wages[EMPLOYEE, WORKHOUR];
+// How much regular wage is an employee paid for the day?
 dvar int+ employee_regular_wages[EMPLOYEE];
 
-// How much offhours wage bump does an employee get for this hour?
+// How much offhours wage bump is an employee eligible for this hour,
+// disregarding whether employee is working overtime?
 dvar int+ offhours_wages[EMPLOYEE, WORKHOUR];
+// How much offhours wage bump is an employee eligible for this day?
+// disregarding whether employee is working overtime?
 dvar int+ employee_offhours_wages[EMPLOYEE];
 
-// How much overtime wage increase does an employee get for the day?
+// Does the employee work overtime?
 dvar int+ employee_works_overtime[EMPLOYEE] in (0..1);
+// How many hours of overtime does the employee work for the day?
 dvar int+ employee_overtime_hours[EMPLOYEE];
+// How much overtime wage increase is an employee eligible for this day?
 dvar int+ employee_overtime_wages[EMPLOYEE];
 
+// Total hours worked for each employee?
+dvar int+ employee_total_hours[EMPLOYEE];
 // Total daily wage for each employee?
 dvar int+ employee_total_wages[EMPLOYEE];
 
@@ -52,7 +67,7 @@ minimize
 /* Constraints */
 
 subject to {
-    // Definitions of wages paid.
+    // Definition of regular wages paid.
     forall (e in EMPLOYEE, h in WORKHOUR) (
         regular_wages[e, h]
         ==
@@ -64,11 +79,10 @@ subject to {
         sum (h in WORKHOUR) (regular_wages[e, h])
     );
 
+    // Definition of eligible offhour wage bumps.
     forall (e in EMPLOYEE, h in WORKHOUR) (
         offhours_wages[e, h]
         ==
-        (1 - is_full_time[e])
-        *
         offhours[h]
         *
         offhours_hourly_wage_bump
@@ -82,56 +96,79 @@ subject to {
         sum (h in WORKHOUR) (offhours_wages[e, h])
     );
 
-//    forall (e in EMPLOYEE) (
-//        employee_works_overtime == 0
-//        =>
-//        employee_overtime_hours[e] == 0
-//    );
+    // Definition of an overtime-working full-timer.
+    forall (e in EMPLOYEE) (
+        is_full_time[e] == 1
+        =>
+        (
+            employee_total_hours[e]
+            <=
+            (fulltime_daily_hours_min + 1) * employee_works_overtime[e]
+        )
+    );
 
+    // Definition of overtime hours.
     forall (e in EMPLOYEE) (
         employee_overtime_hours[e]
         ==
         maxl(
             0,
-            sum (h in WORKHOUR) (working[e, h]) - fulltime_daily_hours_min
+            employee_total_hours[e] - fulltime_daily_hours_min
         )
     );
 
+    // Definition of eligible overtime wage increases.
     forall (e in EMPLOYEE) (
         employee_overtime_wages[e]
         ==
-        is_full_time[e]
-        *
         employee_overtime_hours[e]
         *
         overtime_hourly_wage_increase
     );
 
+    // Definition of employee's hours worked in a day.
+    forall (e in EMPLOYEE) (
+        employee_total_hours[e]
+        ==
+        sum (h in WORKHOUR) (working[e, h])
+    );
+
+    // Definition of employee's total daily wages.
+    // An employee that works overtime should not get the offhours
+    // wage bump for those offhours worked. One hour of overtime
+    // worked would result in a $15 increase, which would beat out
+    // even a $10 increase for a 2-hour offhours period covered;
+    // and if an employee managed to work some of both 2-hour
+    // offhours periods, they would be working overtime anyway
+    // because of the 9am-5pm non-offhours period. Therefore,
+    // to implement the requirement regarding overtime taking
+    // precedence over offhours incentive, we take the maximum
+    // of the eligible offhours and overtime wage increases
+    // to count toward the employee's daily pay.
+    // If the overtime or offhours pay incentives change, or the
+    // lengths or layout of the offhour periods change, we will need
+    // to rethink this formulation.
     forall (e in EMPLOYEE) (
         employee_total_wages[e]
         ==
         employee_regular_wages[e]
         +
-        employee_offhours_wages[e]
-        +
-        employee_overtime_wages[e]
+        maxl(
+            employee_offhours_wages[e],
+            employee_overtime_wages[e]
+        )
     );
-
-//    forall (e in EMPLOYEE) (
-//        employee_works_overtime[e]
-//        ==
-//        
-//    );
 
     // Full-time employees work at minimum/at most
     // a certain number of hours each day.
-    // The ceiling on hours per day accounts for the overtime limit.
+    // The ceiling on hours per day accounts for the overtime limit
+    // of no more than 2 hours per day.
     forall (e in EMPLOYEE) (
         is_full_time[e] == 1
         =>
-        (sum (h in WORKHOUR) (working[e, h]) >= fulltime_daily_hours_min
+        (employee_total_hours[e] >= fulltime_daily_hours_min
             &&
-            sum (h in WORKHOUR) (working[e, h]) <= fulltime_daily_hours_max)
+            employee_total_hours[e] <= fulltime_daily_hours_max)
     );
 
     // Part-time employees work at minimum/at most
@@ -139,9 +176,9 @@ subject to {
     forall (e in EMPLOYEE) (
         is_full_time[e] == 0
         =>
-        (sum (h in WORKHOUR) (working[e, h]) >= parttime_daily_hours_min
+        (employee_total_hours[e] >= parttime_daily_hours_min
             &&
-            sum (h in WORKHOUR) (working[e, h]) <= parttime_daily_hours_max)
+             employee_total_hours[e] <= parttime_daily_hours_max)
     );
 
     // At most a certain number of employees may be working at a time.
@@ -160,7 +197,7 @@ subject to {
     );
 
     // Need a certain number of total hours worked each day.
-    sum (e in EMPLOYEE, h in WORKHOUR) (working[e, h])
+    sum (e in EMPLOYEE) (employee_total_hours[e])
     >=
     daily_labor_hours_requirement;
 }
@@ -182,10 +219,15 @@ main {
 
             for (var e in thisOplModel.EMPLOYEE) {
                 var pad = "       ";
-                write("    " + e + pad.substring(0, e >= 10 ? pad.length - 1 : pad.length));
+                write("    " + e
+                    + pad.substring(
+                        0,
+                        e >= 10 ? pad.length - 1 : pad.length));
 
                 for (var h in thisOplModel.WORKHOUR) {
-                    write(thisOplModel.working[e][h] > 0 ? " *   " : " -   ");
+                    write(thisOplModel.working[e][h] > 0
+                        ? " *   "
+                        : " -   ");
                 }
                 writeln();
             }
@@ -196,15 +238,22 @@ main {
             
             for (var e in thisOplModel.EMPLOYEE) {
                 write("Employee " + e + ": regular $"
-                    + thisOplModel.employee_regular_wages[e]
-                    + ", offhours $"
-                    + thisOplModel.employee_offhours_wages[e]
-                    + ", overtime $"
-                    + thisOplModel.employee_overtime_wages[e]
-                    + ", total $"
-                    + thisOplModel.employee_total_wages[e]
-                );
-                writeln();
+                    + thisOplModel.employee_regular_wages[e]);
+                if (thisOplModel.employee_offhours_wages[e] > 0
+                    || thisOplModel.employee_overtime_wages[e] > 0) {
+
+                    if (thisOplModel.employee_offhours_wages[e]
+                        > thisOplModel.employee_overtime_wages[e]) {
+
+                        write(", offhours $"
+                            + thisOplModel.employee_offhours_wages[e]);
+                    } else {
+                        write(", overtime $"
+                            + thisOplModel.employee_overtime_wages[e]);
+                    }
+                }
+
+                writeln(", total $" + thisOplModel.employee_total_wages[e]);
             }
 
             writeln("Total Daily Wages Paid: $" + cplex.getObjValue());
