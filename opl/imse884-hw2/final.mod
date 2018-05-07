@@ -13,11 +13,13 @@ int overtime_hourly_wage_increase = 15;
 int offhours_hourly_wage_increase = 5;
 int factory_employee_capacity = 13;
 int daily_labor_hours_requirement = 120;
-int fulltime_daily_hours_min = 8;
-int fulltime_daily_hours_max = 10;
-int parttime_daily_hours_min = 3;
-int parttime_daily_hours_max = 5;
+int full_time_daily_hours_min = 8;
+int full_time_daily_hours_max = 10;
+int part_time_daily_hours_min = 3;
+int part_time_daily_hours_max = 5;
 
+// Arbitrarily choosing employees 1-10 as full-timers,
+// employees 11-16 as part-timers.
 int is_full_time[EMPLOYEE] = [
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     0, 0, 0, 0, 0, 0];
@@ -101,7 +103,7 @@ subject to {
         ==
         maxl(
             0,
-            employee_total_hours[e] - fulltime_daily_hours_min
+            employee_total_hours[e] - full_time_daily_hours_min
         )
     );
 
@@ -159,15 +161,15 @@ subject to {
     forall (e in EMPLOYEE) (
         employee_total_hours[e]
         >=
-        is_full_time[e] * fulltime_daily_hours_min
+        is_full_time[e] * full_time_daily_hours_min
         +
-        (1 - is_full_time[e]) * parttime_daily_hours_min
+        (1 - is_full_time[e]) * part_time_daily_hours_min
         &&
         employee_total_hours[e]
         <=
-        is_full_time[e] * fulltime_daily_hours_max
+        is_full_time[e] * full_time_daily_hours_max
         +
-        (1 - is_full_time[e]) * parttime_daily_hours_max
+        (1 - is_full_time[e]) * part_time_daily_hours_max
     );
 
     // At most a certain number of employees may be working at a time.
@@ -176,7 +178,7 @@ subject to {
     );
 
     // Each employee's work time must be consecutive.
-    // That is, if an employee is scheduled to work hour A and hour B,
+    // That is, if an employee is scheduled to work hour A and hour B > A,
     // they must be scheduled to work all hours in between A and B.
     forall (e in EMPLOYEE,
         start in 1..(number_of_hours_in_workday - 2),
