@@ -3173,6 +3173,138 @@ sum[j in S]( x_j ) <= m(S) forall S subset-of N
 triple intersection of matroids? --> TSP
 
 
+Final review
+=====
+5 sheets, front/back
+no calculators
+
+-- branch and bound
+    -- knapsack
+-- cutting planes
+    -- 2d
+    -- difficult
+    -- Chvatal-Gomory
+        -- rank
+    -- Modular cuts
+        -- Gomory cuts
+    -- Superadditive inequality
+    -- Disjunctive cuts
+    -- Lifting
+        -- covers
+        -- cliques
+        -- hypercliques
+-- dimension of a space/convex hull
+-- TUM
+
+Chvatal-Gomory cuts:
+e.g.
+18x_1 + 7x_2 + 3x_3 <= 27
+13x_1 + 16x_2 + 7x_3 <= 28
+
+Looking for:
+4x_1 + 3x_2 + x_3 <= 7
+
+add together, divide by 7:
+31/7 x_1 + 23/7 x_2 + 10/7 x_3 <= 55/7
+floor:
+4x_1 + 3x_1 + x_3 <= 7 ... done
+this is rank 1.
+
+If we now want to get to:
+2x_1 + 2x_2 + x_3 <= 4
+
+13x_1 + 16x_2 + 7x_3 <= 28
+4x_1 + 3x_2 + x_3 <= 7
+-->
+17x_1 + 19x_2 + 2x_3 <= 35
+div 8:
+2x_1 + 2x_2 + x_2 <= 4
+this is rank 2
+
+clique/hole graph structures:
+ranks of inequalities derived from the
+basic ones that define the structure?
+
+Disjunctive cuts:
+18x_1 + 7x_2 + 13x_3 + 14x_4        <= 20
+ 6x_1 + 7x_2 + 13x_3 + 14x_4        <= 16
+
+expand around delta = 0:
+for x_1:
+Put gamma with larger coeff/rhs, lambda with smaller
+-->
+(18 - gamma)x_1 + 7x_2 + 13x_3 + 14x_4 + gamma(x_1 - 1) <= 20 - gamma
+(6 + lambda)x_1 + 7x_2 + 13x_3 + 14x_4 - lambda(x_1) <= 16
+
+18 - gamma = 6 + lambda
+20 - gamma = 16
+
+gamma = 4
+lambda = 8.
+-->
+14x_1 + 7x_2 + 13x_3 + 14x_4 <= 16  ... done
+
+Modular cuts:
+Gomory cuts typically found in final simplex tableau.
+
+2d cutting plane problem. Facets
+
+Lifting, Balas.
+
+Superadditive inequalities:
+Find strongest superadditive cut from:
+13.2 x_1 + 4.7 x_2 + 9.85 x_3 - 1.6 x_4 <= 18.4
+
+angled-step function.
+
+Let lambda = 0.4
+F(a) = floor(a)
+       if a - floor(a) <= lambda
+     = floor(a) + (a - floor(a) - lambda) / (1 - lambda))
+       else
+-->
+13x_1 + (4 + ((4.7 - 4 - 0.4) / (1 - 0.4))) x_2
+      + (9 + ((9.85 - 9 - 0.4) / (1 - 0.4))) x_3
+      + (-2 + (-1.6 - -2 - 0.4) / (1 - 0.4)) x_4
+      <= 18
+-->
+13x_2 + 4.5x_2 + 9.75x_3 - 2x_4 <= 18
+
+Sequential uplifting. Is the result facet-defining?
+
+Balas's result:
+e.g.
+(cover x_2 thru x_5)
+27x_0 + 23x_1 + 17x_2 + 16x_3 + 15x_4 + 13x_5 + 12x_6 <= 50
+u_0 = 0     lifting coeff: 0    0 <= a <= 6
+u_1 = 17      {0, 1}            6 < a < 17
+u_2 = 33        1               17 <= a <= 22
+u_3 = 48      {1, 2}            22 < a < 33
+u_4 = 61        2               33 <= a <= 37
+               {2, 3}           37 < a < 48
+                3               48 <= a <= 50
+
+lambda = 61 - 50 = 11
+
+cover ineq: x_2 + x_3 + x_4 + x_5 <= 3
+with Balas' result:
+2x_0 + x_1 + x_2 + x_3 + x_4 + x_5 + 0x_6 <= 3
+
+Only one lifted coeff gets to be at the top of its range.
+
+Some big hard facet-defining problem.
+e.g.
+cliqued hole, size 5
+
+1-2, 2-3, 3-4, 4-5, 5-1
+with each of 1 thru 5 members of a clique with nodes
+not in the hole.
+
+H_5 - k_1 - k_4 - k_2 - k_3 - k_3 cliqued hole
+
+bipartite graphs between two cliques...
+
+
 
 
 

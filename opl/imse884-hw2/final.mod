@@ -39,15 +39,14 @@ dvar int+ employee_regular_wages[EMPLOYEE];
 // How much offhours wage bump is an employee eligible for this hour,
 // disregarding whether employee is working overtime?
 dvar int+ offhours_wages[EMPLOYEE, WORKHOUR];
-// How much offhours wage bump is an employee eligible for this day?
+// How much offhours wage bump is an employee eligible for this day,
 // disregarding whether employee is working overtime?
 dvar int+ employee_offhours_wages[EMPLOYEE];
 
-// Does the employee work overtime?
-dvar int+ employee_works_overtime[EMPLOYEE] in (0..1);
 // How many hours of overtime does the employee work for the day?
 dvar int+ employee_overtime_hours[EMPLOYEE];
-// How much overtime wage increase is an employee eligible for this day?
+// How much overtime wage increase is an employee eligible for this day
+// because of the overtime hours worked?
 dvar int+ employee_overtime_wages[EMPLOYEE];
 
 // Total hours worked for each employee?
@@ -96,13 +95,6 @@ subject to {
         sum (h in WORKHOUR) (offhours_wages[e, h])
     );
 
-    // Definition of an overtime-working full-timer.
-    forall (e in EMPLOYEE) (
-        employee_total_hours[e]
-        <=
-        (fulltime_daily_hours_min + 1) * employee_works_overtime[e]
-    );
-
     // Definition of overtime hours.
     forall (e in EMPLOYEE) (
         employee_overtime_hours[e]
@@ -129,21 +121,27 @@ subject to {
         sum (h in WORKHOUR) (working[e, h])
     );
 
-    // Definition of employee's total daily wages.
-    // An employee that works overtime should not get the offhours
-    // wage bump for those offhours worked. One hour of overtime
-    // worked would result in a $15 increase, which would beat out
-    // even a $10 increase for a 2-hour offhours period covered;
-    // and if an employee managed to work some of both 2-hour
-    // offhours periods, they would be working overtime anyway
-    // because of the 9am-5pm non-offhours period. Therefore,
-    // to implement the requirement regarding overtime taking
-    // precedence over offhours incentive, we take the maximum
-    // of the eligible offhours and overtime wage increases
-    // to count toward the employee's daily pay.
-    // If the overtime or offhours pay incentives change, or the
-    // lengths or layout of the offhour periods change, we will need
-    // to rethink this formulation.
+    /*
+        Definition of employee's total daily wages.
+
+        An employee that works overtime should not get the offhours
+        wage bump for those offhours worked.
+
+        One hour of overtime worked would result in a $15 increase,
+        which would beat out even a $10 increase for a 2-hour
+        offhours period covered; and if an employee managed to work
+        some of both 2-hour offhours periods, they would be working
+        overtime anyway because of the 9am-5pm "core hours" period.
+
+        Therefore, to implement the requirement regarding overtime
+        taking precedence over offhours incentive, we take the maximum
+        of the eligible offhours and overtime wage increases
+        to count toward the employee's daily pay.
+
+        If the overtime or offhours pay incentives change,
+        or the lengths or layout of the offhour periods change,
+        we will need to rethink this part of the formulation.
+    */
     forall (e in EMPLOYEE) (
         employee_total_wages[e]
         ==
@@ -179,6 +177,8 @@ subject to {
     );
 
     // Each employee's work time must be consecutive.
+    // That is, if an employee is scheduled to work hour A and hour B,
+    // they must be scheduled to work all hours in between A and B.
     forall (e in EMPLOYEE,
         start in 1..(number_of_hours_in_workday - 2),
         end in (start + 2)..number_of_hours_in_workday) (
