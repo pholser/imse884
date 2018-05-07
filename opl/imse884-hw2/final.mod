@@ -10,7 +10,7 @@ string WORKHOUR_LABELS[WORKHOUR] = [
 ];
 int regular_hourly_wage = 25;
 int overtime_hourly_wage_increase = 15;
-int offhours_hourly_wage_bump = 5;
+int offhours_hourly_wage_increase = 5;
 int factory_employee_capacity = 13;
 int daily_labor_hours_requirement = 120;
 int fulltime_daily_hours_min = 8;
@@ -84,7 +84,7 @@ subject to {
         ==
         offhours[h]
         *
-        offhours_hourly_wage_bump
+        offhours_hourly_wage_increase
         *
         working[e, h]
     );
