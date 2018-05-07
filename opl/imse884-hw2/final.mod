@@ -216,7 +216,7 @@ main {
                         e >= 10 ? pad.length - 1 : pad.length));
 
                 for (var h in thisOplModel.WORKHOUR) {
-                    write(thisOplModel.working[e][h] > 0
+                    write(thisOplModel.working[e][h] >= 0.99
                         ? " *   "
                         : " -   ");
                 }
