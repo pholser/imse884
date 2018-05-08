@@ -12,7 +12,11 @@ int regular_hourly_wage = 25;
 int overtime_hourly_wage_increase = 15;
 int offhours_hourly_wage_increase = 5;
 int factory_employee_capacity = 13;
+
+// 600 hr of labor needed each week; same daily schedule used
+// for all five days --> 120 hr/day
 int daily_labor_hours_requirement = 120;
+
 int full_time_daily_hours_min = 8;
 int full_time_daily_hours_max = 10;
 int part_time_daily_hours_min = 3;
