@@ -246,7 +246,7 @@ main {
                     }
                 }
 
-                writeln(", total $" + thisOplModel.employee_total_wages[e]);
+                writeln(" --> total $" + thisOplModel.employee_total_wages[e]);
             }
 
             writeln("Total Daily Wages Paid: $" + cplex.getObjValue());
