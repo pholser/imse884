@@ -1162,7 +1162,7 @@ A^=, b^=
 
 (the set of tight constraints)
 
-n = dim(Ax <= b) + dim(A^+, b^=)
+n = dim(Ax <= b) + dim(A^=, b^=)
 
 e.g.
 P defined by:
@@ -1775,7 +1775,7 @@ x_4 + x_5 + x_6 + x_7 + x_8 <= 4
    1  1  1  1  1  1
 
 Move coefficient(s) so as to catch more points at
-equality, fine more affinely indep pts.
+equality, find more affinely indep pts.
 
 e.g. change x_3 coeff to 2.
 pull in (0, 0, 1, 0, 0, 0, 1, 1, 0)
@@ -2551,10 +2551,10 @@ sum[j]( u * a_j * x_j ) <= u * b for all u >= 0
 
 Step 2:
 Given delta in Z+ (thing to branch on):
-a) If sum[j]( alpha_j * x_j - lambda * ( x_k - delta ) ) <= beta
+a) If sum[j]( alpha_j * x_j ) - lambda * ( x_k - delta ) <= beta
     is valid for P_ch for some lambda >= 0
 and
-b) if sum[j]( alpha_j * x_j + gamma( x_k - (delta + 1) ) ) <= beta
+b) if sum[j]( alpha_j * x_j ) + gamma( x_k - (delta + 1) ) <= beta
     is valid for P_ch for some gamma >= 0
 Then
 c) sum[j]( alpha_j * x_j ) <= beta
@@ -2566,8 +2566,8 @@ e.g.
 x_1, x_2 integer
 
 Choose x_1:
-ineq 1: (-x_1 + lambda * x_1) + x_2 - lambda( x_1 - 0 ) <= 1/2
-ineq 2: (1/2 * x_1 - gamma*x_1) + x_2 + gamma( x_1 - 1 ) <= 5/4 - gamma
+ineq 1: (-1 + lambda) * x_1 + x_2 - lambda( x_1 - 0 ) <= 1/2
+ineq 2: (1/2 - gamma) * x_1 + x_2 + gamma( x_1 - 1 ) <= 5/4 - gamma
 -->
 lambda - 1 = 1/2 - gamma
 1/2 = 5/4 - gamma
@@ -3257,7 +3257,7 @@ Find strongest superadditive cut from:
 
 angled-step function.
 
-Let lambda = 0.4
+Let lambda = 0.4 (strongest occurs at lambda = (b - floor(b)))
 F(a) = floor(a)
        if a - floor(a) <= lambda
      = floor(a) + (a - floor(a) - lambda) / (1 - lambda))
